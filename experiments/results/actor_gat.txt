@@ -1,0 +1,30 @@
+/run/media/tejinder/Worked/ai_course/Project/halfhop-project/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+Loaded config for gat on actor: {}
+Running split 0/9
+Split 0 - Best Val: 0.3039, Test at Best Val: 0.2816
+Running split 1/9
+Split 1 - Best Val: 0.3084, Test at Best Val: 0.2816
+Running split 2/9
+Split 2 - Best Val: 0.3080, Test at Best Val: 0.2586
+Running split 3/9
+Split 3 - Best Val: 0.2998, Test at Best Val: 0.2829
+Running split 4/9
+Split 4 - Best Val: 0.3043, Test at Best Val: 0.2862
+Running split 5/9
+Split 5 - Best Val: 0.2870, Test at Best Val: 0.2868
+Running split 6/9
+Split 6 - Best Val: 0.3051, Test at Best Val: 0.2849
+Running split 7/9
+Split 7 - Best Val: 0.2956, Test at Best Val: 0.2796
+Running split 8/9
+Split 8 - Best Val: 0.3006, Test at Best Val: 0.2572
+Running split 9/9
+Split 9 - Best Val: 0.3010, Test at Best Val: 0.3013
+
+============================================================
+FINAL RESULTS: GAT on Actor
+============================================================
+Test accuracies: [0.2815789580345154, 0.2815789580345154, 0.2585526406764984, 0.28289473056793213, 0.2861842215061188, 0.28684210777282715, 0.28486841917037964, 0.27960526943206787, 0.2572368383407593, 0.3013157844543457]
+Mean: 0.2801
+Std:  0.0131

@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+halfhop/__init__.py
+halfhop/datasets.py
+halfhop/gcn.py
+halfhop/halfhop.py
+halfhop/hh_gcn.py
+halfhop.egg-info/PKG-INFO
+halfhop.egg-info/SOURCES.txt
+halfhop.egg-info/dependency_links.txt
+halfhop.egg-info/requires.txt
+halfhop.egg-info/top_level.txt
+tests/test_gcn.py
+tests/test_halfhop.py
+tests/test_hh_gcn.py
