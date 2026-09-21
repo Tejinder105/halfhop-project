@@ -1,0 +1,30 @@
+/run/media/tejinder/Worked/ai_course/Project/halfhop-project/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+Loaded config for sage on actor: {}
+Running split 0/9
+Split 0 - Best Val: 0.3688, Test at Best Val: 0.3408
+Running split 1/9
+Split 1 - Best Val: 0.3516, Test at Best Val: 0.3336
+Running split 2/9
+Split 2 - Best Val: 0.3668, Test at Best Val: 0.3421
+Running split 3/9
+Split 3 - Best Val: 0.3549, Test at Best Val: 0.3316
+Running split 4/9
+Split 4 - Best Val: 0.3647, Test at Best Val: 0.3375
+Running split 5/9
+Split 5 - Best Val: 0.3577, Test at Best Val: 0.3454
+Running split 6/9
+Split 6 - Best Val: 0.3524, Test at Best Val: 0.3513
+Running split 7/9
+Split 7 - Best Val: 0.3458, Test at Best Val: 0.3434
+Running split 8/9
+Split 8 - Best Val: 0.3520, Test at Best Val: 0.3375
+Running split 9/9
+Split 9 - Best Val: 0.3602, Test at Best Val: 0.3493
+
+============================================================
+FINAL RESULTS: SAGE on Actor
+============================================================
+Test accuracies: [0.34078946709632874, 0.33355262875556946, 0.34210526943206787, 0.33157894015312195, 0.3375000059604645, 0.34539473056793213, 0.35131579637527466, 0.3434210419654846, 0.3375000059604645, 0.34934210777282715]
+Mean: 0.3412
+Std:  0.0064

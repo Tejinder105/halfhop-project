@@ -1,0 +1,30 @@
+/run/media/tejinder/Worked/ai_course/Project/halfhop-project/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+Loaded config for hh-gat on wisconsin: {'lr': 0.0539, 'wd': 0.0068, 'depth': 3, 'hidden': 16, 'dropout': 0.2141, 'alpha': 0.0026, 'p': 0.9797}
+Running split 0/9
+Split 0 - Best Val: 0.8375, Test at Best Val: 0.7059
+Running split 1/9
+Split 1 - Best Val: 0.7500, Test at Best Val: 0.8039
+Running split 2/9
+Split 2 - Best Val: 0.8125, Test at Best Val: 0.7647
+Running split 3/9
+Split 3 - Best Val: 0.8125, Test at Best Val: 0.8235
+Running split 4/9
+Split 4 - Best Val: 0.7250, Test at Best Val: 0.6078
+Running split 5/9
+Split 5 - Best Val: 0.8125, Test at Best Val: 0.6275
+Running split 6/9
+Split 6 - Best Val: 0.7750, Test at Best Val: 0.7647
+Running split 7/9
+Split 7 - Best Val: 0.8000, Test at Best Val: 0.6863
+Running split 8/9
+Split 8 - Best Val: 0.7750, Test at Best Val: 0.6667
+Running split 9/9
+Split 9 - Best Val: 0.8500, Test at Best Val: 0.8235
+
+============================================================
+FINAL RESULTS: HH-GAT on Wisconsin
+============================================================
+Test accuracies: [0.7058823704719543, 0.8039215803146362, 0.7647058963775635, 0.8235294222831726, 0.6078431606292725, 0.6274510025978088, 0.7647058963775635, 0.686274528503418, 0.6666666865348816, 0.8235294222831726]
+Mean: 0.7275
+Std:  0.0798

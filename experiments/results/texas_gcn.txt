@@ -1,0 +1,30 @@
+/run/media/tejinder/Worked/ai_course/Project/halfhop-project/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+Loaded config for gcn on texas: {}
+Running split 0/9
+Split 0 - Best Val: 0.6102, Test at Best Val: 0.6216
+Running split 1/9
+Split 1 - Best Val: 0.5593, Test at Best Val: 0.5946
+Running split 2/9
+Split 2 - Best Val: 0.5593, Test at Best Val: 0.4865
+Running split 3/9
+Split 3 - Best Val: 0.5254, Test at Best Val: 0.6216
+Running split 4/9
+Split 4 - Best Val: 0.6271, Test at Best Val: 0.5676
+Running split 5/9
+Split 5 - Best Val: 0.5763, Test at Best Val: 0.5676
+Running split 6/9
+Split 6 - Best Val: 0.5932, Test at Best Val: 0.5676
+Running split 7/9
+Split 7 - Best Val: 0.6271, Test at Best Val: 0.6216
+Running split 8/9
+Split 8 - Best Val: 0.4915, Test at Best Val: 0.5946
+Running split 9/9
+Split 9 - Best Val: 0.5085, Test at Best Val: 0.6757
+
+============================================================
+FINAL RESULTS: GCN on Texas
+============================================================
+Test accuracies: [0.6216216087341309, 0.5945945978164673, 0.4864864945411682, 0.6216216087341309, 0.5675675868988037, 0.5675675868988037, 0.5675675868988037, 0.6216216087341309, 0.5945945978164673, 0.6756756901741028]
+Mean: 0.5919
+Std:  0.0501

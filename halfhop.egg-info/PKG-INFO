@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: halfhop
+Version: 0.1.0
+Summary: Half-Hop Graph Neural Networks
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: torch
+Requires-Dist: torch_geometric
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: pandas
+Requires-Dist: matplotlib
+Requires-Dist: scikit-learn
