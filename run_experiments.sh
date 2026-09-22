@@ -3,10 +3,18 @@
 # Already-completed runs (those containing "FINAL RESULTS") are skipped
 # automatically so the script can be safely resumed after interruption.
 
-source .venv/bin/activate
+if [ -f ".venv/Scripts/activate" ]; then
+    source .venv/Scripts/activate
+elif [ -f ".venv/bin/activate" ]; then
+    source .venv/bin/activate
+else
+    echo "Virtual environment not found. Create .venv first."
+    exit 1
+fi
 
 DATASETS=("texas" "wisconsin" "actor" "cornell" "squirrel" "chameleon")
 MODELS=("gcn" "sage" "gat" "hh-gcn" "hh-sage" "hh-gat")
+EPOCHS="${EPOCHS:-100}"
 
 mkdir -p experiments/results
 mkdir -p experiments/results/ablations
@@ -26,9 +34,11 @@ for dataset in "${DATASETS[@]}"; do
             continue
         fi
         echo "RUN   ${model} on ${dataset}..."
-        python -m experiments.supervised.run \
+        python -u -m experiments.supervised.run \
             --dataset "$dataset" \
             --model "$model" \
+            --epochs "$EPOCHS" \
+            --verbose \
             > "$result_file" 2>&1
         echo "DONE  ${model} on ${dataset}"
     done
@@ -44,7 +54,7 @@ echo "=========================================="
 
 if ! grep -q "CONNECTIVITY ABLATION" experiments/results/ablations/connectivity_texas.txt 2>/dev/null; then
     echo "RUN   connectivity ablation on texas..."
-    python -m experiments.ablations.connectivity \
+    python -u -m experiments.ablations.connectivity \
         --dataset texas \
         > experiments/results/ablations/connectivity_texas.txt 2>&1
     echo "DONE  connectivity ablation"
@@ -54,7 +64,7 @@ fi
 
 if ! grep -q "INITIALIZATION ABLATION" experiments/results/ablations/initialization_texas.txt 2>/dev/null; then
     echo "RUN   initialization ablation on texas..."
-    python -m experiments.ablations.initialization \
+    python -u -m experiments.ablations.initialization \
         --dataset texas \
         > experiments/results/ablations/initialization_texas.txt 2>&1
     echo "DONE  initialization ablation"
@@ -79,7 +89,7 @@ for dataset in "${SSL_DATASETS[@]}"; do
             continue
         fi
         echo "RUN   ${ssl_method} on ${dataset}..."
-        python -m experiments.ssl.${ssl_method} \
+        python -u -m experiments.ssl.${ssl_method} \
             --dataset "$dataset" \
             > "$result_file" 2>&1
         echo "DONE  ${ssl_method} on ${dataset}"
