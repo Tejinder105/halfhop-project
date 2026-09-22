@@ -1,0 +1,59 @@
+Loaded config for hh-sage on squirrel: {'lr': 0.0296, 'wd': 0.0001, 'depth': 2, 'hidden': 128, 'dropout': 0.8668, 'alpha': 0.9474, 'p': 0.5198}
+Running split 0/9
+Epoch: 010, Loss: 1.0754, Train: 0.7997, Val: 0.3510, Test: 0.3727
+Epoch: 020, Loss: 0.7926, Train: 0.9123, Val: 0.3546, Test: 0.3756
+Epoch: 030, Loss: 0.6631, Train: 0.9523, Val: 0.3582, Test: 0.3660
+Epoch: 040, Loss: 0.5673, Train: 0.9744, Val: 0.3480, Test: 0.3622
+Epoch: 050, Loss: 0.5285, Train: 0.9824, Val: 0.3498, Test: 0.3612
+Epoch: 060, Loss: 0.5754, Train: 0.9824, Val: 0.3480, Test: 0.3756
+Epoch: 070, Loss: 0.5215, Train: 0.9844, Val: 0.3456, Test: 0.3689
+Epoch: 080, Loss: 0.4887, Train: 0.9872, Val: 0.3498, Test: 0.3545
+Epoch: 090, Loss: 0.5196, Train: 0.9884, Val: 0.3450, Test: 0.3554
+Epoch: 100, Loss: 0.4966, Train: 0.9888, Val: 0.3492, Test: 0.3593
+Split 0 - Best Val: 0.3702, Test at Best Val: 0.3823
+Running split 1/9
+Epoch: 010, Loss: 1.1248, Train: 0.8097, Val: 0.3774, Test: 0.3814
+Epoch: 020, Loss: 0.8267, Train: 0.9183, Val: 0.3792, Test: 0.3794
+Epoch: 030, Loss: 0.6707, Train: 0.9603, Val: 0.3720, Test: 0.3573
+Epoch: 040, Loss: 0.6099, Train: 0.9764, Val: 0.3690, Test: 0.3593
+Epoch: 050, Loss: 0.5365, Train: 0.9804, Val: 0.3600, Test: 0.3708
+Epoch: 060, Loss: 0.5537, Train: 0.9848, Val: 0.3582, Test: 0.3573
+Epoch: 070, Loss: 0.5308, Train: 0.9840, Val: 0.3672, Test: 0.3775
+Epoch: 080, Loss: 0.5213, Train: 0.9852, Val: 0.3672, Test: 0.3689
+Epoch: 090, Loss: 0.5008, Train: 0.9884, Val: 0.3510, Test: 0.3746
+Epoch: 100, Loss: 0.5427, Train: 0.9868, Val: 0.3570, Test: 0.3689
+Split 1 - Best Val: 0.3864, Test at Best Val: 0.3775
+Running split 2/9
+Epoch: 010, Loss: 1.1155, Train: 0.7796, Val: 0.3654, Test: 0.3660
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\tejinder\halfhop-project\experiments\supervised\run.py", line 122, in <module>
+    main()
+  File "D:\tejinder\halfhop-project\experiments\supervised\run.py", line 99, in main
+    best_val, best_test = run_training_loop(
+                          ^^^^^^^^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\halfhop\training.py", line 139, in run_training_loop
+    train_acc, val_acc, test_acc = evaluate(
+                                   ^^^^^^^^^
+  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\utils\_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\halfhop\training.py", line 87, in evaluate
+    out = _forward_pass(model, data)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\halfhop\training.py", line 30, in _forward_pass
+    return model(data)
+           ^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1751, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1762, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+forrtl: error (200): program aborting due to control-C event
+Image              PC                Routine            Line        Source             
+KERNELBASE.dll     00007FFEAAAA652D  Unknown               Unknown  Unknown
+KERNEL32.DLL       00007FFEAC8FCD87  Unknown               Unknown  Unknown
+ntdll.dll          00007FFEAD58CAEC  Unknown               Unknown  Unknown

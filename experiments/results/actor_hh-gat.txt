@@ -1,0 +1,28 @@
+Loaded config for hh-gat on actor: {'lr': 0.0009, 'wd': 0.0001, 'depth': 3, 'hidden': 128, 'dropout': 0.8708, 'alpha': 0.0549, 'p': 0.9594}
+Running split 0/9
+Split 0 - Best Val: 0.3252, Test at Best Val: 0.3211
+Running split 1/9
+Split 1 - Best Val: 0.3125, Test at Best Val: 0.3204
+Running split 2/9
+Split 2 - Best Val: 0.3076, Test at Best Val: 0.2928
+Running split 3/9
+Split 3 - Best Val: 0.2677, Test at Best Val: 0.2691
+Running split 4/9
+Split 4 - Best Val: 0.3318, Test at Best Val: 0.2901
+Running split 5/9
+Split 5 - Best Val: 0.3059, Test at Best Val: 0.2928
+Running split 6/9
+Split 6 - Best Val: 0.3133, Test at Best Val: 0.2875
+Running split 7/9
+Split 7 - Best Val: 0.3133, Test at Best Val: 0.3099
+Running split 8/9
+Split 8 - Best Val: 0.3030, Test at Best Val: 0.3105
+Running split 9/9
+Split 9 - Best Val: 0.2965, Test at Best Val: 0.2954
+
+============================================================
+FINAL RESULTS: HH-GAT on Actor
+============================================================
+Test accuracies: [0.3210526406764984, 0.32039472460746765, 0.2927631437778473, 0.26907894015312195, 0.2901315689086914, 0.2927631437778473, 0.2874999940395355, 0.3098684251308441, 0.3105263113975525, 0.29539474844932556]
+Mean: 0.2989
+Std:  0.0163

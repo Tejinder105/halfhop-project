@@ -1,0 +1,28 @@
+Loaded config for gat on cornell: {}
+Running split 0/9
+Split 0 - Best Val: 0.5593, Test at Best Val: 0.3784
+Running split 1/9
+Split 1 - Best Val: 0.5593, Test at Best Val: 0.3784
+Running split 2/9
+Split 2 - Best Val: 0.4407, Test at Best Val: 0.5135
+Running split 3/9
+Split 3 - Best Val: 0.4576, Test at Best Val: 0.3514
+Running split 4/9
+Split 4 - Best Val: 0.5424, Test at Best Val: 0.6486
+Running split 5/9
+Split 5 - Best Val: 0.4915, Test at Best Val: 0.3784
+Running split 6/9
+Split 6 - Best Val: 0.4915, Test at Best Val: 0.4324
+Running split 7/9
+Split 7 - Best Val: 0.6271, Test at Best Val: 0.4324
+Running split 8/9
+Split 8 - Best Val: 0.6441, Test at Best Val: 0.4054
+Running split 9/9
+Split 9 - Best Val: 0.5932, Test at Best Val: 0.4054
+
+============================================================
+FINAL RESULTS: GAT on Cornell
+============================================================
+Test accuracies: [0.37837839126586914, 0.37837839126586914, 0.5135135054588318, 0.3513513505458832, 0.6486486196517944, 0.37837839126586914, 0.4324324429035187, 0.4324324429035187, 0.4054054021835327, 0.4054054021835327]
+Mean: 0.4324
+Std:  0.0883

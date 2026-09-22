@@ -1,30 +1,28 @@
-/run/media/tejinder/Worked/ai_course/Project/halfhop-project/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
-  warnings.warn(
 Loaded config for sage on texas: {}
 Running split 0/9
-Split 0 - Best Val: 0.7966, Test at Best Val: 0.8378
+Split 0 - Best Val: 0.8136, Test at Best Val: 0.8108
 Running split 1/9
-Split 1 - Best Val: 0.8475, Test at Best Val: 0.8108
+Split 1 - Best Val: 0.8644, Test at Best Val: 0.8108
 Running split 2/9
-Split 2 - Best Val: 0.8475, Test at Best Val: 0.7297
+Split 2 - Best Val: 0.8644, Test at Best Val: 0.6757
 Running split 3/9
-Split 3 - Best Val: 0.8644, Test at Best Val: 0.7568
+Split 3 - Best Val: 0.8644, Test at Best Val: 0.8378
 Running split 4/9
-Split 4 - Best Val: 0.9322, Test at Best Val: 0.8378
+Split 4 - Best Val: 0.8983, Test at Best Val: 0.7568
 Running split 5/9
-Split 5 - Best Val: 0.8644, Test at Best Val: 0.8108
+Split 5 - Best Val: 0.8814, Test at Best Val: 0.7838
 Running split 6/9
-Split 6 - Best Val: 0.8644, Test at Best Val: 0.7297
+Split 6 - Best Val: 0.8475, Test at Best Val: 0.7027
 Running split 7/9
-Split 7 - Best Val: 0.8305, Test at Best Val: 0.7297
+Split 7 - Best Val: 0.8136, Test at Best Val: 0.7838
 Running split 8/9
-Split 8 - Best Val: 0.7797, Test at Best Val: 0.7838
+Split 8 - Best Val: 0.7966, Test at Best Val: 0.8108
 Running split 9/9
-Split 9 - Best Val: 0.7797, Test at Best Val: 0.7838
+Split 9 - Best Val: 0.7966, Test at Best Val: 0.8378
 
 ============================================================
 FINAL RESULTS: SAGE on Texas
 ============================================================
-Test accuracies: [0.837837815284729, 0.8108108043670654, 0.7297297120094299, 0.7567567825317383, 0.837837815284729, 0.8108108043670654, 0.7297297120094299, 0.7297297120094299, 0.7837837934494019, 0.7837837934494019]
+Test accuracies: [0.8108108043670654, 0.8108108043670654, 0.6756756901741028, 0.837837815284729, 0.7567567825317383, 0.7837837934494019, 0.7027027010917664, 0.7837837934494019, 0.8108108043670654, 0.837837815284729]
 Mean: 0.7811
-Std:  0.0431
+Std:  0.0547

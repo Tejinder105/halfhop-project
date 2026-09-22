@@ -1,2 +1,28 @@
-/run/media/tejinder/Worked/ai_course/Project/halfhop-project/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
-  warnings.warn(
+Loaded config for hh-gcn on actor: {'lr': 0.0313, 'wd': 0.0087, 'depth': 3, 'hidden': 64, 'dropout': 0.5511, 'alpha': 0.0369, 'p': 0.5466}
+Running split 0/9
+Split 0 - Best Val: 0.3335, Test at Best Val: 0.3125
+Running split 1/9
+Split 1 - Best Val: 0.3363, Test at Best Val: 0.3132
+Running split 2/9
+Split 2 - Best Val: 0.3405, Test at Best Val: 0.3237
+Running split 3/9
+Split 3 - Best Val: 0.3302, Test at Best Val: 0.3099
+Running split 4/9
+Split 4 - Best Val: 0.3310, Test at Best Val: 0.3026
+Running split 5/9
+Split 5 - Best Val: 0.3322, Test at Best Val: 0.3118
+Running split 6/9
+Split 6 - Best Val: 0.3388, Test at Best Val: 0.3086
+Running split 7/9
+Split 7 - Best Val: 0.3310, Test at Best Val: 0.3020
+Running split 8/9
+Split 8 - Best Val: 0.3396, Test at Best Val: 0.3112
+Running split 9/9
+Split 9 - Best Val: 0.3285, Test at Best Val: 0.3250
+
+============================================================
+FINAL RESULTS: HH-GCN on Actor
+============================================================
+Test accuracies: [0.3125, 0.3131578862667084, 0.3236842155456543, 0.3098684251308441, 0.30263158679008484, 0.3118421137332916, 0.308552622795105, 0.3019736707210541, 0.31118419766426086, 0.32499998807907104]
+Mean: 0.3120
+Std:  0.0075

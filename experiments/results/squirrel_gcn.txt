@@ -1,0 +1,42 @@
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/new_data/squirrel/out1_node_feature_label.txt
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/new_data/squirrel/out1_graph_edges.txt
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_0.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_1.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_2.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_3.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_4.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_5.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_6.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_7.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_8.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/f1fc0d14b3b019c562737240d06ec83b07d16a8f/splits/squirrel_split_0.6_0.2_9.npz
+Processing...
+Done!
+Loaded config for gcn on squirrel: {}
+Running split 0/9
+Split 0 - Best Val: 0.2692, Test at Best Val: 0.2699
+Running split 1/9
+Split 1 - Best Val: 0.2680, Test at Best Val: 0.2584
+Running split 2/9
+Split 2 - Best Val: 0.2596, Test at Best Val: 0.2824
+Running split 3/9
+Split 3 - Best Val: 0.2939, Test at Best Val: 0.2651
+Running split 4/9
+Split 4 - Best Val: 0.2506, Test at Best Val: 0.2459
+Running split 5/9
+Split 5 - Best Val: 0.2800, Test at Best Val: 0.2747
+Running split 6/9
+Split 6 - Best Val: 0.2800, Test at Best Val: 0.2469
+Running split 7/9
+Split 7 - Best Val: 0.2849, Test at Best Val: 0.2863
+Running split 8/9
+Split 8 - Best Val: 0.2548, Test at Best Val: 0.2363
+Running split 9/9
+Split 9 - Best Val: 0.2686, Test at Best Val: 0.2305
+
+============================================================
+FINAL RESULTS: GCN on Squirrel
+============================================================
+Test accuracies: [0.26993274688720703, 0.2584053874015808, 0.2824207544326782, 0.2651296854019165, 0.24591737985610962, 0.27473583817481995, 0.2468779981136322, 0.28626319766044617, 0.23631124198436737, 0.23054754734039307]
+Mean: 0.2597
+Std:  0.0192

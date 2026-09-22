@@ -1,2 +1,28 @@
-/run/media/tejinder/Worked/ai_course/Project/halfhop-project/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
-  warnings.warn(
+Loaded config for hh-sage on actor: {'lr': 0.0133, 'wd': 0.009, 'depth': 3, 'hidden': 32, 'dropout': 0.3737, 'alpha': 0.0116, 'p': 0.8368}
+Running split 0/9
+Split 0 - Best Val: 0.3828, Test at Best Val: 0.3684
+Running split 1/9
+Split 1 - Best Val: 0.3803, Test at Best Val: 0.3474
+Running split 2/9
+Split 2 - Best Val: 0.3882, Test at Best Val: 0.3717
+Running split 3/9
+Split 3 - Best Val: 0.3803, Test at Best Val: 0.3572
+Running split 4/9
+Split 4 - Best Val: 0.3762, Test at Best Val: 0.3454
+Running split 5/9
+Split 5 - Best Val: 0.3651, Test at Best Val: 0.3553
+Running split 6/9
+Split 6 - Best Val: 0.3713, Test at Best Val: 0.3566
+Running split 7/9
+Split 7 - Best Val: 0.3713, Test at Best Val: 0.3513
+Running split 8/9
+Split 8 - Best Val: 0.3692, Test at Best Val: 0.3414
+Running split 9/9
+Split 9 - Best Val: 0.3709, Test at Best Val: 0.3493
+
+============================================================
+FINAL RESULTS: HH-SAGE on Actor
+============================================================
+Test accuracies: [0.3684210479259491, 0.34736841917037964, 0.37171053886413574, 0.3572368323802948, 0.34539473056793213, 0.3552631437778473, 0.3565789461135864, 0.35131579637527466, 0.3414473831653595, 0.34934210777282715]
+Mean: 0.3544
+Std:  0.0097

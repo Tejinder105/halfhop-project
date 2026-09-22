@@ -1,0 +1,28 @@
+Loaded config for hh-gcn on cornell: {'lr': 0.0505, 'wd': 0.0055, 'depth': 2, 'hidden': 32, 'dropout': 0.4123, 'alpha': 0.0145, 'p': 0.966}
+Running split 0/9
+Split 0 - Best Val: 0.7797, Test at Best Val: 0.5405
+Running split 1/9
+Split 1 - Best Val: 0.7797, Test at Best Val: 0.6757
+Running split 2/9
+Split 2 - Best Val: 0.6610, Test at Best Val: 0.7027
+Running split 3/9
+Split 3 - Best Val: 0.6780, Test at Best Val: 0.5676
+Running split 4/9
+Split 4 - Best Val: 0.6610, Test at Best Val: 0.6486
+Running split 5/9
+Split 5 - Best Val: 0.7458, Test at Best Val: 0.6757
+Running split 6/9
+Split 6 - Best Val: 0.7288, Test at Best Val: 0.6486
+Running split 7/9
+Split 7 - Best Val: 0.7966, Test at Best Val: 0.5135
+Running split 8/9
+Split 8 - Best Val: 0.8136, Test at Best Val: 0.5405
+Running split 9/9
+Split 9 - Best Val: 0.8136, Test at Best Val: 0.6486
+
+============================================================
+FINAL RESULTS: HH-GCN on Cornell
+============================================================
+Test accuracies: [0.5405405163764954, 0.6756756901741028, 0.7027027010917664, 0.5675675868988037, 0.6486486196517944, 0.6756756901741028, 0.6486486196517944, 0.5135135054588318, 0.5405405163764954, 0.6486486196517944]
+Mean: 0.6162
+Std:  0.0684

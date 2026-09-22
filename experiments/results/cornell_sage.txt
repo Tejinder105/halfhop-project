@@ -1,0 +1,28 @@
+Loaded config for sage on cornell: {}
+Running split 0/9
+Split 0 - Best Val: 0.8644, Test at Best Val: 0.7838
+Running split 1/9
+Split 1 - Best Val: 0.6949, Test at Best Val: 0.7027
+Running split 2/9
+Split 2 - Best Val: 0.7288, Test at Best Val: 0.7027
+Running split 3/9
+Split 3 - Best Val: 0.7458, Test at Best Val: 0.7297
+Running split 4/9
+Split 4 - Best Val: 0.6949, Test at Best Val: 0.7027
+Running split 5/9
+Split 5 - Best Val: 0.7627, Test at Best Val: 0.7027
+Running split 6/9
+Split 6 - Best Val: 0.7627, Test at Best Val: 0.7568
+Running split 7/9
+Split 7 - Best Val: 0.8644, Test at Best Val: 0.7568
+Running split 8/9
+Split 8 - Best Val: 0.8644, Test at Best Val: 0.6757
+Running split 9/9
+Split 9 - Best Val: 0.8305, Test at Best Val: 0.7838
+
+============================================================
+FINAL RESULTS: SAGE on Cornell
+============================================================
+Test accuracies: [0.7837837934494019, 0.7027027010917664, 0.7027027010917664, 0.7297297120094299, 0.7027027010917664, 0.7027027010917664, 0.7567567825317383, 0.7567567825317383, 0.6756756901741028, 0.7837837934494019]
+Mean: 0.7297
+Std:  0.0382
