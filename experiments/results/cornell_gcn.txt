@@ -1,0 +1,42 @@
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/new_data/cornell/out1_node_feature_label.txt
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/new_data/cornell/out1_graph_edges.txt
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_0.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_1.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_2.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_3.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_4.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_5.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_6.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_7.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_8.npz
+Downloading https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/master/splits/cornell_split_0.6_0.2_9.npz
+Processing...
+Done!
+Loaded config for gcn on cornell: {}
+Running split 0/9
+Split 0 - Best Val: 0.5254, Test at Best Val: 0.4054
+Running split 1/9
+Split 1 - Best Val: 0.5254, Test at Best Val: 0.4324
+Running split 2/9
+Split 2 - Best Val: 0.4068, Test at Best Val: 0.5135
+Running split 3/9
+Split 3 - Best Val: 0.4576, Test at Best Val: 0.4054
+Running split 4/9
+Split 4 - Best Val: 0.4915, Test at Best Val: 0.5135
+Running split 5/9
+Split 5 - Best Val: 0.4915, Test at Best Val: 0.3784
+Running split 6/9
+Split 6 - Best Val: 0.4915, Test at Best Val: 0.3514
+Running split 7/9
+Split 7 - Best Val: 0.5932, Test at Best Val: 0.3784
+Running split 8/9
+Split 8 - Best Val: 0.6271, Test at Best Val: 0.3514
+Running split 9/9
+Split 9 - Best Val: 0.5593, Test at Best Val: 0.4324
+
+============================================================
+FINAL RESULTS: GCN on Cornell
+============================================================
+Test accuracies: [0.4054054021835327, 0.4324324429035187, 0.5135135054588318, 0.4054054021835327, 0.5135135054588318, 0.37837839126586914, 0.3513513505458832, 0.37837839126586914, 0.3513513505458832, 0.4324324429035187]
+Mean: 0.4162
+Std:  0.0587

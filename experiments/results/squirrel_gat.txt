@@ -1,0 +1,28 @@
+Loaded config for gat on squirrel: {}
+Running split 0/9
+Split 0 - Best Val: 0.2903, Test at Best Val: 0.2891
+Running split 1/9
+Split 1 - Best Val: 0.3113, Test at Best Val: 0.3132
+Running split 2/9
+Split 2 - Best Val: 0.2915, Test at Best Val: 0.3026
+Running split 3/9
+Split 3 - Best Val: 0.3395, Test at Best Val: 0.3055
+Running split 4/9
+Split 4 - Best Val: 0.2873, Test at Best Val: 0.2997
+Running split 5/9
+Split 5 - Best Val: 0.2921, Test at Best Val: 0.3007
+Running split 6/9
+Split 6 - Best Val: 0.3095, Test at Best Val: 0.2939
+Running split 7/9
+Split 7 - Best Val: 0.3071, Test at Best Val: 0.2939
+Running split 8/9
+Split 8 - Best Val: 0.2939, Test at Best Val: 0.3007
+Running split 9/9
+Split 9 - Best Val: 0.2915, Test at Best Val: 0.2882
+
+============================================================
+FINAL RESULTS: GAT on Squirrel
+============================================================
+Test accuracies: [0.2891450524330139, 0.31316041946411133, 0.3025936484336853, 0.30547550320625305, 0.29971182346343994, 0.3006724417209625, 0.29394811391830444, 0.29394811391830444, 0.3006724417209625, 0.28818443417549133]
+Mean: 0.2988
+Std:  0.0076

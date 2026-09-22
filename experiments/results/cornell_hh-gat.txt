@@ -1,0 +1,28 @@
+Loaded config for hh-gat on cornell: {'lr': 0.0572, 'wd': 0.007, 'depth': 2, 'hidden': 64, 'dropout': 0.0572, 'alpha': 0.071, 'p': 0.9979}
+Running split 0/9
+Split 0 - Best Val: 0.8136, Test at Best Val: 0.6216
+Running split 1/9
+Split 1 - Best Val: 0.7797, Test at Best Val: 0.6216
+Running split 2/9
+Split 2 - Best Val: 0.6949, Test at Best Val: 0.7297
+Running split 3/9
+Split 3 - Best Val: 0.7797, Test at Best Val: 0.7027
+Running split 4/9
+Split 4 - Best Val: 0.7288, Test at Best Val: 0.7027
+Running split 5/9
+Split 5 - Best Val: 0.7797, Test at Best Val: 0.7027
+Running split 6/9
+Split 6 - Best Val: 0.7458, Test at Best Val: 0.6757
+Running split 7/9
+Split 7 - Best Val: 0.8475, Test at Best Val: 0.7297
+Running split 8/9
+Split 8 - Best Val: 0.7966, Test at Best Val: 0.6757
+Running split 9/9
+Split 9 - Best Val: 0.7966, Test at Best Val: 0.7297
+
+============================================================
+FINAL RESULTS: HH-GAT on Cornell
+============================================================
+Test accuracies: [0.6216216087341309, 0.6216216087341309, 0.7297297120094299, 0.7027027010917664, 0.7027027010917664, 0.7027027010917664, 0.6756756901741028, 0.7297297120094299, 0.6756756901741028, 0.7297297120094299]
+Mean: 0.6892
+Std:  0.0408

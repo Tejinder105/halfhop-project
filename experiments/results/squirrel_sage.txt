@@ -1,0 +1,28 @@
+Loaded config for sage on squirrel: {}
+Running split 0/9
+Split 0 - Best Val: 0.3606, Test at Best Val: 0.3631
+Running split 1/9
+Split 1 - Best Val: 0.3684, Test at Best Val: 0.3919
+Running split 2/9
+Split 2 - Best Val: 0.3816, Test at Best Val: 0.3593
+Running split 3/9
+Split 3 - Best Val: 0.3762, Test at Best Val: 0.3573
+Running split 4/9
+Split 4 - Best Val: 0.3636, Test at Best Val: 0.3689
+Running split 5/9
+Split 5 - Best Val: 0.3702, Test at Best Val: 0.3766
+Running split 6/9
+Split 6 - Best Val: 0.3774, Test at Best Val: 0.3381
+Running split 7/9
+Split 7 - Best Val: 0.3714, Test at Best Val: 0.3573
+Running split 8/9
+Split 8 - Best Val: 0.3636, Test at Best Val: 0.3314
+Running split 9/9
+Split 9 - Best Val: 0.3732, Test at Best Val: 0.3362
+
+============================================================
+FINAL RESULTS: SAGE on Squirrel
+============================================================
+Test accuracies: [0.3631123900413513, 0.39193084836006165, 0.3592699468135834, 0.3573487102985382, 0.36887606978416443, 0.3765609860420227, 0.3381364047527313, 0.3573487102985382, 0.33141210675239563, 0.33621516823768616]
+Mean: 0.3580
+Std:  0.0189

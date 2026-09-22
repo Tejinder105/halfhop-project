@@ -1,0 +1,28 @@
+Loaded config for hh-sage on cornell: {'lr': 0.0697, 'wd': 0.0018, 'depth': 2, 'hidden': 64, 'dropout': 0.0697, 'alpha': 0.8807, 'p': 0.566}
+Running split 0/9
+Split 0 - Best Val: 0.8475, Test at Best Val: 0.6757
+Running split 1/9
+Split 1 - Best Val: 0.7458, Test at Best Val: 0.7027
+Running split 2/9
+Split 2 - Best Val: 0.7797, Test at Best Val: 0.7027
+Running split 3/9
+Split 3 - Best Val: 0.7627, Test at Best Val: 0.7027
+Running split 4/9
+Split 4 - Best Val: 0.7458, Test at Best Val: 0.6216
+Running split 5/9
+Split 5 - Best Val: 0.7458, Test at Best Val: 0.5676
+Running split 6/9
+Split 6 - Best Val: 0.7966, Test at Best Val: 0.8108
+Running split 7/9
+Split 7 - Best Val: 0.8644, Test at Best Val: 0.7568
+Running split 8/9
+Split 8 - Best Val: 0.8475, Test at Best Val: 0.7297
+Running split 9/9
+Split 9 - Best Val: 0.8136, Test at Best Val: 0.7297
+
+============================================================
+FINAL RESULTS: HH-SAGE on Cornell
+============================================================
+Test accuracies: [0.6756756901741028, 0.7027027010917664, 0.7027027010917664, 0.7027027010917664, 0.6216216087341309, 0.5675675868988037, 0.8108108043670654, 0.7567567825317383, 0.7297297120094299, 0.7297297120094299]
+Mean: 0.7000
+Std:  0.0680
