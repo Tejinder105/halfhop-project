@@ -156,6 +156,7 @@ def run_grace(dataset_name: str = "amazon-photos",
               hh_alpha: float = 0.5, hh_p: float = 0.75,
               feat_mask_rate: float = 0.3,
               seed: int = 42) -> dict:
+    os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
     set_seed(seed)
     dataset, data = load_dataset(dataset_name)
 
@@ -208,9 +209,13 @@ def run_grace(dataset_name: str = "amazon-photos",
         optimizer.step()
         scheduler.step()
 
+        del aug1, aug2, x1, e1, x2, e2, h1, h2, z1, z2
+
         if epoch % 100 == 0 or epoch == 1:
             progress.set_postfix(loss=f"{loss.item():.4f}")
-
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+ 
     # Linear evaluation using encoder (not projector)
     encoder.eval()
     with torch.no_grad():
