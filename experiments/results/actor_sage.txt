@@ -1,57 +1,128 @@
-Traceback (most recent call last):
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 441, in __str__
-    return self._str
-           ^^^^^^^^^
-AttributeError: 'WindowsPath' object has no attribute '_str'
+Loaded config for sage on actor: {}
+Running split 0/9
+Epoch: 010, Loss: 1.2625, Train: 0.5493, Val: 0.3442, Test: 0.3414
+Epoch: 020, Loss: 0.9733, Train: 0.6968, Val: 0.3602, Test: 0.3395
+Epoch: 030, Loss: 0.7926, Train: 0.7903, Val: 0.3499, Test: 0.3243
+Epoch: 040, Loss: 0.6663, Train: 0.8487, Val: 0.3470, Test: 0.3368
+Epoch: 050, Loss: 0.5890, Train: 0.8860, Val: 0.3516, Test: 0.3336
+Epoch: 060, Loss: 0.5239, Train: 0.9098, Val: 0.3438, Test: 0.3329
+Epoch: 070, Loss: 0.4969, Train: 0.9219, Val: 0.3396, Test: 0.3283
+Epoch: 080, Loss: 0.4620, Train: 0.9339, Val: 0.3405, Test: 0.3276
+Epoch: 090, Loss: 0.4362, Train: 0.9413, Val: 0.3433, Test: 0.3322
+Epoch: 100, Loss: 0.4103, Train: 0.9449, Val: 0.3372, Test: 0.3283
+Split 0 - Best Val: 0.3618, Test at Best Val: 0.3428
+Running split 1/9
+Epoch: 010, Loss: 1.2564, Train: 0.5521, Val: 0.3298, Test: 0.3263
+Epoch: 020, Loss: 0.9743, Train: 0.6968, Val: 0.3507, Test: 0.3322
+Epoch: 030, Loss: 0.7812, Train: 0.7832, Val: 0.3392, Test: 0.3421
+Epoch: 040, Loss: 0.6738, Train: 0.8492, Val: 0.3405, Test: 0.3382
+Epoch: 050, Loss: 0.6051, Train: 0.8868, Val: 0.3417, Test: 0.3362
+Epoch: 060, Loss: 0.5501, Train: 0.9090, Val: 0.3409, Test: 0.3401
+Epoch: 070, Loss: 0.4833, Train: 0.9238, Val: 0.3458, Test: 0.3316
+Epoch: 080, Loss: 0.4597, Train: 0.9320, Val: 0.3400, Test: 0.3336
+Epoch: 090, Loss: 0.4355, Train: 0.9389, Val: 0.3331, Test: 0.3303
+Epoch: 100, Loss: 0.4142, Train: 0.9438, Val: 0.3359, Test: 0.3362
+Split 1 - Best Val: 0.3516, Test at Best Val: 0.3355
+Running split 2/9
+Epoch: 010, Loss: 1.3009, Train: 0.5241, Val: 0.3503, Test: 0.3158
+Epoch: 020, Loss: 1.0040, Train: 0.6754, Val: 0.3594, Test: 0.3322
+Epoch: 030, Loss: 0.8036, Train: 0.7859, Val: 0.3524, Test: 0.3230
+Epoch: 040, Loss: 0.6774, Train: 0.8487, Val: 0.3425, Test: 0.3362
+Epoch: 050, Loss: 0.5950, Train: 0.8871, Val: 0.3454, Test: 0.3296
+Epoch: 060, Loss: 0.5425, Train: 0.9123, Val: 0.3392, Test: 0.3283
+Epoch: 070, Loss: 0.4927, Train: 0.9252, Val: 0.3351, Test: 0.3270
+Epoch: 080, Loss: 0.4641, Train: 0.9331, Val: 0.3277, Test: 0.3250
+Epoch: 090, Loss: 0.4316, Train: 0.9391, Val: 0.3384, Test: 0.3322
+Epoch: 100, Loss: 0.4116, Train: 0.9452, Val: 0.3326, Test: 0.3329
+Split 2 - Best Val: 0.3618, Test at Best Val: 0.3270
+Running split 3/9
+Epoch: 010, Loss: 1.2657, Train: 0.5315, Val: 0.3470, Test: 0.3296
+Epoch: 020, Loss: 0.9812, Train: 0.6880, Val: 0.3392, Test: 0.3441
+Epoch: 030, Loss: 0.7820, Train: 0.7961, Val: 0.3499, Test: 0.3309
+Epoch: 040, Loss: 0.6614, Train: 0.8577, Val: 0.3553, Test: 0.3316
+Epoch: 050, Loss: 0.5907, Train: 0.8942, Val: 0.3553, Test: 0.3289
+Epoch: 060, Loss: 0.5387, Train: 0.9156, Val: 0.3470, Test: 0.3382
+Epoch: 070, Loss: 0.4967, Train: 0.9230, Val: 0.3450, Test: 0.3349
+Epoch: 080, Loss: 0.4621, Train: 0.9339, Val: 0.3479, Test: 0.3283
+Epoch: 090, Loss: 0.4300, Train: 0.9394, Val: 0.3458, Test: 0.3230
+Epoch: 100, Loss: 0.4124, Train: 0.9427, Val: 0.3405, Test: 0.3309
+Split 3 - Best Val: 0.3577, Test at Best Val: 0.3303
+Running split 4/9
+Epoch: 010, Loss: 1.2884, Train: 0.5513, Val: 0.3487, Test: 0.3250
+Epoch: 020, Loss: 1.0024, Train: 0.6839, Val: 0.3561, Test: 0.3257
+Epoch: 030, Loss: 0.8069, Train: 0.7815, Val: 0.3594, Test: 0.3322
+Epoch: 040, Loss: 0.6775, Train: 0.8432, Val: 0.3512, Test: 0.3401
+Epoch: 050, Loss: 0.6021, Train: 0.8838, Val: 0.3475, Test: 0.3329
+Epoch: 060, Loss: 0.5442, Train: 0.9093, Val: 0.3462, Test: 0.3434
+Epoch: 070, Loss: 0.5069, Train: 0.9274, Val: 0.3442, Test: 0.3362
+Epoch: 080, Loss: 0.4649, Train: 0.9309, Val: 0.3405, Test: 0.3336
+Epoch: 090, Loss: 0.4425, Train: 0.9405, Val: 0.3359, Test: 0.3296
+Epoch: 100, Loss: 0.4130, Train: 0.9468, Val: 0.3446, Test: 0.3303
+Split 4 - Best Val: 0.3618, Test at Best Val: 0.3250
+Running split 5/9
+Epoch: 010, Loss: 1.2852, Train: 0.5392, Val: 0.3117, Test: 0.3289
+Epoch: 020, Loss: 0.9936, Train: 0.6831, Val: 0.3470, Test: 0.3342
+Epoch: 030, Loss: 0.8083, Train: 0.7856, Val: 0.3442, Test: 0.3428
+Epoch: 040, Loss: 0.6830, Train: 0.8473, Val: 0.3368, Test: 0.3362
+Epoch: 050, Loss: 0.6016, Train: 0.8862, Val: 0.3343, Test: 0.3401
+Epoch: 060, Loss: 0.5497, Train: 0.9046, Val: 0.3372, Test: 0.3382
+Epoch: 070, Loss: 0.4941, Train: 0.9202, Val: 0.3302, Test: 0.3421
+Epoch: 080, Loss: 0.4695, Train: 0.9282, Val: 0.3335, Test: 0.3395
+Epoch: 090, Loss: 0.4420, Train: 0.9389, Val: 0.3335, Test: 0.3454
+Epoch: 100, Loss: 0.4189, Train: 0.9446, Val: 0.3359, Test: 0.3368
+Split 5 - Best Val: 0.3503, Test at Best Val: 0.3395
+Running split 6/9
+Epoch: 010, Loss: 1.2638, Train: 0.5348, Val: 0.3232, Test: 0.3316
+Epoch: 020, Loss: 0.9764, Train: 0.6861, Val: 0.3413, Test: 0.3447
+Epoch: 030, Loss: 0.7846, Train: 0.7862, Val: 0.3405, Test: 0.3401
+Epoch: 040, Loss: 0.6706, Train: 0.8432, Val: 0.3372, Test: 0.3336
+Epoch: 050, Loss: 0.5956, Train: 0.8797, Val: 0.3376, Test: 0.3362
+Epoch: 060, Loss: 0.5473, Train: 0.9065, Val: 0.3388, Test: 0.3368
+Epoch: 070, Loss: 0.5004, Train: 0.9243, Val: 0.3306, Test: 0.3263
+Epoch: 080, Loss: 0.4708, Train: 0.9326, Val: 0.3318, Test: 0.3263
+Epoch: 090, Loss: 0.4391, Train: 0.9378, Val: 0.3376, Test: 0.3368
+Epoch: 100, Loss: 0.4176, Train: 0.9438, Val: 0.3326, Test: 0.3362
+Split 6 - Best Val: 0.3450, Test at Best Val: 0.3355
+Running split 7/9
+Epoch: 010, Loss: 1.2688, Train: 0.5384, Val: 0.3384, Test: 0.3158
+Epoch: 020, Loss: 0.9684, Train: 0.6949, Val: 0.3409, Test: 0.3507
+Epoch: 030, Loss: 0.7895, Train: 0.7936, Val: 0.3281, Test: 0.3546
+Epoch: 040, Loss: 0.6637, Train: 0.8588, Val: 0.3388, Test: 0.3520
+Epoch: 050, Loss: 0.5684, Train: 0.8934, Val: 0.3363, Test: 0.3520
+Epoch: 060, Loss: 0.5240, Train: 0.9139, Val: 0.3322, Test: 0.3434
+Epoch: 070, Loss: 0.4859, Train: 0.9265, Val: 0.3265, Test: 0.3401
+Epoch: 080, Loss: 0.4540, Train: 0.9356, Val: 0.3257, Test: 0.3368
+Epoch: 090, Loss: 0.4192, Train: 0.9424, Val: 0.3298, Test: 0.3329
+Epoch: 100, Loss: 0.4016, Train: 0.9468, Val: 0.3232, Test: 0.3375
+Split 7 - Best Val: 0.3495, Test at Best Val: 0.3461
+Running split 8/9
+Epoch: 010, Loss: 1.2692, Train: 0.5526, Val: 0.3285, Test: 0.3309
+Epoch: 020, Loss: 0.9853, Train: 0.6809, Val: 0.3462, Test: 0.3559
+Epoch: 030, Loss: 0.8020, Train: 0.7873, Val: 0.3359, Test: 0.3487
+Epoch: 040, Loss: 0.6760, Train: 0.8512, Val: 0.3314, Test: 0.3434
+Epoch: 050, Loss: 0.5931, Train: 0.8871, Val: 0.3368, Test: 0.3355
+Epoch: 060, Loss: 0.5313, Train: 0.9079, Val: 0.3318, Test: 0.3368
+Epoch: 070, Loss: 0.4772, Train: 0.9263, Val: 0.3339, Test: 0.3349
+Epoch: 080, Loss: 0.4469, Train: 0.9367, Val: 0.3392, Test: 0.3454
+Epoch: 090, Loss: 0.4183, Train: 0.9433, Val: 0.3479, Test: 0.3441
+Epoch: 100, Loss: 0.4083, Train: 0.9474, Val: 0.3417, Test: 0.3342
+Split 8 - Best Val: 0.3590, Test at Best Val: 0.3559
+Running split 9/9
+Epoch: 010, Loss: 1.2548, Train: 0.5496, Val: 0.3487, Test: 0.3500
+Epoch: 020, Loss: 0.9878, Train: 0.6760, Val: 0.3565, Test: 0.3487
+Epoch: 030, Loss: 0.7976, Train: 0.7760, Val: 0.3462, Test: 0.3520
+Epoch: 040, Loss: 0.6833, Train: 0.8465, Val: 0.3442, Test: 0.3434
+Epoch: 050, Loss: 0.6074, Train: 0.8808, Val: 0.3433, Test: 0.3480
+Epoch: 060, Loss: 0.5493, Train: 0.8994, Val: 0.3454, Test: 0.3408
+Epoch: 070, Loss: 0.5104, Train: 0.9134, Val: 0.3417, Test: 0.3382
+Epoch: 080, Loss: 0.4724, Train: 0.9257, Val: 0.3454, Test: 0.3368
+Epoch: 090, Loss: 0.4356, Train: 0.9356, Val: 0.3396, Test: 0.3421
+Epoch: 100, Loss: 0.4262, Train: 0.9391, Val: 0.3425, Test: 0.3454
+Split 9 - Best Val: 0.3631, Test at Best Val: 0.3507
 
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 555, in drive
-    return self._drv
-           ^^^^^^^^^
-AttributeError: 'WindowsPath' object has no attribute '_drv'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "D:\tejinder\halfhop-project\experiments\supervised\run.py", line 4, in <module>
-    import torch
-  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\__init__.py", line 2808, in <module>
-    _import_device_backends()
-  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\__init__.py", line 2758, in _import_device_backends
-    backend_extensions = entry_points(group=group_name)
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 913, in entry_points
-    return EntryPoints(eps).select(**params)
-           ^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 911, in <genexpr>
-    dist.entry_points for dist in _unique(distributions())
-    ^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 471, in entry_points
-    return EntryPoints._from_text_for(self.read_text('entry_points.txt'), self)
-                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 819, in read_text
-    return self._path.joinpath(filename).read_text(encoding='utf-8')
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 1027, in read_text
-    with self.open(mode='r', encoding=encoding, errors=errors) as f:
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 1013, in open
-    return io.open(self, mode, buffering, encoding, errors, newline)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 448, in __fspath__
-    return str(self)
-           ^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 443, in __str__
-    self._str = self._format_parsed_parts(self.drive, self.root,
-                                          ^^^^^^^^^^
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 557, in drive
-    self._load_parts()
-  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 414, in _load_parts
-    path = self._flavour.join(*paths)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<frozen ntpath>", line 142, in join
-KeyboardInterrupt
+============================================================
+FINAL RESULTS: SAGE on Actor
+============================================================
+Test accuracies: [0.34276315569877625, 0.33552631735801697, 0.32697367668151855, 0.3302631676197052, 0.32499998807907104, 0.339473694562912, 0.33552631735801697, 0.3460526168346405, 0.35592105984687805, 0.3506578803062439]
+Mean: 0.3388
+Std:  0.0101
