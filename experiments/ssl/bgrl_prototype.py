@@ -1,4 +1,10 @@
 """
+Prototype implementation used for understanding BGRL.
+The paper reproduction uses the original Thakoor et al. implementation
+in `bgrl_original/` plus `halfhop_bgrl/` and `run_bgrl_experiments.py`.
+
+Do not use this file to reproduce Half-Hop Table 3.
+
 BGRL with Half-Hop augmentation.
 
 Based on:

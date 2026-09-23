@@ -112,7 +112,12 @@ for index in "${!SSL_DATASETS[@]}"; do
             continue
         fi
         echo "RUN   ${ssl_method} on ${dataset}..."
-        if python -u -m experiments.ssl.${ssl_method} \
+        if [ "$ssl_method" = "bgrl" ]; then
+            ssl_module="experiments.ssl.bgrl_prototype"
+        else
+            ssl_module="experiments.ssl.${ssl_method}"
+        fi
+        if python -u -m ${ssl_module} \
             --dataset "$dataset" \
             --epochs "$SSL_EPOCHS" \
             | tee "$result_file"; then
