@@ -46,10 +46,14 @@ experiments/
 │   ├── connectivity.py     # Connectivity ablation (proposed vs HH1 vs HH2)
 │   └── initialization.py  # Init ablation (linear vs zero vs random)
 ├── ssl/
-│   ├── bgrl.py             # Half-Hop BGRL (Bootstrap Your Own Graph Repr.)
+│   ├── bgrl_prototype.py   # Prototype BGRL (not the paper reproduction)
 │   └── grace.py            # Half-Hop GRACE (Graph Contrastive Learning)
 ├── generate_report.py      # Auto-generates tables and figures
 └── results/                # Experiment output files
+
+bgrl_original/              # Official Thakoor et al. BGRL (vendored)
+halfhop_bgrl/               # Half-Hop added on top of official BGRL
+run_bgrl_experiments.py     # Table 3 BGRL runner (use this on Kaggle)
 
 configs/                    # Optimal hyperparameters per dataset
 tests/                      # 43 unit and integration tests
@@ -111,10 +115,13 @@ python -m experiments.ablations.initialization --dataset texas
 
 ### SSL Experiments
 ```bash
-# HH-BGRL
-python -m experiments.ssl.bgrl --dataset amazon_computers --epochs 1000
+# Official BGRL baseline (Amazon Computers, Table 3 FeatDrop+EdgeDrop)
+python run_bgrl_experiments.py --dataset computers --augmentation feat_edge --seed 0 --device cuda
 
-# HH-GRACE
+# Half-Hop + FeatDrop + EdgeDrop (use --low-memory on 15GB T4s if needed)
+python run_bgrl_experiments.py --dataset computers --augmentation feat_edge_hh --seed 0 --device cuda --low-memory
+
+# HH-GRACE (prototype)
 python -m experiments.ssl.grace --dataset amazon_photo --epochs 1000
 ```
 
@@ -168,16 +175,27 @@ The code automatically uses CUDA (GPU) if available:
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 ```
 
-**Running on Kaggle (free T4 GPU):**
-1. Go to kaggle.com → New Notebook
-2. Enable GPU: Settings → Accelerator → GPU T4
-3. Run these cells:
-   ```python
-   !git clone https://github.com/<user>/halfhop-project.git
-   %cd halfhop-project
-   !pip install -r requirements.txt && pip install -e .
-   !bash run_experiments.sh
-   ```
+**Running on Kaggle (2x T4, 15GB each):**
+1. New Notebook → Settings → Accelerator → GPU T4 x2
+2. Official BGRL is single-GPU. Pin one experiment per T4.
+3. Run:
+
+```python
+# one-time setup
+!pip install -r requirements.txt && pip install -e .
+
+# smoke test (optional): 2 epochs, skip mid-training eval
+!python run_bgrl_experiments.py --dataset computers --augmentation feat_edge --seed 0 --device cuda --epochs 2 --eval-epochs 0
+
+# Amazon Computers official BGRL baseline (Table 3 FeatDrop+EdgeDrop)
+# GPU 0
+!CUDA_VISIBLE_DEVICES=0 python run_bgrl_experiments.py --dataset computers --augmentation feat_edge --seed 0 --device cuda
+
+# GPU 1 (second job, different setup or seed)
+!CUDA_VISIBLE_DEVICES=1 python run_bgrl_experiments.py --dataset computers --augmentation none --seed 0 --device cuda
+```
+
+Do not `pip install torch==1.9.1` from the official BGRL README. Use Kaggle's existing PyTorch/PyG so the supervised Half-Hop code keeps working.
 
 ---
 
