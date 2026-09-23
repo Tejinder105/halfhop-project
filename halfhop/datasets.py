@@ -148,7 +148,12 @@ def load_dataset(name: str, root: str = "data") -> tuple:
     Raises:
         ValueError: If ``name`` is not recognized.
     """
-    name = name.lower()
+    name = name.lower().replace("_", "-")
+    aliases = {
+        "amazon-photo": "amazon-photos",
+        "film": "actor",
+    }
+    name = aliases.get(name, name)
     if name not in _LOADERS:
         raise ValueError(
             f"Unknown dataset '{name}'. "

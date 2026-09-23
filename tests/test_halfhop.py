@@ -39,9 +39,7 @@ def test_single_edge(basic_data):
     assert data.x[2, 1] == 0.5
     
     assert data.edge_index.size(1) == 3
-    
-    # Check edges
-    # expected: 0->2, 1->2, 2->1
+
     src, dst = data.edge_index
     edges = set(zip(src.tolist(), dst.tolist()))
     assert (0, 2) in edges
@@ -55,13 +53,11 @@ def test_self_loops(data_with_self_loops):
     transform = HalfHop(alpha=0.5, p=1.0)
     data = transform(data_with_self_loops)
     
-    # Self loops should not be half-hopped
-    assert data.x.size(0) == 3  # 2 original + 1 slow (for 0->1)
+    assert data.x.size(0) == 3
     
     src, dst = data.edge_index
     edges = set(zip(src.tolist(), dst.tolist()))
     
-    # Original self-loops preserved
     assert (0, 0) in edges
     assert (1, 1) in edges
     
