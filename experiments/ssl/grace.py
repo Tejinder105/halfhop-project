@@ -16,6 +16,7 @@ Reference:
 
 import argparse
 import copy
+import os
 
 import torch
 import torch.nn as nn
@@ -26,6 +27,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 import numpy as np
+from tqdm import trange
 
 from halfhop.datasets import load_dataset
 from halfhop.halfhop import HalfHop
@@ -34,7 +36,9 @@ from halfhop.reproducibility import set_seed
 # ---------------------------------------------------------------------------
 # Device
 # ---------------------------------------------------------------------------
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+DEVICE = torch.device(
+    os.environ.get('HALFHOP_DEVICE', 'cuda' if torch.cuda.is_available() else 'cpu')
+)
 
 
 # ---------------------------------------------------------------------------
@@ -145,7 +149,7 @@ def linear_eval(embeddings: np.ndarray, labels: np.ndarray,
 # ---------------------------------------------------------------------------
 # Main training loop
 # ---------------------------------------------------------------------------
-def run_grace(dataset_name: str = "amazon_photo",
+def run_grace(dataset_name: str = "amazon-photos",
               hidden: int = 256, proj_dim: int = 128,
               epochs: int = 1000, lr: float = 0.001,
               tau: float = 0.4,
@@ -176,7 +180,8 @@ def run_grace(dataset_name: str = "amazon_photo",
 
     encoder.train()
     projector.train()
-    for epoch in range(1, epochs + 1):
+    progress = trange(1, epochs + 1, desc=f"GRACE {dataset_name}", unit="epoch")
+    for epoch in progress:
         optimizer.zero_grad()
 
         # View 1: Half-Hop augmented
@@ -204,7 +209,7 @@ def run_grace(dataset_name: str = "amazon_photo",
         scheduler.step()
 
         if epoch % 100 == 0 or epoch == 1:
-            print(f"  Epoch {epoch:4d} | Loss: {loss.item():.4f}")
+            progress.set_postfix(loss=f"{loss.item():.4f}")
 
     # Linear evaluation using encoder (not projector)
     encoder.eval()
@@ -239,7 +244,7 @@ def run_grace(dataset_name: str = "amazon_photo",
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run GRACE with Half-Hop")
-    parser.add_argument("--dataset", type=str, default="amazon_photo")
+    parser.add_argument("--dataset", type=str, default="amazon-photos")
     parser.add_argument("--hidden", type=int, default=256)
     parser.add_argument("--proj_dim", type=int, default=128)
     parser.add_argument("--epochs", type=int, default=1000)

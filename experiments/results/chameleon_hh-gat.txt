@@ -1,0 +1,128 @@
+Loaded config for hh-gat on chameleon: {'lr': 0.0012, 'wd': 0.0008, 'depth': 3, 'hidden': 64, 'dropout': 0.0439, 'alpha': 0.9766, 'p': 0.9386}
+Running split 0/9
+Epoch: 010, Loss: 0.8059, Train: 0.7592, Val: 0.4925, Test: 0.4781
+Epoch: 020, Loss: 0.4974, Train: 0.8324, Val: 0.3923, Test: 0.4298
+Epoch: 030, Loss: 0.3365, Train: 0.8883, Val: 0.4019, Test: 0.4167
+Epoch: 040, Loss: 0.2697, Train: 0.9103, Val: 0.3964, Test: 0.3772
+Epoch: 050, Loss: 0.2426, Train: 0.9176, Val: 0.3841, Test: 0.3728
+Epoch: 060, Loss: 0.2225, Train: 0.9249, Val: 0.3813, Test: 0.3772
+Epoch: 070, Loss: 0.2156, Train: 0.9313, Val: 0.3923, Test: 0.3882
+Epoch: 080, Loss: 0.2079, Train: 0.9295, Val: 0.3676, Test: 0.3882
+Epoch: 090, Loss: 0.2139, Train: 0.9405, Val: 0.3813, Test: 0.3816
+Epoch: 100, Loss: 0.2107, Train: 0.9359, Val: 0.3827, Test: 0.3838
+Split 0 - Best Val: 0.4925, Test at Best Val: 0.4781
+Running split 1/9
+Epoch: 010, Loss: 0.8066, Train: 0.7555, Val: 0.4472, Test: 0.4649
+Epoch: 020, Loss: 0.4845, Train: 0.8608, Val: 0.4198, Test: 0.4211
+Epoch: 030, Loss: 0.3740, Train: 0.9038, Val: 0.3855, Test: 0.3991
+Epoch: 040, Loss: 0.2763, Train: 0.9231, Val: 0.3937, Test: 0.4167
+Epoch: 050, Loss: 0.2259, Train: 0.9359, Val: 0.3772, Test: 0.3969
+Epoch: 060, Loss: 0.2316, Train: 0.9368, Val: 0.3772, Test: 0.3904
+Epoch: 070, Loss: 0.2245, Train: 0.9423, Val: 0.3676, Test: 0.3904
+Epoch: 080, Loss: 0.2059, Train: 0.9441, Val: 0.3800, Test: 0.3772
+Epoch: 090, Loss: 0.1956, Train: 0.9405, Val: 0.3717, Test: 0.3794
+Epoch: 100, Loss: 0.1948, Train: 0.9496, Val: 0.3635, Test: 0.3794
+Split 1 - Best Val: 0.4527, Test at Best Val: 0.4693
+Running split 2/9
+Epoch: 010, Loss: 0.8084, Train: 0.7509, Val: 0.4348, Test: 0.4232
+Epoch: 020, Loss: 0.4429, Train: 0.8516, Val: 0.3690, Test: 0.3706
+Epoch: 030, Loss: 0.2997, Train: 0.9002, Val: 0.3429, Test: 0.3246
+Epoch: 040, Loss: 0.2333, Train: 0.9249, Val: 0.3251, Test: 0.3443
+Epoch: 050, Loss: 0.2303, Train: 0.9377, Val: 0.3141, Test: 0.3224
+Epoch: 060, Loss: 0.2072, Train: 0.9350, Val: 0.3292, Test: 0.3180
+Epoch: 070, Loss: 0.1923, Train: 0.9350, Val: 0.3265, Test: 0.3202
+Epoch: 080, Loss: 0.1923, Train: 0.9469, Val: 0.3361, Test: 0.3202
+Epoch: 090, Loss: 0.1828, Train: 0.9460, Val: 0.3306, Test: 0.3268
+Epoch: 100, Loss: 0.1819, Train: 0.9396, Val: 0.3086, Test: 0.3224
+Split 2 - Best Val: 0.4815, Test at Best Val: 0.4671
+Running split 3/9
+Epoch: 010, Loss: 0.8182, Train: 0.7537, Val: 0.4280, Test: 0.4825
+Epoch: 020, Loss: 0.4634, Train: 0.8297, Val: 0.4115, Test: 0.4123
+Epoch: 030, Loss: 0.3124, Train: 0.9038, Val: 0.3992, Test: 0.4167
+Epoch: 040, Loss: 0.2553, Train: 0.9313, Val: 0.3978, Test: 0.4145
+Epoch: 050, Loss: 0.2650, Train: 0.9377, Val: 0.3923, Test: 0.4145
+Epoch: 060, Loss: 0.2321, Train: 0.9396, Val: 0.3827, Test: 0.4079
+Epoch: 070, Loss: 0.1986, Train: 0.9359, Val: 0.3800, Test: 0.4079
+Epoch: 080, Loss: 0.1985, Train: 0.9432, Val: 0.3745, Test: 0.3969
+Epoch: 090, Loss: 0.2007, Train: 0.9405, Val: 0.3827, Test: 0.4101
+Epoch: 100, Loss: 0.1807, Train: 0.9505, Val: 0.3690, Test: 0.3969
+Split 3 - Best Val: 0.4499, Test at Best Val: 0.4627
+Running split 4/9
+Epoch: 010, Loss: 0.8339, Train: 0.7326, Val: 0.4321, Test: 0.4079
+Epoch: 020, Loss: 0.4853, Train: 0.8342, Val: 0.4198, Test: 0.3794
+Epoch: 030, Loss: 0.3598, Train: 0.8837, Val: 0.3896, Test: 0.3794
+Epoch: 040, Loss: 0.2945, Train: 0.9176, Val: 0.3731, Test: 0.3882
+Epoch: 050, Loss: 0.2499, Train: 0.9277, Val: 0.3580, Test: 0.3816
+Epoch: 060, Loss: 0.2516, Train: 0.9341, Val: 0.3553, Test: 0.3794
+Epoch: 070, Loss: 0.1983, Train: 0.9396, Val: 0.3498, Test: 0.3816
+Epoch: 080, Loss: 0.2172, Train: 0.9396, Val: 0.3484, Test: 0.3662
+Epoch: 090, Loss: 0.2289, Train: 0.9460, Val: 0.3580, Test: 0.3596
+Epoch: 100, Loss: 0.2084, Train: 0.9460, Val: 0.3471, Test: 0.3531
+Split 4 - Best Val: 0.4431, Test at Best Val: 0.4035
+Running split 5/9
+Epoch: 010, Loss: 0.8149, Train: 0.7427, Val: 0.4417, Test: 0.4386
+Epoch: 020, Loss: 0.4836, Train: 0.8352, Val: 0.4047, Test: 0.4320
+Epoch: 030, Loss: 0.3816, Train: 0.8855, Val: 0.3745, Test: 0.4079
+Epoch: 040, Loss: 0.2972, Train: 0.9148, Val: 0.3676, Test: 0.4123
+Epoch: 050, Loss: 0.2597, Train: 0.9277, Val: 0.3731, Test: 0.4145
+Epoch: 060, Loss: 0.2266, Train: 0.9286, Val: 0.3539, Test: 0.3925
+Epoch: 070, Loss: 0.2408, Train: 0.9368, Val: 0.3553, Test: 0.3772
+Epoch: 080, Loss: 0.2051, Train: 0.9377, Val: 0.3608, Test: 0.3750
+Epoch: 090, Loss: 0.2060, Train: 0.9405, Val: 0.3772, Test: 0.3969
+Epoch: 100, Loss: 0.2064, Train: 0.9441, Val: 0.3608, Test: 0.3904
+Split 5 - Best Val: 0.4650, Test at Best Val: 0.4232
+Running split 6/9
+Epoch: 010, Loss: 0.7880, Train: 0.7720, Val: 0.4554, Test: 0.4298
+Epoch: 020, Loss: 0.4749, Train: 0.8342, Val: 0.4170, Test: 0.4013
+Epoch: 030, Loss: 0.3809, Train: 0.8782, Val: 0.3992, Test: 0.3860
+Epoch: 040, Loss: 0.3150, Train: 0.9121, Val: 0.3827, Test: 0.3838
+Epoch: 050, Loss: 0.2617, Train: 0.9203, Val: 0.3813, Test: 0.3882
+Epoch: 060, Loss: 0.2276, Train: 0.9359, Val: 0.3745, Test: 0.3772
+Epoch: 070, Loss: 0.2374, Train: 0.9368, Val: 0.3855, Test: 0.3706
+Epoch: 080, Loss: 0.2014, Train: 0.9441, Val: 0.3827, Test: 0.3575
+Epoch: 090, Loss: 0.2505, Train: 0.9423, Val: 0.3704, Test: 0.3509
+Epoch: 100, Loss: 0.1969, Train: 0.9505, Val: 0.3704, Test: 0.3487
+Split 6 - Best Val: 0.4678, Test at Best Val: 0.4167
+Running split 7/9
+Epoch: 010, Loss: 0.8064, Train: 0.7592, Val: 0.4335, Test: 0.4013
+Epoch: 020, Loss: 0.4888, Train: 0.8333, Val: 0.3745, Test: 0.3662
+Epoch: 030, Loss: 0.3522, Train: 0.8855, Val: 0.3567, Test: 0.3377
+Epoch: 040, Loss: 0.3070, Train: 0.9011, Val: 0.3608, Test: 0.3377
+Epoch: 050, Loss: 0.2638, Train: 0.9185, Val: 0.3594, Test: 0.3399
+Epoch: 060, Loss: 0.2450, Train: 0.9212, Val: 0.3416, Test: 0.3311
+Epoch: 070, Loss: 0.2335, Train: 0.9304, Val: 0.3649, Test: 0.3596
+Epoch: 080, Loss: 0.2308, Train: 0.9332, Val: 0.3635, Test: 0.3355
+Epoch: 090, Loss: 0.2044, Train: 0.9267, Val: 0.3690, Test: 0.3487
+Epoch: 100, Loss: 0.2309, Train: 0.9359, Val: 0.3594, Test: 0.3377
+Split 7 - Best Val: 0.4568, Test at Best Val: 0.4298
+Running split 8/9
+Epoch: 010, Loss: 0.8009, Train: 0.7692, Val: 0.4678, Test: 0.4364
+Epoch: 020, Loss: 0.4873, Train: 0.8416, Val: 0.4047, Test: 0.3860
+Epoch: 030, Loss: 0.3489, Train: 0.8984, Val: 0.4156, Test: 0.3925
+Epoch: 040, Loss: 0.2815, Train: 0.9148, Val: 0.3951, Test: 0.3750
+Epoch: 050, Loss: 0.2691, Train: 0.9304, Val: 0.3923, Test: 0.3596
+Epoch: 060, Loss: 0.2414, Train: 0.9359, Val: 0.3868, Test: 0.3531
+Epoch: 070, Loss: 0.2267, Train: 0.9295, Val: 0.4074, Test: 0.3509
+Epoch: 080, Loss: 0.2315, Train: 0.9368, Val: 0.3909, Test: 0.3509
+Epoch: 090, Loss: 0.2109, Train: 0.9460, Val: 0.3704, Test: 0.3553
+Epoch: 100, Loss: 0.2162, Train: 0.9524, Val: 0.3827, Test: 0.3706
+Split 8 - Best Val: 0.4678, Test at Best Val: 0.4408
+Running split 9/9
+Epoch: 010, Loss: 0.8208, Train: 0.7482, Val: 0.4115, Test: 0.4342
+Epoch: 020, Loss: 0.4510, Train: 0.8416, Val: 0.3663, Test: 0.3838
+Epoch: 030, Loss: 0.3753, Train: 0.8773, Val: 0.3471, Test: 0.3794
+Epoch: 040, Loss: 0.3081, Train: 0.9075, Val: 0.3210, Test: 0.3794
+Epoch: 050, Loss: 0.2902, Train: 0.9212, Val: 0.3169, Test: 0.3596
+Epoch: 060, Loss: 0.2533, Train: 0.9267, Val: 0.3251, Test: 0.3750
+Epoch: 070, Loss: 0.2185, Train: 0.9267, Val: 0.3155, Test: 0.3531
+Epoch: 080, Loss: 0.2661, Train: 0.9386, Val: 0.3155, Test: 0.3706
+Epoch: 090, Loss: 0.2113, Train: 0.9295, Val: 0.3128, Test: 0.3377
+Epoch: 100, Loss: 0.2096, Train: 0.9386, Val: 0.3086, Test: 0.3465
+Split 9 - Best Val: 0.4376, Test at Best Val: 0.4496
+
+============================================================
+FINAL RESULTS: HH-GAT on Chameleon
+============================================================
+Test accuracies: [0.4780701696872711, 0.46929824352264404, 0.46710526943206787, 0.46271929144859314, 0.4035087823867798, 0.4232456088066101, 0.4166666567325592, 0.429824560880661, 0.44078946113586426, 0.4495614171028137]
+Mean: 0.4441
+Std:  0.0253

@@ -1,6 +1,7 @@
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "D:\tejinder\halfhop-project\experiments\ablations\initialization.py", line 2, in <module>
-    import torch
-ModuleNotFoundError: No module named 'torch'
+
+============================================================
+INITIALIZATION ABLATION RESULTS on TEXAS
+============================================================
+    linear: 75.14% ± 6.60%
+      zero: 68.92% ± 5.73%
+    random: 66.22% ± 6.89%

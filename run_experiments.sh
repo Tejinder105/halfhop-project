@@ -2,6 +2,10 @@
 # Runs all supervised experiments across 6 datasets and 6 models.
 # Already-completed runs (those containing "FINAL RESULTS") are skipped
 # automatically so the script can be safely resumed after interruption.
+set -o pipefail
+
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$PROJECT_ROOT" || exit 1
 
 if [ -f ".venv/Scripts/activate" ]; then
     source .venv/Scripts/activate
@@ -15,6 +19,13 @@ fi
 DATASETS=("texas" "wisconsin" "actor" "cornell" "squirrel" "chameleon")
 MODELS=("gcn" "sage" "gat" "hh-gcn" "hh-sage" "hh-gat")
 EPOCHS="${EPOCHS:-100}"
+SSL_EPOCHS="${SSL_EPOCHS:-1000}"
+
+has_marker() {
+    local result_file="$1"
+    local marker="$2"
+    grep -Fq -- "$marker" "$result_file" 2>/dev/null
+}
 
 mkdir -p experiments/results
 mkdir -p experiments/results/ablations
@@ -29,18 +40,27 @@ for dataset in "${DATASETS[@]}"; do
     for model in "${MODELS[@]}"; do
         result_file="experiments/results/${dataset}_${model}.txt"
         # Skip if already completed successfully
-        if grep -q "FINAL RESULTS" "$result_file" 2>/dev/null; then
+        if has_marker "$result_file" "FINAL RESULTS"; then
             echo "SKIP  ${model} on ${dataset} (already done)"
             continue
         fi
+        if grep -Eq -- "CUDA error: out of memory|KeyboardInterrupt|RUN FAILED" "$result_file" 2>/dev/null; then
+            echo "SKIP  ${model} on ${dataset} (previous run failed; delete ${result_file} to retry)"
+            continue
+        fi
         echo "RUN   ${model} on ${dataset}..."
-        python -u -m experiments.supervised.run \
+        if python -u -m experiments.supervised.run \
             --dataset "$dataset" \
             --model "$model" \
             --epochs "$EPOCHS" \
             --verbose \
-            > "$result_file" 2>&1
-        echo "DONE  ${model} on ${dataset}"
+            > "$result_file" 2>&1; then
+            echo "DONE  ${model} on ${dataset}"
+        else
+            printf '\nRUN FAILED: %s on %s\n' "$model" "$dataset" >> "$result_file"
+            echo "FAILED ${model} on ${dataset}; see ${result_file}"
+            exit 1
+        fi
     done
 done
 
@@ -52,7 +72,7 @@ echo "=========================================="
 echo "Phase 8: Ablation Studies"
 echo "=========================================="
 
-if ! grep -q "CONNECTIVITY ABLATION" experiments/results/ablations/connectivity_texas.txt 2>/dev/null; then
+if ! has_marker experiments/results/ablations/connectivity_texas.txt "CONNECTIVITY ABLATION"; then
     echo "RUN   connectivity ablation on texas..."
     python -u -m experiments.ablations.connectivity \
         --dataset texas \
@@ -62,7 +82,7 @@ else
     echo "SKIP  connectivity ablation (already done)"
 fi
 
-if ! grep -q "INITIALIZATION ABLATION" experiments/results/ablations/initialization_texas.txt 2>/dev/null; then
+if ! has_marker experiments/results/ablations/initialization_texas.txt "INITIALIZATION ABLATION"; then
     echo "RUN   initialization ablation on texas..."
     python -u -m experiments.ablations.initialization \
         --dataset texas \
@@ -79,20 +99,29 @@ echo ""
 echo "=========================================="
 echo "Phase 9: SSL Experiments"
 echo "=========================================="
-SSL_DATASETS=("amazon_computers" "amazon_photo" "coauthor_cs")
+SSL_DATASETS=("amazon-computers" "amazon-photos" "coauthor-cs")
+SSL_OUTPUT_NAMES=("amazon_computers" "amazon_photo" "coauthor_cs")
 
-for dataset in "${SSL_DATASETS[@]}"; do
+for index in "${!SSL_DATASETS[@]}"; do
+    dataset="${SSL_DATASETS[$index]}"
+    output_name="${SSL_OUTPUT_NAMES[$index]}"
     for ssl_method in "bgrl" "grace"; do
-        result_file="experiments/results/${dataset}_${ssl_method}.txt"
-        if grep -q "FINAL SSL RESULTS" "$result_file" 2>/dev/null; then
+        result_file="experiments/results/${output_name}_${ssl_method}.txt"
+        if has_marker "$result_file" "FINAL SSL RESULTS"; then
             echo "SKIP  ${ssl_method} on ${dataset} (already done)"
             continue
         fi
         echo "RUN   ${ssl_method} on ${dataset}..."
-        python -u -m experiments.ssl.${ssl_method} \
+        if python -u -m experiments.ssl.${ssl_method} \
             --dataset "$dataset" \
-            > "$result_file" 2>&1
-        echo "DONE  ${ssl_method} on ${dataset}"
+            --epochs "$SSL_EPOCHS" \
+            | tee "$result_file"; then
+            echo "DONE  ${ssl_method} on ${dataset}"
+        else
+            printf '\nRUN FAILED: %s on %s\n' "$ssl_method" "$dataset" >> "$result_file"
+            echo "FAILED ${ssl_method} on ${dataset}; see ${result_file}"
+            exit 1
+        fi
     done
 done
 
