@@ -1,6 +1,7 @@
-Traceback (most recent call last):
-  File "<frozen runpy>", line 198, in _run_module_as_main
-  File "<frozen runpy>", line 88, in _run_code
-  File "D:\tejinder\halfhop-project\experiments\ablations\connectivity.py", line 2, in <module>
-    import torch
-ModuleNotFoundError: No module named 'torch'
+
+============================================================
+CONNECTIVITY ABLATION RESULTS on TEXAS
+============================================================
+  proposed: 74.05% ± 5.44%
+       hh1: 70.00% ± 6.80%
+       hh2: 60.54% ± 6.40%

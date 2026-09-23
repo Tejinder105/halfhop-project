@@ -1,28 +1,44 @@
 Loaded config for gcn on texas: {}
 Running split 0/9
+Epoch: 010, Loss: 0.5305, Train: 0.6322, Val: 0.2034, Test: 0.0811
+Epoch: 020, Loss: 0.5236, Train: 0.8851, Val: 0.5932, Test: 0.4865
+Epoch: 030, Loss: 0.2902, Train: 0.9195, Val: 0.5424, Test: 0.4595
+Epoch: 040, Loss: 0.2690, Train: 0.9080, Val: 0.5593, Test: 0.4865
+Epoch: 050, Loss: 0.2111, Train: 0.9310, Val: 0.5424, Test: 0.5135
+Epoch: 060, Loss: 0.2491, Train: 0.9195, Val: 0.5254, Test: 0.5135
+Epoch: 070, Loss: 0.1849, Train: 0.9770, Val: 0.5424, Test: 0.4054
+Epoch: 080, Loss: 0.1294, Train: 0.9655, Val: 0.5424, Test: 0.4595
+Epoch: 090, Loss: 0.1491, Train: 0.9885, Val: 0.5424, Test: 0.4595
+Epoch: 100, Loss: 0.1540, Train: 0.9885, Val: 0.5254, Test: 0.4595
 Split 0 - Best Val: 0.6271, Test at Best Val: 0.6216
 Running split 1/9
-Split 1 - Best Val: 0.5593, Test at Best Val: 0.5946
+Epoch: 010, Loss: 0.4583, Train: 0.8276, Val: 0.5085, Test: 0.5676
+Epoch: 020, Loss: 0.3455, Train: 0.9310, Val: 0.4576, Test: 0.5676
+Epoch: 030, Loss: 0.2476, Train: 0.9425, Val: 0.4746, Test: 0.5676
+Epoch: 040, Loss: 0.2009, Train: 0.9540, Val: 0.4407, Test: 0.5676
+Epoch: 050, Loss: 0.1336, Train: 0.9770, Val: 0.4746, Test: 0.5676
+Epoch: 060, Loss: 0.1212, Train: 0.9655, Val: 0.4237, Test: 0.5676
+Epoch: 070, Loss: 0.1549, Train: 0.9770, Val: 0.4407, Test: 0.5676
+Epoch: 080, Loss: 0.1296, Train: 0.9770, Val: 0.4407, Test: 0.5676
+Epoch: 090, Loss: 0.1618, Train: 0.9770, Val: 0.4237, Test: 0.5676
+Epoch: 100, Loss: 0.1215, Train: 0.9770, Val: 0.4068, Test: 0.5946
+Split 1 - Best Val: 0.5593, Test at Best Val: 0.5676
 Running split 2/9
-Split 2 - Best Val: 0.5932, Test at Best Val: 0.4865
-Running split 3/9
-Split 3 - Best Val: 0.5424, Test at Best Val: 0.6216
-Running split 4/9
-Split 4 - Best Val: 0.6271, Test at Best Val: 0.5676
-Running split 5/9
-Split 5 - Best Val: 0.6102, Test at Best Val: 0.5946
-Running split 6/9
-Split 6 - Best Val: 0.6102, Test at Best Val: 0.5135
-Running split 7/9
-Split 7 - Best Val: 0.6271, Test at Best Val: 0.6216
-Running split 8/9
-Split 8 - Best Val: 0.4915, Test at Best Val: 0.5946
-Running split 9/9
-Split 9 - Best Val: 0.4746, Test at Best Val: 0.6216
-
-============================================================
-FINAL RESULTS: GCN on Texas
-============================================================
-Test accuracies: [0.6216216087341309, 0.5945945978164673, 0.4864864945411682, 0.6216216087341309, 0.5675675868988037, 0.5945945978164673, 0.5135135054588318, 0.6216216087341309, 0.5945945978164673, 0.6216216087341309]
-Mean: 0.5838
-Std:  0.0480
+Epoch: 010, Loss: 0.5036, Train: 0.8391, Val: 0.5254, Test: 0.4054
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\tejinder\halfhop-project\experiments\supervised\run.py", line 122, in <module>
+    main()
+  File "D:\tejinder\halfhop-project\experiments\supervised\run.py", line 99, in main
+    best_val, best_test = run_training_loop(
+                          ^^^^^^^^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\halfhop\training.py", line 138, in run_training_loop
+    loss = train_step(model, data, optimizer, train_mask)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\halfhop\training.py", line 60, in train_step
+    optimizer.step()
+  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\optim\optimizer.py", line 473, in wrapper
+    _global_optimizer_pre_hooks.values(),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

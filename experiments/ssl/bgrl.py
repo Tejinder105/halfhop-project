@@ -16,6 +16,7 @@ Reference:
 import argparse
 import copy
 import math
+import os
 
 import torch
 import torch.nn as nn
@@ -26,6 +27,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 import numpy as np
+from tqdm import trange
 
 from halfhop.datasets import load_dataset
 from halfhop.halfhop import HalfHop
@@ -34,7 +36,9 @@ from halfhop.reproducibility import set_seed
 # ---------------------------------------------------------------------------
 # Device
 # ---------------------------------------------------------------------------
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+DEVICE = torch.device(
+    os.environ.get('HALFHOP_DEVICE', 'cuda' if torch.cuda.is_available() else 'cpu')
+)
 
 
 # ---------------------------------------------------------------------------
@@ -131,7 +135,7 @@ class BGRL(nn.Module):
         ):
             target_p.data.mul_(tau).add_(online_p.data, alpha=1.0 - tau)
 
-    def forward(self, x1, edge1, x2, edge2):
+    def forward(self, x1, edge1, x2, edge2, original_mask=None):
         """
         Args:
             x1, edge1: Augmented view 1 (Half-Hop augmented)
@@ -142,12 +146,16 @@ class BGRL(nn.Module):
         # Online branches
         z1 = self.online_encoder(x1, edge1)
         q1 = self.predictor(z1)
+        if original_mask is not None:
+            q1 = q1[original_mask]
         z2 = self.online_encoder(x2, edge2)
         q2 = self.predictor(z2)
 
         # Target branches (no gradient)
         with torch.no_grad():
             t1 = self.target_encoder(x1, edge1)
+            if original_mask is not None:
+                t1 = t1[original_mask]
             t2 = self.target_encoder(x2, edge2)
 
         # BGRL loss: cosine similarity between cross-view predictions & targets
@@ -192,7 +200,7 @@ def linear_eval(embeddings: np.ndarray, labels: np.ndarray,
 # ---------------------------------------------------------------------------
 # Main training loop
 # ---------------------------------------------------------------------------
-def run_bgrl(dataset_name: str = "amazon_computers",
+def run_bgrl(dataset_name: str = "amazon-computers",
              hidden: int = 512, out_channels: int = 256,
              epochs: int = 1000, lr: float = 1e-5,
              tau: float = 0.99, hh_alpha: float = 0.5, hh_p: float = 0.75,
@@ -225,7 +233,8 @@ def run_bgrl(dataset_name: str = "amazon_computers",
     print(f"Device: {DEVICE}")
 
     model.train()
-    for epoch in range(1, epochs + 1):
+    progress = trange(1, epochs + 1, desc=f"BGRL {dataset_name}", unit="epoch")
+    for epoch in progress:
         optimizer.zero_grad()
 
         # View 1: Half-Hop augmented graph
@@ -240,14 +249,15 @@ def run_bgrl(dataset_name: str = "amazon_computers",
         x2 = aug2.x
         e2 = aug2.edge_index
 
-        loss = model(x1, e1, x2, e2)
+        original_mask = ~aug1.slow_node_mask if hasattr(aug1, 'slow_node_mask') else None
+        loss = model(x1, e1, x2, e2, original_mask=original_mask)
         loss.backward()
         optimizer.step()
         model.update_target(tau=tau)
         scheduler.step()
 
         if epoch % 100 == 0 or epoch == 1:
-            print(f"  Epoch {epoch:4d} | Loss: {loss.item():.4f}")
+            progress.set_postfix(loss=f"{loss.item():.4f}")
 
     # Linear evaluation
     model.eval()
@@ -285,7 +295,7 @@ def run_bgrl(dataset_name: str = "amazon_computers",
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run BGRL with Half-Hop")
-    parser.add_argument("--dataset", type=str, default="amazon_computers")
+    parser.add_argument("--dataset", type=str, default="amazon-computers")
     parser.add_argument("--hidden", type=int, default=512)
     parser.add_argument("--out_channels", type=int, default=256)
     parser.add_argument("--epochs", type=int, default=1000)

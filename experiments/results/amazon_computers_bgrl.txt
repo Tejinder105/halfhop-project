@@ -1,0 +1,2 @@
+Training BGRL on amazon-computers | 767 feats | 10 classes | 13752 nodes
+Device: cuda

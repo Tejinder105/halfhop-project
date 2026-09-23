@@ -8,3 +8,4 @@ matplotlib
 scikit-learn
 pytest
 jupyter
+tqdm

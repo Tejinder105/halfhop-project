@@ -1,28 +1,57 @@
-Loaded config for sage on actor: {}
-Running split 0/9
-Split 0 - Best Val: 0.3651, Test at Best Val: 0.3474
-Running split 1/9
-Split 1 - Best Val: 0.3532, Test at Best Val: 0.3362
-Running split 2/9
-Split 2 - Best Val: 0.3614, Test at Best Val: 0.3421
-Running split 3/9
-Split 3 - Best Val: 0.3598, Test at Best Val: 0.3408
-Running split 4/9
-Split 4 - Best Val: 0.3639, Test at Best Val: 0.3329
-Running split 5/9
-Split 5 - Best Val: 0.3549, Test at Best Val: 0.3283
-Running split 6/9
-Split 6 - Best Val: 0.3483, Test at Best Val: 0.3493
-Running split 7/9
-Split 7 - Best Val: 0.3524, Test at Best Val: 0.3421
-Running split 8/9
-Split 8 - Best Val: 0.3512, Test at Best Val: 0.3487
-Running split 9/9
-Split 9 - Best Val: 0.3684, Test at Best Val: 0.3500
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 441, in __str__
+    return self._str
+           ^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute '_str'
 
-============================================================
-FINAL RESULTS: SAGE on Actor
-============================================================
-Test accuracies: [0.34736841917037964, 0.33618420362472534, 0.34210526943206787, 0.34078946709632874, 0.3328947424888611, 0.3282894790172577, 0.34934210777282715, 0.34210526943206787, 0.3486842215061188, 0.3499999940395355]
-Mean: 0.3418
-Std:  0.0074
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 555, in drive
+    return self._drv
+           ^^^^^^^^^
+AttributeError: 'WindowsPath' object has no attribute '_drv'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\tejinder\halfhop-project\experiments\supervised\run.py", line 4, in <module>
+    import torch
+  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\__init__.py", line 2808, in <module>
+    _import_device_backends()
+  File "D:\tejinder\halfhop-project\.venv\Lib\site-packages\torch\__init__.py", line 2758, in _import_device_backends
+    backend_extensions = entry_points(group=group_name)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 913, in entry_points
+    return EntryPoints(eps).select(**params)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 911, in <genexpr>
+    dist.entry_points for dist in _unique(distributions())
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 471, in entry_points
+    return EntryPoints._from_text_for(self.read_text('entry_points.txt'), self)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\importlib\metadata\__init__.py", line 819, in read_text
+    return self._path.joinpath(filename).read_text(encoding='utf-8')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 448, in __fspath__
+    return str(self)
+           ^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 443, in __str__
+    self._str = self._format_parsed_parts(self.drive, self.root,
+                                          ^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 557, in drive
+    self._load_parts()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\pathlib.py", line 414, in _load_parts
+    path = self._flavour.join(*paths)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen ntpath>", line 142, in join
+KeyboardInterrupt

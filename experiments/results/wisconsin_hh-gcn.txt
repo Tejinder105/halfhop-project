@@ -1,28 +1,128 @@
 Loaded config for hh-gcn on wisconsin: {'lr': 0.0105, 'wd': 0.0002, 'depth': 3, 'hidden': 128, 'dropout': 0.6612, 'alpha': 0.9937, 'p': 0.714}
 Running split 0/9
+Epoch: 010, Loss: 0.9351, Train: 0.7000, Val: 0.4875, Test: 0.4510
+Epoch: 020, Loss: 0.8779, Train: 0.8000, Val: 0.5000, Test: 0.4314
+Epoch: 030, Loss: 0.7033, Train: 0.8417, Val: 0.4750, Test: 0.4510
+Epoch: 040, Loss: 0.6766, Train: 0.8167, Val: 0.4875, Test: 0.4510
+Epoch: 050, Loss: 0.7185, Train: 0.8750, Val: 0.4250, Test: 0.4706
+Epoch: 060, Loss: 0.4785, Train: 0.8583, Val: 0.4375, Test: 0.4118
+Epoch: 070, Loss: 0.4196, Train: 0.8417, Val: 0.4625, Test: 0.4706
+Epoch: 080, Loss: 0.4726, Train: 0.8417, Val: 0.5000, Test: 0.3922
+Epoch: 090, Loss: 0.4191, Train: 0.9083, Val: 0.4500, Test: 0.4510
+Epoch: 100, Loss: 0.4073, Train: 0.9083, Val: 0.4500, Test: 0.4314
 Split 0 - Best Val: 0.5500, Test at Best Val: 0.5882
 Running split 1/9
-Split 1 - Best Val: 0.4875, Test at Best Val: 0.5294
+Epoch: 010, Loss: 0.9651, Train: 0.6917, Val: 0.4625, Test: 0.5490
+Epoch: 020, Loss: 0.8551, Train: 0.8333, Val: 0.3875, Test: 0.5490
+Epoch: 030, Loss: 0.5897, Train: 0.8917, Val: 0.4250, Test: 0.6471
+Epoch: 040, Loss: 0.4789, Train: 0.9083, Val: 0.3750, Test: 0.5098
+Epoch: 050, Loss: 0.4428, Train: 0.9000, Val: 0.4125, Test: 0.5490
+Epoch: 060, Loss: 0.5356, Train: 0.8833, Val: 0.4000, Test: 0.5686
+Epoch: 070, Loss: 0.4326, Train: 0.9333, Val: 0.3875, Test: 0.5686
+Epoch: 080, Loss: 0.5461, Train: 0.9333, Val: 0.4000, Test: 0.6078
+Epoch: 090, Loss: 0.3828, Train: 0.9500, Val: 0.4000, Test: 0.5686
+Epoch: 100, Loss: 0.3132, Train: 0.9417, Val: 0.4000, Test: 0.5686
+Split 1 - Best Val: 0.5000, Test at Best Val: 0.6275
 Running split 2/9
-Split 2 - Best Val: 0.6000, Test at Best Val: 0.5490
+Epoch: 010, Loss: 1.0622, Train: 0.6750, Val: 0.5000, Test: 0.4706
+Epoch: 020, Loss: 0.8017, Train: 0.7333, Val: 0.4875, Test: 0.5098
+Epoch: 030, Loss: 0.8206, Train: 0.8417, Val: 0.4500, Test: 0.4706
+Epoch: 040, Loss: 0.6192, Train: 0.8750, Val: 0.4500, Test: 0.4902
+Epoch: 050, Loss: 0.5124, Train: 0.8667, Val: 0.4375, Test: 0.5098
+Epoch: 060, Loss: 0.5169, Train: 0.9167, Val: 0.4375, Test: 0.4902
+Epoch: 070, Loss: 0.5032, Train: 0.8917, Val: 0.3875, Test: 0.4706
+Epoch: 080, Loss: 0.4305, Train: 0.9333, Val: 0.4250, Test: 0.4902
+Epoch: 090, Loss: 0.5278, Train: 0.8917, Val: 0.4000, Test: 0.4314
+Epoch: 100, Loss: 0.2785, Train: 0.9417, Val: 0.3750, Test: 0.4510
+Split 2 - Best Val: 0.5750, Test at Best Val: 0.5490
 Running split 3/9
-Split 3 - Best Val: 0.5750, Test at Best Val: 0.5294
+Epoch: 010, Loss: 1.0378, Train: 0.6917, Val: 0.5375, Test: 0.4706
+Epoch: 020, Loss: 0.7834, Train: 0.7583, Val: 0.5375, Test: 0.4314
+Epoch: 030, Loss: 0.8681, Train: 0.7917, Val: 0.4375, Test: 0.4314
+Epoch: 040, Loss: 0.5721, Train: 0.8250, Val: 0.4375, Test: 0.4902
+Epoch: 050, Loss: 0.5231, Train: 0.8750, Val: 0.4625, Test: 0.4902
+Epoch: 060, Loss: 0.4418, Train: 0.8750, Val: 0.4875, Test: 0.4706
+Epoch: 070, Loss: 0.6224, Train: 0.8833, Val: 0.4875, Test: 0.4314
+Epoch: 080, Loss: 0.4664, Train: 0.9417, Val: 0.4875, Test: 0.4314
+Epoch: 090, Loss: 0.3389, Train: 0.9250, Val: 0.4625, Test: 0.4706
+Epoch: 100, Loss: 0.4505, Train: 0.8833, Val: 0.4250, Test: 0.4118
+Split 3 - Best Val: 0.6125, Test at Best Val: 0.5294
 Running split 4/9
-Split 4 - Best Val: 0.5625, Test at Best Val: 0.3529
+Epoch: 010, Loss: 1.0816, Train: 0.7583, Val: 0.4375, Test: 0.3529
+Epoch: 020, Loss: 0.7029, Train: 0.8417, Val: 0.3875, Test: 0.3922
+Epoch: 030, Loss: 0.4389, Train: 0.8333, Val: 0.3500, Test: 0.4706
+Epoch: 040, Loss: 0.4888, Train: 0.8917, Val: 0.3375, Test: 0.4510
+Epoch: 050, Loss: 0.4210, Train: 0.8917, Val: 0.3125, Test: 0.4314
+Epoch: 060, Loss: 0.3014, Train: 0.9167, Val: 0.3625, Test: 0.4510
+Epoch: 070, Loss: 0.3233, Train: 0.9417, Val: 0.3250, Test: 0.4118
+Epoch: 080, Loss: 0.4628, Train: 0.9333, Val: 0.3750, Test: 0.3922
+Epoch: 090, Loss: 0.3596, Train: 0.9417, Val: 0.3250, Test: 0.3922
+Epoch: 100, Loss: 0.3802, Train: 0.9333, Val: 0.2625, Test: 0.3725
+Split 4 - Best Val: 0.5625, Test at Best Val: 0.4314
 Running split 5/9
-Split 5 - Best Val: 0.6125, Test at Best Val: 0.4706
+Epoch: 010, Loss: 0.9361, Train: 0.6833, Val: 0.4625, Test: 0.3725
+Epoch: 020, Loss: 0.8780, Train: 0.7750, Val: 0.4500, Test: 0.3725
+Epoch: 030, Loss: 0.7085, Train: 0.8250, Val: 0.4500, Test: 0.4902
+Epoch: 040, Loss: 0.5025, Train: 0.9083, Val: 0.4000, Test: 0.3529
+Epoch: 050, Loss: 0.5747, Train: 0.9000, Val: 0.4500, Test: 0.4314
+Epoch: 060, Loss: 0.5156, Train: 0.8833, Val: 0.4500, Test: 0.4118
+Epoch: 070, Loss: 0.3998, Train: 0.9083, Val: 0.4375, Test: 0.3725
+Epoch: 080, Loss: 0.4618, Train: 0.9500, Val: 0.4000, Test: 0.3922
+Epoch: 090, Loss: 0.3721, Train: 0.9417, Val: 0.4125, Test: 0.3922
+Epoch: 100, Loss: 0.2955, Train: 0.9417, Val: 0.3750, Test: 0.3725
+Split 5 - Best Val: 0.5750, Test at Best Val: 0.6078
 Running split 6/9
-Split 6 - Best Val: 0.5875, Test at Best Val: 0.4706
+Epoch: 010, Loss: 1.1403, Train: 0.5833, Val: 0.4750, Test: 0.5686
+Epoch: 020, Loss: 0.9521, Train: 0.7000, Val: 0.5250, Test: 0.4118
+Epoch: 030, Loss: 0.7890, Train: 0.8417, Val: 0.4500, Test: 0.4706
+Epoch: 040, Loss: 0.7075, Train: 0.8167, Val: 0.4875, Test: 0.4314
+Epoch: 050, Loss: 0.4630, Train: 0.8750, Val: 0.5000, Test: 0.4902
+Epoch: 060, Loss: 0.4445, Train: 0.9000, Val: 0.4500, Test: 0.4902
+Epoch: 070, Loss: 0.5225, Train: 0.9250, Val: 0.4625, Test: 0.4314
+Epoch: 080, Loss: 0.5784, Train: 0.9083, Val: 0.4750, Test: 0.4510
+Epoch: 090, Loss: 0.3809, Train: 0.9000, Val: 0.4750, Test: 0.3529
+Epoch: 100, Loss: 0.3537, Train: 0.8833, Val: 0.4375, Test: 0.4118
+Split 6 - Best Val: 0.5875, Test at Best Val: 0.4902
 Running split 7/9
-Split 7 - Best Val: 0.5500, Test at Best Val: 0.5686
+Epoch: 010, Loss: 1.1849, Train: 0.6417, Val: 0.5250, Test: 0.5686
+Epoch: 020, Loss: 0.7011, Train: 0.7500, Val: 0.4875, Test: 0.4706
+Epoch: 030, Loss: 1.0888, Train: 0.8417, Val: 0.4250, Test: 0.4706
+Epoch: 040, Loss: 0.6319, Train: 0.9083, Val: 0.4250, Test: 0.4510
+Epoch: 050, Loss: 0.5784, Train: 0.8917, Val: 0.4625, Test: 0.4510
+Epoch: 060, Loss: 0.4429, Train: 0.8417, Val: 0.4750, Test: 0.4902
+Epoch: 070, Loss: 0.4619, Train: 0.9417, Val: 0.3750, Test: 0.4902
+Epoch: 080, Loss: 0.4473, Train: 0.9167, Val: 0.4500, Test: 0.4510
+Epoch: 090, Loss: 0.4347, Train: 0.9083, Val: 0.4125, Test: 0.4510
+Epoch: 100, Loss: 0.4767, Train: 0.9333, Val: 0.4375, Test: 0.4314
+Split 7 - Best Val: 0.5625, Test at Best Val: 0.5882
 Running split 8/9
-Split 8 - Best Val: 0.5750, Test at Best Val: 0.4510
+Epoch: 010, Loss: 1.0983, Train: 0.6667, Val: 0.4875, Test: 0.5686
+Epoch: 020, Loss: 0.8525, Train: 0.7667, Val: 0.5125, Test: 0.4314
+Epoch: 030, Loss: 0.6456, Train: 0.8667, Val: 0.5250, Test: 0.3529
+Epoch: 040, Loss: 0.5970, Train: 0.8500, Val: 0.4375, Test: 0.4118
+Epoch: 050, Loss: 0.4684, Train: 0.8917, Val: 0.4250, Test: 0.4706
+Epoch: 060, Loss: 0.3218, Train: 0.9167, Val: 0.3750, Test: 0.4314
+Epoch: 070, Loss: 0.4559, Train: 0.8750, Val: 0.4125, Test: 0.4510
+Epoch: 080, Loss: 0.3314, Train: 0.8917, Val: 0.4125, Test: 0.4118
+Epoch: 090, Loss: 0.2443, Train: 0.9250, Val: 0.3750, Test: 0.4118
+Epoch: 100, Loss: 0.2475, Train: 0.9333, Val: 0.4250, Test: 0.3922
+Split 8 - Best Val: 0.5625, Test at Best Val: 0.5882
 Running split 9/9
-Split 9 - Best Val: 0.6125, Test at Best Val: 0.5098
+Epoch: 010, Loss: 1.1936, Train: 0.6333, Val: 0.5375, Test: 0.4902
+Epoch: 020, Loss: 0.7995, Train: 0.7417, Val: 0.5625, Test: 0.5098
+Epoch: 030, Loss: 0.6897, Train: 0.7667, Val: 0.5625, Test: 0.5098
+Epoch: 040, Loss: 0.6389, Train: 0.7917, Val: 0.5125, Test: 0.3725
+Epoch: 050, Loss: 0.5851, Train: 0.8833, Val: 0.5500, Test: 0.4118
+Epoch: 060, Loss: 0.6580, Train: 0.8167, Val: 0.4750, Test: 0.3333
+Epoch: 070, Loss: 0.4892, Train: 0.8917, Val: 0.5250, Test: 0.4118
+Epoch: 080, Loss: 0.5071, Train: 0.8750, Val: 0.5750, Test: 0.4118
+Epoch: 090, Loss: 0.5523, Train: 0.9333, Val: 0.4875, Test: 0.3529
+Epoch: 100, Loss: 0.4916, Train: 0.9000, Val: 0.4375, Test: 0.4314
+Split 9 - Best Val: 0.6125, Test at Best Val: 0.5490
 
 ============================================================
 FINAL RESULTS: HH-GCN on Wisconsin
 ============================================================
-Test accuracies: [0.5882353186607361, 0.529411792755127, 0.5490196347236633, 0.529411792755127, 0.3529411852359772, 0.47058823704719543, 0.47058823704719543, 0.5686274766921997, 0.45098039507865906, 0.5098039507865906]
-Mean: 0.5020
-Std:  0.0687
+Test accuracies: [0.5882353186607361, 0.6274510025978088, 0.5490196347236633, 0.529411792755127, 0.4313725531101227, 0.6078431606292725, 0.4901960790157318, 0.5882353186607361, 0.5882353186607361, 0.5490196347236633]
+Mean: 0.5549
+Std:  0.0592

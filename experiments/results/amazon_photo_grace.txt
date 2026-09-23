@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\tejinder\halfhop-project\experiments\ssl\grace.py", line 254, in <module>
+    run_grace(
+  File "D:\tejinder\halfhop-project\experiments\ssl\grace.py", line 156, in run_grace
+    dataset, data = load_dataset(dataset_name)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\tejinder\halfhop-project\halfhop\datasets.py", line 153, in load_dataset
+    raise ValueError(
+ValueError: Unknown dataset 'amazon_photo'. Valid names: ['actor', 'amazon-computers', 'amazon-photos', 'chameleon', 'coauthor-cs', 'coauthor-physics', 'cornell', 'squirrel', 'texas', 'wikics', 'wisconsin']
