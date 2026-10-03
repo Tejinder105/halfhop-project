@@ -125,6 +125,19 @@ python run_bgrl_experiments.py --dataset computers --augmentation feat_edge_hh -
 python -m experiments.ssl.grace --dataset amazon_photo --epochs 1000
 ```
 
+### ModelNet 3D mesh graphs (extension)
+```bash
+# Single GPU / one model
+python -m experiments.modelnet.run --dataset 10 --model gcn --epochs 100 --device cuda
+python -m experiments.modelnet.run --dataset 10 --model hh-gcn --epochs 100 --device cuda --p 0.5
+
+# Kaggle 2x T4: one model per GPU
+bash experiments/modelnet/run_kaggle_2gpu.sh
+```
+
+Meshes → `FaceToEdge` graphs → GCN/SAGE ± Half-Hop → global pool → object class.
+Use `--p 0.5` (default) on T4; lower `--batch-size` if OOM.
+
 ### Generate Report
 ```bash
 python experiments/generate_report.py
