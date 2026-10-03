@@ -187,6 +187,13 @@ class HalfHop:
         data.edge_index = new_edge_index
         data.slow_node_mask = slow_node_mask
 
+        # Batched graphs (e.g. ModelNet DataLoader): slow nodes inherit the
+        # graph id of the edge target so global pooling stays correct.
+        if getattr(data, "batch", None) is not None:
+            data.batch = torch.cat([data.batch, data.batch[target]], dim=0)
+        if getattr(data, "ptr", None) is not None:
+            delattr(data, "ptr")
+
         return data
 
     def __repr__(self) -> str:
