@@ -140,6 +140,17 @@ def resolve_device(flag: str) -> torch.device:
     return torch.device(flag)
 
 
+def load_modelnet(root: str, name: str, pre_transform):
+    """Load train/test ModelNet. Call from one process only on first download."""
+    train_dataset = ModelNet(
+        root, name=name, train=True, pre_transform=pre_transform
+    )
+    test_dataset = ModelNet(
+        root, name=name, train=False, pre_transform=pre_transform
+    )
+    return train_dataset, test_dataset
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="ModelNet mesh graph classification ± Half-Hop"
@@ -178,9 +189,40 @@ def main():
         default=None,
         help="Optional path to append FINAL RESULTS line",
     )
+    parser.add_argument(
+        "--prepare-only",
+        action="store_true",
+        help="Download/process ModelNet once, then exit (for 2-GPU races).",
+    )
+    parser.add_argument(
+        "--clean-data",
+        action="store_true",
+        help="Delete data-dir before load (fix a failed parallel download).",
+    )
     args = parser.parse_args()
 
     set_seed(args.seed)
+    root = args.data_dir
+
+    if args.clean_data and Path(root).exists():
+        import shutil
+
+        print(f"Removing corrupted/partial dataset at {root}")
+        shutil.rmtree(root, ignore_errors=True)
+
+    pre_transform = Compose([NormalizeScale(), FaceToEdge(), UsePosAsFeatures()])
+
+    if args.prepare_only:
+        print(f"Preparing ModelNet{args.dataset} under {root} (single process)...")
+        train_dataset, test_dataset = load_modelnet(
+            root, args.dataset, pre_transform
+        )
+        print(
+            f"Ready: train={len(train_dataset)} test={len(test_dataset)} "
+            f"feats={train_dataset.num_features} classes={train_dataset.num_classes}"
+        )
+        return
+
     device = resolve_device(args.device)
     print(f"Device: {device}")
     if device.type == "cuda":
@@ -190,16 +232,8 @@ def main():
             "Pin one job per T4 with CUDA_VISIBLE_DEVICES."
         )
 
-    pre_transform = Compose([NormalizeScale(), FaceToEdge(), UsePosAsFeatures()])
-    root = args.data_dir
-
-    print(f"Loading ModelNet{args.dataset} (download on first run)...")
-    train_dataset = ModelNet(
-        root, name=args.dataset, train=True, pre_transform=pre_transform
-    )
-    test_dataset = ModelNet(
-        root, name=args.dataset, train=False, pre_transform=pre_transform
-    )
+    print(f"Loading ModelNet{args.dataset} from {root}...")
+    train_dataset, test_dataset = load_modelnet(root, args.dataset, pre_transform)
 
     # Hold out 10% of train graphs for validation.
     from torch.utils.data import Subset
