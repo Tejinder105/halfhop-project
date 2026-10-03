@@ -96,13 +96,9 @@ class HalfHop:
         # 2. Decide which edges to half-hop (node-level target sampling)
         # ------------------------------------------------------------------
         if self.p == 1.0:
-            # All non-self-loop edges are half-hopped (deterministic)
             edge_index_to_halfhop = edge_index
             edge_index_to_keep = None
         else:
-            # Randomly select target nodes; half-hop their incoming edges.
-            # Uses torch_geometric.utils.subgraph for efficient node-level
-            # masking (matches official repository implementation exactly).
             node_mask = torch.rand(data.num_nodes, device=device) < self.p
             _, _, edge_mask = subgraph(
                 node_mask,

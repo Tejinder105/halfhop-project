@@ -7,9 +7,6 @@ from torch_geometric.nn import GCNConv
 class GCN(nn.Module):
     r"""Graph Convolutional Network (Kipf & Welling, 2016).
 
-    Implements a variable-depth GCN using PyG's :class:`~torch_geometric.nn.GCNConv`.
-    Architecture: [GCNConv + ReLU + Dropout] × (depth-1) → GCNConv.
-
     Args:
         in_channels (int): Number of input node features.
         hidden_channels (int): Size of hidden layer(s).
