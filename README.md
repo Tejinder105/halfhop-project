@@ -125,6 +125,19 @@ python run_bgrl_experiments.py --dataset computers --augmentation feat_edge_hh -
 python -m experiments.ssl.grace --dataset amazon_photo --epochs 1000
 ```
 
+### Amazon-ratings (real e-commerce heterophilous graph)
+```bash
+# Single model
+python -m experiments.supervised.run --dataset amazon-ratings --model gcn --epochs 200
+python -m experiments.supervised.run --dataset amazon-ratings --model hh-gcn --epochs 200
+
+# Kaggle 2x T4: GCN on GPU0, HH-GCN on GPU1
+bash experiments/supervised/run_amazon_ratings_2gpu.sh
+```
+
+Nodes = products, edges = frequently bought together, labels = rating class (5).
+Expect Half-Hop to help more than on ModelNet because this graph is heterophilous.
+
 ### ModelNet 3D mesh graphs (extension)
 ```bash
 # Single GPU / one model

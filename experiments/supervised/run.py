@@ -66,19 +66,23 @@ def main():
 
     set_seed(args.seed)
 
-    dataset, data = load_dataset(args.dataset)
+    dataset_name = args.dataset.lower().replace("_", "-")
+    if dataset_name in ("amazon-rating", "amazonratings"):
+        dataset_name = "amazon-ratings"
+
+    dataset, data = load_dataset(dataset_name)
     num_features = dataset.num_features
     num_classes = dataset.num_classes
     
-    config = load_config(args.dataset, args.model)
-    print(f"Loaded config for {args.model} on {args.dataset}: {config}")
+    config = load_config(dataset_name, args.model)
+    print(f"Loaded config for {args.model} on {dataset_name}: {config}")
     
     lr = config.get("lr", 0.01)
     wd = config.get("wd", 5e-4)
 
-    dataset_name = args.dataset.lower()
     if dataset_name in HETEROPHILIC_DATASETS:
-        num_splits = 10
+        # Texas…Cornell and Amazon-ratings: 10 fixed masks on data.
+        num_splits = data.train_mask.size(1) if data.train_mask.dim() == 2 else 10
     elif dataset_name in HOMOPHILIC_DATASETS:
         num_splits = 20
         if dataset_name != "wikics":
@@ -112,7 +116,7 @@ def main():
         
     results = torch.tensor(test_results)
     print("\n" + "="*60)
-    print(f"FINAL RESULTS: {args.model.upper()} on {args.dataset.capitalize()}")
+    print(f"FINAL RESULTS: {args.model.upper()} on {dataset_name}")
     print("="*60)
     print(f"Test accuracies: {results.tolist()}")
     print(f"Mean: {results.mean().item():.4f}")

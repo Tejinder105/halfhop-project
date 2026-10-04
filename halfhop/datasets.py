@@ -14,6 +14,7 @@ from torch_geometric.datasets import (
     Amazon,
     Coauthor,
     WikiCS,
+    HeterophilousGraphDataset,
 )
 
 
@@ -64,6 +65,19 @@ def load_chameleon(root: str = "data") -> tuple:
     return dataset, dataset[0]
 
 
+def load_amazon_ratings(root: str = "data") -> tuple:
+    """Load Amazon-ratings (heterophilous product co-purchase graph).
+
+    Nodes are products; edges connect frequently co-purchased items.
+    Labels are average rating buckets (5 classes). Real e-commerce graph
+    from Platonov et al. heterophilous suite. Provides 10 fixed splits.
+    """
+    dataset = HeterophilousGraphDataset(
+        root=f"{root}/Heterophilous", name="Amazon-ratings"
+    )
+    return dataset, dataset[0]
+
+
 # ---------------------------------------------------------------------------
 # Homophilic datasets
 # ---------------------------------------------------------------------------
@@ -106,7 +120,8 @@ def load_wikics(root: str = "data") -> tuple:
 # ---------------------------------------------------------------------------
 
 HETEROPHILIC_DATASETS = [
-    "texas", "wisconsin", "cornell", "actor", "squirrel", "chameleon"
+    "texas", "wisconsin", "cornell", "actor", "squirrel", "chameleon",
+    "amazon-ratings",
 ]
 HOMOPHILIC_DATASETS = [
     "amazon-photos", "amazon-computers",
@@ -122,6 +137,7 @@ _LOADERS = {
     "actor": load_actor,
     "squirrel": load_squirrel,
     "chameleon": load_chameleon,
+    "amazon-ratings": load_amazon_ratings,
     "amazon-photos": load_amazon_photos,
     "amazon-computers": load_amazon_computers,
     "coauthor-cs": load_coauthor_cs,
@@ -152,6 +168,8 @@ def load_dataset(name: str, root: str = "data") -> tuple:
     aliases = {
         "amazon-photo": "amazon-photos",
         "film": "actor",
+        "amazon-rating": "amazon-ratings",
+        "amazonratings": "amazon-ratings",
     }
     name = aliases.get(name, name)
     if name not in _LOADERS:
