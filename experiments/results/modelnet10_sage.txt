@@ -1,0 +1,1 @@
+FINAL RESULTS: SAGE on ModelNet10 | best_val=0.8296 test_at_best_val=0.6982 final_test=0.6982 seed=0 p=0.5 alpha=0.5

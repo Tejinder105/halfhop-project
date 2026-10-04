@@ -1,0 +1,1 @@
+FINAL RESULTS: GCN on ModelNet10 | best_val=0.7920 test_at_best_val=0.6762 final_test=0.6762 seed=0 p=0.5 alpha=0.5

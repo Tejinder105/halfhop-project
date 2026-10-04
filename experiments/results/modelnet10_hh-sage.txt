@@ -1,0 +1,1 @@
+FINAL RESULTS: HH-SAGE on ModelNet10 | best_val=0.8271 test_at_best_val=0.6927 final_test=0.6949 seed=0 p=0.5 alpha=0.5
