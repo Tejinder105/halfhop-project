@@ -20,6 +20,14 @@ from torch_geometric.datasets import ShapeNet
 
 from experiments.pointcloud.run import knn_edge_index
 
+# shapenet.cs.stanford.edu times out from Kaggle. Same zip, different host.
+# The filename must stay unchanged: ShapeNet.download() renames the extracted
+# folder using the last path component.
+ShapeNet.url = (
+    "https://huggingface.co/datasets/cminst/ShapeNet/resolve/main/"
+    "shapenetcore_partanno_segmentation_benchmark_v0_normal.zip"
+)
+
 
 def edge_boundary_stats(score: torch.Tensor, disagree: torch.Tensor, fraction: float) -> dict:
     """Rates of label disagreement in the top and bottom ``fraction`` of edges."""
