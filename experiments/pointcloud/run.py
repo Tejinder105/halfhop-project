@@ -131,12 +131,20 @@ def append_row(path: Path, row: dict) -> None:
 
 
 def matching(rows: list[dict], proto: dict) -> list[dict]:
-    ignore = {"depth", "seed", "best_val", "test"}
+    ignore = {"depth", "seed", "best_val", "test", "test_final"}
     return [
         r
         for r in rows
         if all(r.get(k) == proto[k] for k in proto if k not in ignore)
     ]
+
+
+def mean_std(xs: list[float]) -> tuple[float, float]:
+    mean = sum(xs) / len(xs)
+    if len(xs) < 2:
+        return mean, 0.0
+    var = sum((x - mean) ** 2 for x in xs) / (len(xs) - 1)
+    return mean, var ** 0.5
 
 
 def summarize(path: Path, proto: dict) -> None:
@@ -148,23 +156,25 @@ def summarize(path: Path, proto: dict) -> None:
         if line.strip()
     ]
     rows = matching(rows, proto)
-    by_depth: dict[int, list[float]] = {}
+    by_depth: dict[int, list[dict]] = {}
     for row in rows:
-        by_depth.setdefault(row["depth"], []).append(row["test"])
-    print(f"--- {path} ---")
+        by_depth.setdefault(row["depth"], []).append(row)
+    print(f"--- {path} (epochs={proto['epochs']}) ---")
+    print("          test @ best val      test @ final epoch")
     for depth in sorted(by_depth):
-        xs = by_depth[depth]
-        mean = sum(xs) / len(xs)
-        if len(xs) > 1:
-            var = sum((x - mean) ** 2 for x in xs) / (len(xs) - 1)
-            std = var ** 0.5
-        else:
-            std = 0.0
-        print(f"depth {depth:>2}: test {mean:.4f} ± {std:.4f}  n={len(xs)}")
-    if 2 in by_depth and 16 in by_depth:
+        group = by_depth[depth]
+        bv_mean, bv_std = mean_std([r["test"] for r in group])
+        fin = [r["test_final"] for r in group if "test_final" in r]
+        fin_str = "    (not recorded)" if not fin else "{:.4f} ± {:.4f}".format(*mean_std(fin))
         print(
-            "Go/no-go: depth 16 clearly below depth 2 means over-smoothing "
-            "is real here. Similar numbers mean it is not; move to segmentation."
+            f"depth {depth:>2}: {bv_mean:.4f} ± {bv_std:.4f}    "
+            f"{fin_str}   n={len(group)}"
+        )
+    if 8 in by_depth and 16 in by_depth:
+        print(
+            "Gate: depth 16 staying ~3-4 points below depth 8 at high epoch "
+            "counts means over-smoothing is real. Catching up means the drop "
+            "was under-training; move to the segmentation track."
         )
 
 
@@ -217,9 +227,19 @@ def train_depth(args, train_dataset, test_dataset, depth: int, seed: int, device
                 f"val={val_acc:.4f} test={test_acc:.4f}"
             )
 
+    # Finding 1 of the G0 analysis: with only ~400 val graphs, argmax-over-epochs
+    # picks a lucky checkpoint and cost depth 16 ~3 points. Report both so later
+    # stages can see selection noise instead of inheriting it.
+    test_final = accuracy(test_loader, model, device)
+
+    if args.save_checkpoints:
+        ckpt = Path(args.checkpoint_dir) / f"g0_d{depth}_s{seed}_e{args.epochs}.pt"
+        ckpt.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(best_state, ckpt)
+
     model.load_state_dict(best_state)
-    test_acc = accuracy(test_loader, model, device)
-    return best_val, test_acc
+    test_at_best_val = accuracy(test_loader, model, device)
+    return best_val, test_at_best_val, test_final
 
 
 def parse_args():
@@ -267,6 +287,14 @@ def parse_args():
         "--prepare-only",
         action="store_true",
         help="Download and process the point clouds, then exit.",
+    )
+    parser.add_argument(
+        "--save-checkpoints",
+        action="store_true",
+        help="Save the best-val weights. Needed later for smoothing analysis.",
+    )
+    parser.add_argument(
+        "--checkpoint-dir", type=str, default="experiments/results/checkpoints"
     )
     return parser.parse_args()
 
@@ -330,15 +358,17 @@ def main():
             f"feats={train_dataset.num_features}"
         )
         for depth, seed in pending:
-            best_val, test_acc = train_depth(
+            best_val, test_acc, test_final = train_depth(
                 args, train_dataset, test_dataset, depth, seed, device
             )
             row = {**proto, "depth": depth, "seed": seed,
-                   "best_val": round(best_val, 6), "test": round(test_acc, 6)}
+                   "best_val": round(best_val, 6), "test": round(test_acc, 6),
+                   "test_final": round(test_final, 6)}
             append_row(out, row)
             print(
                 f"FINAL depth={depth} seed={seed} "
-                f"best_val={best_val:.4f} test={test_acc:.4f}"
+                f"best_val={best_val:.4f} test={test_acc:.4f} "
+                f"test_final={test_final:.4f}"
             )
 
     summarize(out, proto)

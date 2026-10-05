@@ -130,7 +130,7 @@ def train_one_epoch(loader, model, optimizer, device) -> float:
         loss = F.cross_entropy(out, data.y)
         loss.backward()
         optimizer.step()
-        total_loss += float(loss) * data.num_graphs
+        total_loss += loss.item() * data.num_graphs
     return total_loss / max(len(loader.dataset), 1)
 
 
