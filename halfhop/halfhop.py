@@ -40,6 +40,16 @@ class HalfHop:
               (edges: ``vi→νk``, ``νk→vj``)
             * ``'hh2'``: ``vi ↔ νk ↔ vj``
               (edges: ``vi→νk``, ``νk→vi``, ``vj→νk``, ``νk→vj``)
+        selection (str): Which edges are slowed. ``'node'`` (default) is the
+            published sampler and uses ``p``. ``'edge'`` slows an exact
+            ``budget`` fraction of edges, chosen uniformly. ``'score'`` slows
+            that same fraction, chosen by ``data.<score_attr>``.
+        budget (float, optional): Fraction of edges to slow when
+            ``selection`` is ``'edge'`` or ``'score'``.
+        score_attr (str): Data attribute holding one score per edge.
+            Default: ``'edge_score'``.
+        score_mode (str): ``'high'`` slows the largest scores, ``'low'``
+            the smallest. Default: ``'high'``.
 
     .. note::
         Use the :attr:`slow_node_mask` attribute to mask out the slow nodes
@@ -60,9 +70,23 @@ class HalfHop:
         inplace: bool = True,
         slow_node_init: str = 'linear',
         connectivity: str = 'proposed',
+        selection: str = 'node',
+        budget: float | None = None,
+        score_attr: str = 'edge_score',
+        score_mode: str = 'high',
     ):
         assert 0.0 <= p <= 1.0, f"p must be in [0, 1], got {p}"
         assert 0.0 <= alpha <= 1.0, f"alpha must be in [0, 1], got {alpha}"
+        assert selection in ('node', 'edge', 'score'), (
+            f"selection must be 'node', 'edge', or 'score', got '{selection}'"
+        )
+        assert score_mode in ('high', 'low'), (
+            f"score_mode must be 'high' or 'low', got '{score_mode}'"
+        )
+        if selection != 'node':
+            assert budget is not None and 0.0 <= budget <= 1.0, (
+                f"budget must be in [0, 1] for selection='{selection}', got {budget}"
+            )
         assert slow_node_init in self.VALID_INIT, (
             f"slow_node_init must be one of {self.VALID_INIT}, "
             f"got '{slow_node_init}'"
@@ -77,6 +101,10 @@ class HalfHop:
         self.inplace = inplace
         self.slow_node_init = slow_node_init
         self.connectivity = connectivity
+        self.selection = selection
+        self.budget = budget
+        self.score_attr = score_attr
+        self.score_mode = score_mode
 
     def __call__(self, data):
         if not self.inplace:
@@ -93,20 +121,49 @@ class HalfHop:
         edge_index = edge_index[:, ~self_loop_mask]
 
         # ------------------------------------------------------------------
-        # 2. Decide which edges to half-hop (node-level target sampling)
+        # 2. Decide which edges to half-hop
         # ------------------------------------------------------------------
-        if self.p == 1.0:
-            edge_index_to_halfhop = edge_index
-            edge_index_to_keep = None
+        if self.selection == 'node':
+            # Published Half-Hop: sample target nodes, then take all their
+            # incoming edges. ``p`` is that node probability.
+            if self.p == 1.0:
+                edge_index_to_halfhop = edge_index
+                edge_index_to_keep = None
+            else:
+                node_mask = torch.rand(data.num_nodes, device=device) < self.p
+                _, _, edge_mask = subgraph(
+                    node_mask,
+                    torch.stack([edge_index[1], edge_index[1]], dim=0),
+                    return_edge_mask=True,
+                )
+                edge_index_to_halfhop = edge_index[:, edge_mask]
+                edge_index_to_keep = edge_index[:, ~edge_mask]
         else:
-            node_mask = torch.rand(data.num_nodes, device=device) < self.p
-            _, _, edge_mask = subgraph(
-                node_mask,
-                torch.stack([edge_index[1], edge_index[1]], dim=0),
-                return_edge_mask=True,
-            )
-            edge_index_to_halfhop = edge_index[:, edge_mask]
-            edge_index_to_keep = edge_index[:, ~edge_mask]
+            # Exact per-graph budget. ``edge`` is uniform. ``score`` takes the
+            # highest (or lowest) ``data.<score_attr>`` edges. Tiny noise
+            # breaks index-order ties.
+            num_edges = edge_index.size(1)
+            k = min(num_edges, max(0, int(round(self.budget * num_edges))))
+            if self.selection == 'edge':
+                choice = torch.randperm(num_edges, device=device)[:k]
+            else:
+                score = getattr(data, self.score_attr)
+                if score.numel() == self_loop_mask.numel():
+                    score = score[~self_loop_mask]
+                if score.numel() != num_edges:
+                    raise ValueError(
+                        f"{self.score_attr} has {score.numel()} values, "
+                        f"expected {num_edges} edges"
+                    )
+                score = score.to(device).float()
+                if self.score_mode == 'low':
+                    score = -score
+                score = score + torch.rand(num_edges, device=device) * 1e-8
+                choice = torch.topk(score, k).indices
+            keep = torch.ones(num_edges, dtype=torch.bool, device=device)
+            keep[choice] = False
+            edge_index_to_halfhop = edge_index[:, choice]
+            edge_index_to_keep = edge_index[:, keep]
 
         # ------------------------------------------------------------------
         # 3. Assign slow-node IDs (consecutive, starting after original nodes)
@@ -201,5 +258,6 @@ class HalfHop:
             f"{self.__class__.__name__}("
             f"alpha={self.alpha}, p={self.p}, "
             f"init='{self.slow_node_init}', "
-            f"connectivity='{self.connectivity}')"
+            f"connectivity='{self.connectivity}', "
+            f"selection='{self.selection}')"
         )

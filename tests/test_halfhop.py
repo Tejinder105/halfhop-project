@@ -142,6 +142,43 @@ def test_init_random(basic_data):
     assert data.x[2, 0] != 0.5 or data.x[2, 1] != 0.5
 
 
+def test_edge_budget_slows_an_exact_count():
+    torch.manual_seed(0)
+    x = torch.ones(6, 2)
+    src = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4]
+    dst = [1, 2, 0, 2, 0, 1, 4, 5, 3, 5]
+    data = Data(
+        x=x,
+        edge_index=torch.tensor([src, dst], dtype=torch.long),
+    )
+    out = HalfHop(selection='edge', budget=0.3, inplace=False)(data)
+    assert int(out.slow_node_mask.sum()) == 3
+    assert out.x.size(0) == 9
+
+
+def test_score_selection_slows_the_highest_edge():
+    x = torch.tensor([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0]])
+    data = Data(
+        x=x,
+        edge_index=torch.tensor([[0, 0], [1, 2]], dtype=torch.long),
+        edge_score=torch.tensor([0.1, 0.9]),
+    )
+    out = HalfHop(selection='score', budget=0.5, inplace=False)(data)
+    assert out.x.size(0) == 4
+    assert torch.allclose(out.x[3], torch.tensor([0.0, 0.5]))
+
+
+def test_score_selection_low_slows_the_smallest_edge():
+    x = torch.tensor([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0]])
+    data = Data(
+        x=x,
+        edge_index=torch.tensor([[0, 0], [1, 2]], dtype=torch.long),
+        edge_score=torch.tensor([0.1, 0.9]),
+    )
+    out = HalfHop(selection='score', budget=0.5, score_mode='low', inplace=False)(data)
+    assert torch.allclose(out.x[3], torch.tensor([0.5, 0.0]))
+
+
 def test_invalid_args():
     with pytest.raises(AssertionError):
         HalfHop(p=-0.1)
