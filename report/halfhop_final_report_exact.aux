@@ -1,0 +1,75 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{pei}
+\citation{azabou}
+\citation{azabou}
+\citation{kipf}
+\citation{hamilton}
+\citation{gat}
+\citation{thakoor}
+\citation{kipf}
+\citation{hamilton}
+\citation{gat}
+\citation{azabou}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work and Paper Analysis}{1}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Methodology}{1}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Half-Hop transformation}{1}{subsection.3.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Half-Hop inserts a slow node between adjacent nodes.}}{1}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:schematic}{{1}{1}{Half-Hop inserts a slow node between adjacent nodes}{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Feature initialization and sampling}{1}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Integration with GNNs}{2}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Implementation Architecture}{2}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Core Augmentation Transform}{2}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}End-to-End Pipeline}{2}{subsection.4.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces End-to-end data pipeline of the reproduced Half-Hop architecture.}}{2}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:pipeline}{{2}{2}{End-to-end data pipeline of the reproduced Half-Hop architecture}{figure.caption.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Edge Replacement and Post-Processing}{2}{subsection.4.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Edge replacement and post-processing. The original edge is replaced by the slow-node path. After message passing, the slow-node embedding ($h_k$) is masked out.}}{2}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:masking}{{3}{2}{Edge replacement and post-processing. The original edge is replaced by the slow-node path. After message passing, the slow-node embedding ($h_k$) is masked out}{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Configuration Management}{2}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Testing Strategy}{2}{subsection.4.5}\protected@file@percent }
+\citation{wu}
+\citation{kipf}
+\citation{hamilton}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Execution Environment and Protocols}{3}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Heterophilic benchmarks}{3}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Benchmark statistics used in the supervised reproduction.}}{3}{table.caption.4}\protected@file@percent }
+\newlabel{tab:datasets}{{I}{3}{Benchmark statistics used in the supervised reproduction}{table.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Training protocol}{3}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}ModelNet10 graph classification}{3}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Implementation Verification}{3}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Heterophilic node classification}{3}{subsection.6.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces GCN test accuracy (\%) over ten splits.}}{3}{table.caption.5}\protected@file@percent }
+\newlabel{tab:gcn}{{II}{3}{GCN test accuracy (\%) over ten splits}{table.caption.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces GraphSAGE test accuracy (\%) over ten splits.}}{3}{table.caption.6}\protected@file@percent }
+\newlabel{tab:sage}{{III}{3}{GraphSAGE test accuracy (\%) over ten splits}{table.caption.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces GAT test accuracy (\%) over ten splits.}}{3}{table.caption.7}\protected@file@percent }
+\newlabel{tab:gat}{{IV}{3}{GAT test accuracy (\%) over ten splits}{table.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Change in accuracy after adding Half-Hop.}}{4}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:heatmap}{{4}{4}{Change in accuracy after adding Half-Hop}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Comparison with the original paper}{4}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Texas ablations}{4}{subsection.6.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Texas connectivity and initialization ablations.}}{4}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:ablations}{{5}{4}{Texas connectivity and initialization ablations}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-D}}ModelNet10 graph classification}{4}{subsection.6.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces ModelNet10 test accuracy at the best validation epoch; seed 0, $p=0.5$, $\alpha =0.5$.}}{4}{table.caption.11}\protected@file@percent }
+\newlabel{tab:modelnet}{{VI}{4}{ModelNet10 test accuracy at the best validation epoch; seed 0, $p=0.5$, $\alpha =0.5$}{table.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces ModelNet10 baseline versus Half-Hop.}}{4}{figure.caption.12}\protected@file@percent }
+\newlabel{fig:modelnet}{{6}{4}{ModelNet10 baseline versus Half-Hop}{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Limitations}{4}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VIII}Conclusion and Future Work}{4}{section.8}\protected@file@percent }
+\bibcite{azabou}{1}
+\bibcite{kipf}{2}
+\bibcite{hamilton}{3}
+\bibcite{gat}{4}
+\bibcite{pei}{5}
+\bibcite{wu}{6}
+\bibcite{thakoor}{7}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Project Half-Hop results versus the source paper.}}{5}{table.caption.9}\protected@file@percent }
+\newlabel{tab:paper}{{V}{5}{Project Half-Hop results versus the source paper}{table.caption.9}{}}
+\@writefile{toc}{\contentsline {section}{References}{5}{section*.13}\protected@file@percent }
+\gdef \@abspage@last{5}
