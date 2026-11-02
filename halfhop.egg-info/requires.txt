@@ -5,3 +5,6 @@ scipy
 pandas
 matplotlib
 scikit-learn
+pyyaml
+pytest
+tqdm

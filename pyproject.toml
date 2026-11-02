@@ -16,6 +16,9 @@ dependencies = [
     "pandas",
     "matplotlib",
     "scikit-learn",
+    "pyyaml",
+    "pytest",
+    "tqdm",
 ]
 
 [tool.setuptools.packages.find]
