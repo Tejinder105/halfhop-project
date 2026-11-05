@@ -1,0 +1,77 @@
+{
+  "gate_auroc_threshold": 0.65,
+  "overall_auroc": 0.6856,
+  "gate_pass": true,
+  "categories_passed": 4,
+  "categories_total": 4,
+  "per_category": [
+    {
+      "category": "Airplane",
+      "synset": "02691156",
+      "n_shapes": 200,
+      "n_edges": 5166770,
+      "n_heterophilic": 340631,
+      "heterophilic_frac": 0.0659,
+      "auroc_logreg": 0.726,
+      "feature_aurocs": {
+        "normal_angle": 0.6992,
+        "curv_diff": 0.6844,
+        "plan_diff": 0.5034,
+        "lin_diff": 0.5052
+      },
+      "gate_pass": true,
+      "elapsed_s": 12.3
+    },
+    {
+      "category": "Chair",
+      "synset": "03001627",
+      "n_shapes": 200,
+      "n_edges": 5387650,
+      "n_heterophilic": 207823,
+      "heterophilic_frac": 0.0386,
+      "auroc_logreg": 0.6798,
+      "feature_aurocs": {
+        "normal_angle": 0.6728,
+        "curv_diff": 0.6482,
+        "plan_diff": 0.5182,
+        "lin_diff": 0.5176
+      },
+      "gate_pass": true,
+      "elapsed_s": 12.62
+    },
+    {
+      "category": "Lamp",
+      "synset": "03636649",
+      "n_shapes": 200,
+      "n_edges": 4314670,
+      "n_heterophilic": 75281,
+      "heterophilic_frac": 0.0174,
+      "auroc_logreg": 0.6776,
+      "feature_aurocs": {
+        "normal_angle": 0.6634,
+        "curv_diff": 0.6659,
+        "plan_diff": 0.5207,
+        "lin_diff": 0.5232
+      },
+      "gate_pass": true,
+      "elapsed_s": 10.64
+    },
+    {
+      "category": "Table",
+      "synset": "04379243",
+      "n_shapes": 200,
+      "n_edges": 5475180,
+      "n_heterophilic": 132985,
+      "heterophilic_frac": 0.0243,
+      "auroc_logreg": 0.6589,
+      "feature_aurocs": {
+        "normal_angle": 0.6522,
+        "curv_diff": 0.6138,
+        "plan_diff": 0.5043,
+        "lin_diff": 0.5106
+      },
+      "gate_pass": true,
+      "elapsed_s": 12.69
+    }
+  ]
+}
