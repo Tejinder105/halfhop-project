@@ -12,7 +12,7 @@ env/
 ENV/
 env.bak/
 venv.bak/
-/data
+data/
 
 # Build & Packaging
 build/
@@ -73,3 +73,17 @@ runs/
 data/cornell/
 data/squirrel/
 data/chameleon/
+
+# Results-only publishing policy
+# Keep experiment results, reports, documentation, and selected deliverables.
+/*
+!/.gitignore
+!/*.md
+!/experiments/
+/experiments/*
+!/experiments/results/
+!/experiments/results/**
+!/report/
+!/report/**
+!/half_hop.pdf
+!/results_extension.zip
