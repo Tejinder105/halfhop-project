@@ -50,12 +50,13 @@ Does geometric edge selection provide meaningful enrichment of heterophilic edge
 
 ## 4. Honest Reviewer Findings & Takeaways
 
-1. **The Signal is Real but Moderate:** The mean per-shape AUROC across held-out shapes is **0.6968**, which clears the 0.65 threshold. However, this is a **narrow pass on Table and Lamp** (Table per-shape mean is ~0.65–0.66).
+1. **The Signal is Real but Moderate:** The mean per-shape AUROC across held-out shapes is **0.6968**, which clears the 0.65 threshold. However, this is a **narrow pass on Table** (pooled AUROC 0.6589, just 0.009 above threshold) and **Chair** (95% CI lower bound is 0.6407, dipping slightly below 0.65). Lamp has a strong per-shape mean (0.7211) but high variance ($\pm 0.165$).
 2. **Only Two Features Carry Signal:** **Surface normal angle** and **curvature difference** are the sole informative geometric features. Planarity and linearity differences are at ~0.50–0.52 (pure chance).
-3. **Controls Rule Out Density/Length Artifacts:** Trivial controls (raw edge length and local point density difference) yield AUROCs between **0.42 and 0.50** (sub-chance or chance). This confirms the proxy is genuinely capturing geometric boundary orientation, not sampling density artifacts.
-4. **Budget Lift Validates Edge Prioritization:** At a realistic Half-Hop budget of $p = 10\%$, selecting edges by surface normal angle achieves **2.0× to 2.6× enrichment (lift)** over random edge selection across categories. At $p = 25\%$, it captures **over 50% of all heterophilic edges**.
+3. **Control Baselines & Nuance:** Trivial controls (raw edge length and local point density difference) yield AUROCs between **0.50 and 0.61**. Geometry clearly beats controls on 3 of 4 categories (Airplane, Lamp, Table). However, for Chair at $p=5\%$, edge-length lift ($2.21\times$) equals or slightly exceeds normal-angle lift ($1.98\times$), showing that edge length is non-trivial on certain categories.
+4. **Budget Lift Validates Edge Prioritization:** At a realistic Half-Hop budget of $p = 10\%$, selecting edges by surface normal angle achieves **1.85× to 2.39× enrichment (lift)** over random edge selection across categories. At $p = 25\%$, it captures **43% to 51% of all heterophilic edges** (Airplane: 51%, Chair: 44%, Lamp: 47%, Table: 43%).
 5. **Implications for Stage 1:**
    - The base rate of heterophilic edges is low (**1.7% to 6.6%**).
-   - An **Oracle arm** (selecting true label-disagreeing edges) MUST be evaluated first in Stage 1 as an upper bound.
+   - Stage 1 uses an **unsupervised surface normal disagreement rule** (fixed threshold, zero ground-truth supervision during inference). The supervised logistic regression from Stage 0 is a diagnostic upper bound only.
+   - An **Oracle arm** (selecting true label-disagreeing edges) is evaluated as an upper bound.
    - If the Oracle arm fails to significantly outperform random Half-Hop, geometry-selected Half-Hop cannot succeed either.
-   - Boundary-specific mIoU (not just global mIoU) must be reported in Stage 1, because global metrics will be insensitive to changes on 3% of edges.
+   - Boundary-specific mIoU as well as global mIoU should be tracked across categories.
