@@ -171,36 +171,48 @@ An external reviewer endorsed this as the **strongest research idea** of the thr
 
 The reviewer proposed a 3-stage gated design:
 
-#### Stage 0 — Geometry Proxy Validity Check (Executed & Officially Passed ✅)
+#### Stage 0 — Geometry Proxy Validity Check (Revised Rigorous Evaluation ✅)
 
 Before committing to expensive GNN training on point clouds:
-1. ShapeNet-Part benchmark data was acquired across 4 categories (Airplane, Chair, Lamp, Table).
-2. For each category (200 shapes each, 800 shapes total), built a $k$-NN graph ($k=10$) on 3D coordinates.
-3. Computed 4 local PCA geometric features on each directed edge:
-   - `normal_angle`: local surface normal divergence in degrees
+1. ShapeNet-Part benchmark data was evaluated across 4 categories (Airplane, Chair, Lamp, Table).
+2. **Shape-Level Split:** To avoid edge leakage across splits, shapes were divided into disjoint train (80%, 160 shapes) and held-out test (20%, 40 shapes) sets.
+3. Computed 4 local PCA geometric features on each directed edge ($k=10$):
+   - `normal_angle`: local surface normal divergence in degrees (with unoriented sign handling $|cos|$)
    - `curv_diff`: local curvature difference $|κ_i - κ_j|$
-   - `plan_diff`: difference in local planarity
-   - `lin_diff`: difference in local linearity
-4. Trained a logistic regression classifier (80/20 train/test split) to predict whether endpoints belong to different part segments ($y = 1$).
-5. **Gate G₀ Evaluation:** Criterion is overall AUROC ≥ 0.65.
+   - `plan_diff`: local planarity difference
+   - `lin_diff`: local linearity difference
+4. Evaluated **Control Baselines**:
+   - `edge_len`: raw Euclidean distance $||p_i - p_j||$
+   - `dens_diff`: local point density disparity (mean distance to $k$-NN)
+5. Computed **Per-Shape AUROC** (mean ± std and 95% confidence intervals on held-out shapes), along with **Precision, Recall & Lift** at realistic Half-Hop budgets $p \in \{5\%, 10\%, 25\%\}$.
+6. **Gate G₀ Evaluation:** Criterion is overall per-shape AUROC ≥ 0.65.
 
-**Stage 0 Empirical Results (20,344,270 edges evaluated):**
+**Stage 0 Empirical Results (Held-Out Test Shapes):**
 
-| Category | Synset | Shapes | Total Edges | Heterophilic Edges | Hetero% | AUROC (LogReg) | Gate G₀ |
-| :--- | :--- | ---: | ---: | ---: | ---: | ---: | :---: |
-| **Airplane** | `02691156` | 200 | 5,166,770 | 340,631 | 6.59% | **0.7260** | ✅ PASS |
-| **Chair** | `03001627` | 200 | 5,387,650 | 207,823 | 3.86% | **0.6798** | ✅ PASS |
-| **Lamp** | `03636649` | 200 | 4,314,670 | 75,281 | 1.74% | **0.6776** | ✅ PASS |
-| **Table** | `04379243` | 200 | 5,475,180 | 132,985 | 2.43% | **0.6589** | ✅ PASS |
-| **Overall Mean** | — | **800** | **20,344,270** | **756,720** | **3.72%** | **0.6856** | **✅ PASS** |
+| Category | Train Shapes | Test Shapes | Base Rate (Hetero%) | Per-Shape AUROC (Mean ± Std) | 95% Confidence Interval | Pooled Test AUROC | Gate G₀ |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Airplane** | 160 | 40 | 6.66% | **0.7210 ± 0.0811** | `[0.6958, 0.7461]` | 0.7258 | ✅ PASS |
+| **Chair** | 160 | 40 | 4.40% | **0.6685 ± 0.0898** | `[0.6407, 0.6963]` | 0.6795 | ✅ PASS |
+| **Lamp** | 160 | 40 | 2.29% | **0.7211 ± 0.1645** | `[0.6694, 0.7727]` | 0.6794 | ✅ PASS |
+| **Table** | 160 | 40 | 2.88% | **0.6766 ± 0.1198** | `[0.6394, 0.7137]` | 0.6589 | ✅ PASS (Narrow) |
+| **Overall Mean** | — | — | — | **0.6968** | — | **0.6859** | **✅ PASS** |
 
-**Feature-Level Predictive Power (Individual AUROC):**
-- **Surface Normal Angle:** 0.6992 (Airplane), 0.6728 (Chair), 0.6634 (Lamp), 0.6522 (Table) — single strongest predictor.
-- **Curvature Difference:** 0.6844 (Airplane), 0.6482 (Chair), 0.6659 (Lamp), 0.6138 (Table).
-- **Planarity / Linearity Differences:** ~0.50–0.52 (weak discriminators on their own).
+**Controls & Signal Attribution (Pooled Test AUROCs):**
+- **Surface Normal Angle:** 0.6989 (Airplane), 0.6725 (Chair), 0.6645 (Lamp), 0.6522 (Table) — primary predictive signal.
+- **Curvature Difference:** 0.6843 (Airplane), 0.6477 (Chair), 0.6679 (Lamp), 0.6140 (Table).
+- **Planarity / Linearity:** 0.503–0.525 across all categories (pure chance).
+- **Control Baselines (Edge Length & Density):** AUROCs range from 0.50 to 0.60. Edge length lift at $p=10\%$ is only ~0.7× to 1.1× (worse than random or near-random), proving that normal angle / curvature capture genuine boundary geometry rather than point density variations.
 
-**Verdict:** **GATE G₀ OFFICIALLY PASSED** (0.6856 ≥ 0.65, 4/4 categories passed).
-This confirms that local surface geometry reliably flags part transitions, formally justifying the geometry-aware Half-Hop edge selection mechanism for Stage 1.
+**Precision, Recall & Lift at Half-Hop Budget ($p = 10\%$):**
+- **Airplane:** Random base rate = 6.66% → Geometric precision = **15.90% (2.39× lift)**, capturing 23.88% of all boundary edges.
+- **Chair:** Random base rate = 4.40% → Geometric precision = **8.57% (1.95× lift)**, capturing 19.48% of all boundary edges.
+- **Lamp:** Random base rate = 2.29% → Geometric precision = **5.42% (2.37× lift)**, capturing 23.74% of all boundary edges.
+- **Table:** Random base rate = 2.88% → Geometric precision = **5.33% (1.85× lift)**, capturing 18.53% of all boundary edges.
+
+**Verdict & Honest Framing:**
+- Gate $G_0$ **PASSED**, but this is a **modest signal** (narrow pass on Table and Chair; overall AUROC ~0.69).
+- Because heterophilic edges are sparse (1.7% to 6.6%), geometry provides a **~2.0× to 2.5× enrichment** over random edge selection.
+- In Stage 1, an **Oracle arm** must be run first: if oracle selection does not beat random Half-Hop, geometry selection cannot either.
 
 #### Stage 1 — Controlled GNN Experiment (~60–80 runs, 3–4 categories, 3 seeds)
 
