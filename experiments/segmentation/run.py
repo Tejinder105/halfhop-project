@@ -62,6 +62,7 @@ class GraphBuild:
         self.budget = budget
 
     def __call__(self, data):
+        data = data.clone()
         normals = data.x
         data.x = data.pos.clone()
         data.edge_index = knn_edge_index(data.pos, self.k)
@@ -165,18 +166,18 @@ def load_done(path: Path) -> set:
 def train_arm(args, category, arm, seed, device):
     set_seed(seed)
     transform = GraphBuild(args.k, arm, args.budget)
-    train_ds = load_dataset(args.data_dir, category, 'train', transform)
-    val_ds = load_dataset(args.data_dir, category, 'val', transform)
-    test_ds = load_dataset(args.data_dir, category, 'test', transform)
-    train_loader = DataLoader(
-        train_ds, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers
-    )
-    val_loader = DataLoader(
-        val_ds, batch_size=args.batch_size, num_workers=args.num_workers
-    )
-    test_loader = DataLoader(
-        test_ds, batch_size=args.batch_size, num_workers=args.num_workers
-    )
+    print(f'Building graphs for {category} [{arm}] (k={args.k}, budget={args.budget})...')
+    raw_train = load_dataset(args.data_dir, category, 'train', None)
+    raw_val = load_dataset(args.data_dir, category, 'val', None)
+    raw_test = load_dataset(args.data_dir, category, 'test', None)
+
+    train_ds = [transform(d) for d in tqdm(raw_train, desc=f'{arm} train graphs', leave=False)]
+    val_ds = [transform(d) for d in tqdm(raw_val, desc=f'{arm} val graphs', leave=False)]
+    test_ds = [transform(d) for d in tqdm(raw_test, desc=f'{arm} test graphs', leave=False)]
+
+    train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True)
+    val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False)
+    test_loader = DataLoader(test_ds, batch_size=args.batch_size, shuffle=False)
 
     model = Segmenter(
         in_channels=3,
@@ -189,12 +190,14 @@ def train_arm(args, category, arm, seed, device):
 
     best_val = -1.0
     best_state = None
-    for epoch in tqdm(range(1, args.epochs + 1), desc=f'{category} {arm} s{seed}'):
+    pbar = tqdm(range(1, args.epochs + 1), desc=f'{category} {arm} s{seed}')
+    for epoch in pbar:
         loss = train_one_epoch(train_loader, model, optimizer, device)
         val_acc, val_miou = evaluate(val_loader, model, device)
         if val_miou > best_val:
             best_val = val_miou
             best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
+        pbar.set_postfix({'loss': f'{loss:.3f}', 'val_miou': f'{val_miou:.3f}', 'best': f'{best_val:.3f}'})
         if epoch == 1 or epoch % 10 == 0:
             print(
                 f'{category} {arm} seed {seed} epoch {epoch:03d} '
@@ -226,6 +229,7 @@ def parse_args():
     parser.add_argument('--budget', type=float, default=0.1)
     parser.add_argument('--device', default='auto')
     parser.add_argument('--num-workers', type=int, default=0)
+    parser.add_argument('--prepare-only', action='store_true', help='Download and extract dataset only, then exit.')
     parser.add_argument('--data-dir', default='data/ShapeNet')
     parser.add_argument(
         '--output', default='experiments/results/segmentation.jsonl'
@@ -256,6 +260,12 @@ def main():
         'batch_size': args.batch_size,
     }
     print(f'Device: {device}')
+    if args.prepare_only:
+        print(f'Downloading/verifying ShapeNet for {args.category} in {args.data_dir}...')
+        load_dataset(args.data_dir, args.category, 'train', None)
+        print('ShapeNet dataset ready.')
+        return
+    arms = ARMS if args.sweep else (args.model,)
     for arm in arms:
         row = {**proto, 'model': arm}
         if run_key(row) in done:
