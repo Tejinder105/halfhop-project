@@ -1,0 +1,3 @@
+{"stage": "seg", "category": "Airplane", "seed": 0, "budget": 0.1, "k": 16, "depth": 4, "hidden": 64, "dropout": 0.5, "epochs": 100, "lr": 0.001, "batch_size": 16, "model": "gcn", "best_val_miou": 0.777446, "test_acc": 0.829318, "test_miou": 0.700928}
+{"stage": "seg", "category": "Airplane", "seed": 0, "budget": 0.1, "k": 16, "depth": 4, "hidden": 64, "dropout": 0.5, "epochs": 100, "lr": 0.001, "batch_size": 16, "model": "hh-random", "best_val_miou": 0.780878, "test_acc": 0.831377, "test_miou": 0.702825}
+{"stage": "seg", "category": "Airplane", "seed": 0, "budget": 0.1, "k": 16, "depth": 4, "hidden": 64, "dropout": 0.5, "epochs": 100, "lr": 0.001, "batch_size": 16, "model": "hh-geom", "best_val_miou": 0.806395, "test_acc": 0.841999, "test_miou": 0.723823}
