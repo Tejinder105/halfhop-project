@@ -68,22 +68,12 @@ wandb/
 runs/
 .tensorboard/
 *.log
+halfhop_code.zip
+results_extension/
 
 # Runtime-downloaded benchmark datasets (PyG data caches)
 data/cornell/
 data/squirrel/
 data/chameleon/
 
-# Results-only publishing policy
-# Keep experiment results, reports, documentation, and selected deliverables.
-/*
-!/.gitignore
-!/*.md
-!/experiments/
-/experiments/*
-!/experiments/results/
-!/experiments/results/**
-!/report/
-!/report/**
-!/half_hop.pdf
-!/results_extension.zip
+

@@ -1,0 +1,51 @@
+# Amazon-ratings (heterophilous product co-purchase graph).
+# Real e-commerce: predict rating class from co-purchase structure.
+# p<1 keeps Half-Hop VRAM-friendly on T4 (~24k nodes, ~93k edges).
+
+gcn:
+  lr: 0.01
+  wd: 0.0005
+  depth: 2
+  hidden: 64
+  dropout: 0.5
+
+sage:
+  lr: 0.01
+  wd: 0.0005
+  depth: 2
+  hidden: 64
+  dropout: 0.5
+
+gat:
+  lr: 0.01
+  wd: 0.0005
+  depth: 2
+  hidden: 64
+  dropout: 0.5
+
+hh-gcn:
+  lr: 0.01
+  wd: 0.0005
+  depth: 2
+  hidden: 64
+  dropout: 0.5
+  alpha: 0.5
+  p: 0.5
+
+hh-sage:
+  lr: 0.01
+  wd: 0.0005
+  depth: 2
+  hidden: 64
+  dropout: 0.5
+  alpha: 0.5
+  p: 0.5
+
+hh-gat:
+  lr: 0.01
+  wd: 0.0005
+  depth: 2
+  hidden: 32
+  dropout: 0.5
+  alpha: 0.5
+  p: 0.5

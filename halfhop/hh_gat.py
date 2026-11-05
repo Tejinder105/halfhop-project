@@ -1,0 +1,68 @@
+import torch
+from torch import nn
+
+from halfhop.halfhop import HalfHop
+from halfhop.gat import GAT
+
+
+class HHGAT(nn.Module):
+    r"""Half-Hop augmented GAT.
+
+    Applies :class:`~halfhop.halfhop.HalfHop` before running a
+    :class:`~halfhop.gat.GAT` encoder. Slow-node embeddings are discarded
+    after message passing.
+
+    Args:
+        in_channels (int): Number of input node features.
+        hidden_channels (int): GAT hidden layer size per head.
+        out_channels (int): Number of output classes/dimensions.
+        alpha (float): Half-Hop interpolation factor. Default: ``0.5``.
+        p (float): Half-Hop node-sampling probability. Default: ``1.0``.
+        dropout (float): GAT dropout probability. Default: ``0.5``.
+        depth (int): Number of GAT layers. Default: ``2``.
+        num_heads (int): Number of attention heads in hidden layers.
+            Default: ``8``.
+        inplace (bool): Whether HalfHop modifies input in-place.
+            Default: ``False``.
+        slow_node_init (str): Slow-node feature initialization.
+            One of ``'linear'``, ``'zero'``, ``'random'``. Default: ``'linear'``.
+        connectivity (str): Edge connectivity scheme.
+            One of ``'proposed'``, ``'hh1'``, ``'hh2'``. Default: ``'proposed'``.
+    """
+
+    def __init__(
+        self,
+        in_channels: int,
+        hidden_channels: int,
+        out_channels: int,
+        alpha: float = 0.5,
+        p: float = 1.0,
+        dropout: float = 0.5,
+        depth: int = 2,
+        num_heads: int = 8,
+        inplace: bool = False,
+        slow_node_init: str = 'linear',
+        connectivity: str = 'proposed',
+    ):
+        super().__init__()
+        self.halfhop = HalfHop(
+            alpha=alpha,
+            p=p,
+            inplace=inplace,
+            slow_node_init=slow_node_init,
+            connectivity=connectivity,
+        )
+        self.gnn = GAT(
+            in_channels=in_channels,
+            hidden_channels=hidden_channels,
+            out_channels=out_channels,
+            dropout=dropout,
+            depth=depth,
+            num_heads=num_heads,
+        )
+
+    def forward(self, data):
+        r"""Forward pass: HalfHop → GAT → remove slow nodes."""
+        data = self.halfhop(data)
+        x = self.gnn(data.x, data.edge_index)
+        return x[~data.slow_node_mask]

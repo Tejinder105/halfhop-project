@@ -1,0 +1,26 @@
+hh-gcn:
+  lr: 0.0053
+  wd: 0.0001
+  depth: 3
+  hidden: 128
+  dropout: 0.2455
+  alpha: 0.0145
+  p: 0.8257
+
+hh-sage:
+  lr: 0.0296
+  wd: 0.0001
+  depth: 2
+  hidden: 128
+  dropout: 0.8668
+  alpha: 0.9474
+  p: 0.5198
+
+hh-gat:
+  lr: 0.0027
+  wd: 0.0001
+  depth: 3
+  hidden: 64
+  dropout: 0.5131
+  alpha: 0.9277
+  p: 0.1549
