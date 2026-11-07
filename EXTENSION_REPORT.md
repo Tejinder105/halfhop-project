@@ -337,6 +337,30 @@ All metrics are computed across seeds $\{0, 1, 2\}$ and extracted directly from 
    - **Topological cause:** Tables consist of large planar slabs (tabletops) joined to thin rectangular legs. Sharp 90-degree surface normal changes occur abundantly *within the tabletop itself* (between the top surface and the edge bevel/thickness) and along leg corners. Scoring edges purely by normal disagreement causes Half-Hop to sever essential intra-part message passing inside the tabletop rather than protecting part boundaries.
    - **Scientific implication:** This negative control confirms the causal mechanism: geometry-aware Half-Hop is only effective when the geometric proxy accurately maps to semantic heterophily. Where geometry and semantic parts decouple, slowing edges degrades representation learning.
 
+### 5.5 Next-Generation Extensions: Selective Half-Hop (Options A & B)
+
+Following external peer review, two targeted extensions have been designed and implemented in the repository with a pure-PyTorch core, paired bootstrap confidence intervals, and strict kill criteria.
+
+#### 5.5.1 Option A: "Where Should Message Passing Slow Down?" (Heterophilic Classification)
+- **Scientific question:** Can budgeted edge/node selection improve upon uniform Half-Hop on classic heterophilic graphs (Texas, Cornell, Wisconsin, Chameleon), or is Half-Hop's benefit primarily driven by ego-preservation?
+- **Selectors tested:**
+  1. `hh_feat`: Label-free endpoint feature dissimilarity ($1 - \cos(x_i, x_j)$).
+  2. `hh_mlp`: Prediction disagreement from a train-only MLP ($1 - \langle p_i, p_j \rangle$).
+  3. `hh_oracle_train`: Disagreement on training nodes only (fair upper bound).
+  4. `hh_oracle_full`: Disagreement on all nodes (theoretical upper bound control).
+  5. `hh_inverted`: Homophilic edge slowdown ($1 - \text{disagreement}$, negative control expected to degrade).
+- **Controls for ego preservation:** Plain GCN, `hh_random` (budget control), `gcn_selfloop` with sweep over self-loop weight $w \in \{2, 4, 8, 16\}$, and `appnp` (initial residual / teleport control).
+- **Kill criterion:** If `hh_oracle_train` does not beat `hh_all` by a clear positive margin with a 95% bootstrap CI strictly excluding zero across at least 2 datasets, selective slowing is decisively refuted. If `gcn_selfloop` or `appnp` matches `hh_all`, Half-Hop's mechanism is clarified as ego-preservation rather than edge-level topological mediation.
+
+#### 5.5.2 Option B: Half-Hop-3D (EdgeConv Backbone & Real Geometric Slow Nodes)
+- **Scientific question:** Does geometry-directed Half-Hop persist when moving from an isotropic GCN to a modern relative-coordinate point cloud backbone (DGCNN / EdgeConv), and when slow nodes are geometrically embedded?
+- **Architectural advances:**
+  1. **EdgeConv Backbone:** Evaluates both EdgeConv ($h_i' = \max_{j \in \mathcal{N}(i)} \Theta [x_j - x_i, x_i]$) and isotropic GCN on static k-NN graphs.
+  2. **Node-Level Selection:** Evaluates both edge-level selection and node-level selection (scoring target nodes by boundary density and slowing all incoming edges), matching the paper's inductive bias.
+  3. **Geometrically Real Slow Nodes:** Slow nodes are embedded at $p_k = \alpha p_i + (1-\alpha) p_j$ with small $\alpha$ so they remain physically on the 3D surface, and all input features (positions and normals) are interpolated consistently.
+  4. **Fine-Grained Boundary Metrics:** In addition to overall test mIoU, computes **boundary mIoU** (mIoU restricted to points adjacent to part boundaries) and interior accuracy.
+- **Oracle Gate (Kill Criterion):** `oracle_node` must outperform matched `rand_node` by $\ge 1.0$ point boundary-mIoU with a 95% bootstrap CI strictly above zero on Airplane and Table. If the oracle fails to beat random, selective slowing is halted and reported as a negative finding.
+
 ---
 
 ## 6. Limitations and What Would Strengthen These Results
@@ -360,25 +384,32 @@ halfhop-project/
 │   ├── halfhop.py              # Core Half-Hop operator
 │   ├── gcn.py, graphsage.py    # GNN encoders
 │   ├── hh_gcn.py, hh_sage.py  # Wrapped Half-Hop models
-│   ├── dropedge.py             # NEW: DropEdge transform
-│   └── hh_dropedge.py          # NEW: HH + DropEdge joint models
+│   ├── dropedge.py             # DropEdge transform
+│   ├── hh_dropedge.py          # HH + DropEdge joint models
+│   ├── selective_halfhop.py    # NEW: Pure-PyTorch selective Half-Hop operator
+│   └── stats_utils.py          # NEW: Paired bootstrap confidence interval utilities
 ├── experiments/
 │   ├── supervised/run.py       # Baseline 10-split evaluation runner
-│   ├── hyperparameter_sensitivity.py  # NEW: α × p grid sweeper (Ext. 1)
-│   ├── dropedge_combination.py        # NEW: 4-arm depth evaluator (Ext. 2)
-│   ├── geometry_proxy_check.py        # NEW: Stage 0 ShapeNet proxy validity runner
+│   ├── hyperparameter_sensitivity.py  # α × p grid sweeper (Ext. 1)
+│   ├── dropedge_combination.py        # 4-arm depth evaluator (Ext. 2)
+│   ├── geometry_proxy_check.py        # Stage 0 ShapeNet proxy validity runner
 │   ├── segmentation/
-│   │   ├── run.py              # NEW: Stage 1 single-arm & sweep GNN trainer
-│   │   ├── run_2gpu.py         # NEW: Stage 1 multi-GPU concurrent dynamic runner
+│   │   ├── run.py              # Stage 1 single-arm & sweep GNN trainer
+│   │   ├── run_2gpu.py         # Stage 1 multi-GPU concurrent dynamic runner
 │   │   └── proxy.py            # ShapeNet dataset mirror proxy
-│   ├── run_extensions.py              # NEW: Master extension runner
+│   ├── exp_a_heterophilic.py   # NEW: Option A runner (oracle, feat, mlp, controls)
+│   ├── analyze_a.py            # NEW: Option A paired bootstrap analyzer
+│   ├── exp_b_halfhop3d.py      # NEW: Option B runner (EdgeConv, boundary mIoU)
+│   ├── analyze_b.py            # NEW: Option B paired bootstrap analyzer
+│   ├── run_extensions.py       # Master extension runner
 │   └── results/
 │       ├── sensitivity/        # JSONL + heatmap PNGs (4 datasets)
 │       ├── dropedge_combo/     # JSONL + depth curve PNGs + summaries (4 datasets)
-│       ├── geometry_proxy/     # NEW: stage0_results.json & stage0_report.md
-│       └── segmentation.jsonl  # NEW: Stage 1 full 36-model benchmark results (4 categories × 3 seeds)
+│       ├── geometry_proxy/     # stage0_results.json & stage0_report.md
+│       └── segmentation.jsonl  # Stage 1 full 36-model benchmark results
 ├── tests/
-│   └── test_dropedge.py        # NEW: 4/4 unit tests for DropEdge modules
+│   ├── test_dropedge.py        # 4/4 unit tests for DropEdge modules
+│   └── test_selective_halfhop.py # NEW: 8/8 unit tests for selective Half-Hop
 ├── extension_plan.md           # Original point-cloud extension plan
 └── EXTENSION_REPORT.md         # Master report
 ```
@@ -394,3 +425,5 @@ halfhop-project/
 | Extension 2 (HH + DropEdge) | ✅ Complete | Mixed/negative result; synergy positive in 7/12 cells, negative in 5/12; mean +0.36%; not statistically meaningful at these dataset sizes; first evaluation in supervised heterophilic setting is the narrow novel contribution |
 | Point-cloud geometry plan: Stage 0 | ✅ Complete & Passed | Evaluated 20,344,270 edges across 800 real shapes; **Mean AUROC = 0.6856 ≥ 0.65 (Gate G₀ PASSED)**. Geometry reliably predicts label boundaries |
 | Point-cloud geometry plan: Stage 1 | ✅ Complete & Passed (Gate G₁ Cleared) | **3/4 Categories Cleared:** `hh-geom` significantly outperforms `hh-random` on Airplane (+1.92%), Chair (+0.72%), and Lamp (+0.89%), while uniform random Half-Hop fails/degrades; Table (-1.46%) serves as an informative negative control directly corroborating Stage 0 |
+| Selective Half-Hop: Option A (heterophilic selectors) | 📋 Code Ready & Verified | Pure-PyTorch selective operator; oracle, feat, mlp selectors + self-loop & APPNP controls; 8/8 tests passed; verified on synthetic smoke test |
+| Selective Half-Hop: Option B (Half-Hop-3D) | 📋 Code Ready & Verified | EdgeConv backbone, node-level boundary selection, real geometric slow nodes, boundary mIoU; verified on synthetic smoke test |

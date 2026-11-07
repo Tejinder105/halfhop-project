@@ -70,6 +70,8 @@ runs/
 *.log
 halfhop_code.zip
 results_extension/
+/results/
+
 
 # Runtime-downloaded benchmark datasets (PyG data caches)
 data/cornell/
