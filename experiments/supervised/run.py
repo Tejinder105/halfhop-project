@@ -15,6 +15,14 @@ from halfhop.gat import GAT
 from halfhop.hh_gcn import HHGCN
 from halfhop.hh_graphsage import HHGraphSAGE
 from halfhop.hh_gat import HHGAT
+from halfhop.adahop import (
+    AdaHopGCN,
+    AdaHopSAGE,
+    AdaHopGAT,
+    SoftAdaHopGCN,
+    StatefulHHGCN,
+    MultiDelayGCN,
+)
 
 
 def get_model(model_name, num_features, num_classes, config):
@@ -41,6 +49,45 @@ def get_model(model_name, num_features, num_classes, config):
         return HHGraphSAGE(num_features, hidden, num_classes, dropout=dropout, depth=depth, alpha=alpha, p=p)
     elif model_name == "hh-gat":
         return HHGAT(num_features, hidden, num_classes, dropout=dropout, depth=depth, alpha=alpha, p=p)
+    elif model_name == "adahop-gcn":
+        alpha_hidden = config.get("alpha_hidden", 32)
+        entropy_reg = config.get("entropy_reg", 0.0)
+        p = config.get("p", 1.0)
+        return AdaHopGCN(num_features, hidden, num_classes,
+                         alpha_hidden=alpha_hidden, entropy_reg=entropy_reg,
+                         p=p, dropout=dropout, depth=depth)
+    elif model_name == "adahop-sage":
+        alpha_hidden = config.get("alpha_hidden", 32)
+        entropy_reg = config.get("entropy_reg", 0.0)
+        p = config.get("p", 1.0)
+        return AdaHopSAGE(num_features, hidden, num_classes,
+                          alpha_hidden=alpha_hidden, entropy_reg=entropy_reg,
+                          p=p, dropout=dropout, depth=depth)
+    elif model_name == "adahop-gat":
+        alpha_hidden = config.get("alpha_hidden", 32)
+        entropy_reg = config.get("entropy_reg", 0.0)
+        p = config.get("p", 1.0)
+        return AdaHopGAT(num_features, hidden, num_classes,
+                         alpha_hidden=alpha_hidden, entropy_reg=entropy_reg,
+                         p=p, dropout=dropout, depth=depth)
+    elif model_name == "soft-adahop-gcn":
+        alpha = config.get("alpha", 0.5)
+        gate_hidden = config.get("gate_hidden", 32)
+        gamma_init = config.get("gamma_init", None)
+        return SoftAdaHopGCN(num_features, hidden, num_classes,
+                             alpha=alpha, gate_hidden=gate_hidden,
+                             gamma_init=gamma_init, dropout=dropout, depth=depth)
+    elif model_name == "stateful-hh-gcn":
+        alpha = config.get("alpha", 0.5)
+        p = config.get("p", 1.0)
+        return StatefulHHGCN(num_features, hidden, num_classes,
+                             alpha=alpha, p=p, dropout=dropout, depth=depth)
+    elif model_name in ("multidelay-gcn", "multi-delay-gcn"):
+        k = config.get("k", 2)
+        alpha = config.get("alpha", 0.5)
+        p = config.get("p", 1.0)
+        return MultiDelayGCN(num_features, hidden, num_classes,
+                             k=k, alpha=alpha, p=p, dropout=dropout, depth=depth)
     else:
         raise ValueError(f"Unknown model: {model_name}")
 
@@ -62,9 +109,13 @@ def main():
     parser.add_argument("--epochs", type=int, default=200, help="Number of training epochs")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--verbose", action="store_true", help="Print epoch details")
+    parser.add_argument("--device", type=str, default=None, help="Device to use (e.g. cuda:0, cuda:1, cpu)")
     args = parser.parse_args()
 
     set_seed(args.seed)
+
+    device = torch.device(args.device) if args.device else (torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu'))
+    print(f"Using device: {device}")
 
     dataset_name = args.dataset.lower().replace("_", "-")
     if dataset_name in ("amazon-rating", "amazonratings"):
@@ -108,7 +159,8 @@ def main():
             val_mask=val_mask,
             test_mask=test_mask,
             epochs=args.epochs,
-            verbose=args.verbose
+            verbose=args.verbose,
+            device=device,
         )
         
         print(f"Split {split_id} - Best Val: {best_val:.4f}, Test at Best Val: {best_test:.4f}")
