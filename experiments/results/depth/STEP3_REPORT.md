@@ -75,3 +75,4 @@ Step 3 resolves the fundamental debate between the **"Ego-Weighting Hypothesis"*
 | **MultiDelay** ($k=3$) | **1.434** | **0.739** | **0.408** | 0.126 |
 | **APPNP** | 1.102 | 1.185 | 0.386 | **0.432** |
 | **GCN + Residual** | 0.343 | 0.331 | 0.111 | 0.090 |
+
