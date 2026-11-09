@@ -258,18 +258,24 @@ For baselines, we use the same search space and report best-val results.
 
 ---
 
-## 11. Reported Results (Table 2, Heterophilic)
+## 11. Reported Results (Table 2, Heterophilic — Verified from Published ICML 2023 Proceedings PMLR 202)
 
-Mean accuracy ± std over 10 splits:
+Mean accuracy ± std over 10 splits (camera-ready proceedings, page 6):
 
-| Dataset | GCN | HH-GCN | SAGE | HH-SAGE | GAT | HH-GAT |
-|---------|-----|--------|------|---------|-----|--------|
-| Texas | 55.14±5.16 | 72.88±7.17 | 82.43±6.14 | 84.85±6.74 | 52.16±6.63 | 80.54±6.33 |
-| Wisconsin | 45.49±4.54 | 72.55±5.90 | 76.67±5.24 | 84.51±4.70 | 49.80±5.07 | 80.00±4.74 |
-| Actor | 26.86±0.96 | 33.39±1.29 | 30.41±0.86 | 34.63±0.96 | 27.99±0.90 | 35.49±1.02 |
-| Squirrel | 37.57±2.00 | 45.56±2.42 | 41.43±1.27 | 45.82±1.55 | 31.57±1.04 | 45.12±1.38 |
-| Chameleon | 40.82±2.45 | 62.64±2.13 | 45.01±2.46 | 57.13±2.88 | 40.53±3.02 | 63.46±2.52 |
-| Cornell | 57.30±4.16 | 63.33±5.70 | 75.68±7.79 | 80.54±5.35 | 57.30±4.68 | 78.11±5.90 |
+| Dataset | GCN† | HH-GCN | GAT† | HH-GAT | GraphSAGE† | HH-GraphSAGE | MLP† |
+|---|---|---|---|---|---|---|---|
+| Texas | 55.14 ± 5.16 | 71.89 ± 3.46 | 52.16 ± 6.63 | 80.54 ± 4.80 | 82.43 ± 6.14 | 85.95 ± 6.42 | 80.81 ± 4.75 |
+| Wisconsin | 51.76 ± 3.06 | 79.80 ± 4.30 | 49.41 ± 4.09 | 83.53 ± 3.84 | 81.18 ± 5.56 | 85.88 ± 3.99 | 85.29 ± 3.31 |
+| Actor | 27.32 ± 1.10 | 35.12 ± 1.06 | 27.44 ± 0.89 | 36.70 ± 0.92 | 34.23 ± 0.99 | 36.82 ± 0.77 | 36.63 ± 0.70 |
+| Squirrel | 31.52 ± 0.71 | 47.19 ± 1.21 | 36.77 ± 1.68 | 46.35 ± 1.86 | 41.61 ± 0.74 | 45.25 ± 1.52 | 28.77 ± 1.56 |
+| Chameleon | 38.44 ± 1.92 | 60.24 ± 1.93 | 48.36 ± 1.58 | 61.12 ± 1.83 | 58.73 ± 1.68 | 62.98 ± 3.35 | 46.21 ± 2.99 |
+| Cornell | 60.54 ± 5.30 | 63.24 ± 5.43 | 61.89 ± 5.05 | 72.70 ± 4.26 | 75.95 ± 5.01 | 74.60 ± 6.06 | 81.89 ± 6.40 |
+
+*Note: Baselines marked with † are cited from Yan et al. (2021) "Two sides of the same coin: Heterophily and oversmoothing in GNNs".*
+*Competitor models from literature in Table 2:*
+- *MixHop: Texas 77.84, Wisconsin 75.88, Actor 32.22, Squirrel 43.80, Chameleon 60.50, Cornell 73.51*
+- *GGCN: Texas 84.86, Wisconsin 86.86, Actor 37.54, Squirrel 55.17, Chameleon 71.14, Cornell 85.68*
+- *H2GCN: Texas 84.86, Wisconsin 87.65, Actor 35.70, Squirrel 36.48, Chameleon 60.11, Cornell 82.70*
 
 ---
 
