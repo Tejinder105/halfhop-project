@@ -151,6 +151,21 @@ bash experiments/modelnet/run_kaggle_2gpu.sh
 Meshes → `FaceToEdge` graphs → GCN/SAGE ± Half-Hop → global pool → object class.
 Use `--p 0.5` (default) on T4; lower `--batch-size` if OOM.
 
+### Adaptive point-cloud ModelNet40 experiment
+```bash
+# Smoke-test the adaptive graph core locally
+python -m pytest tests/test_adaptive_modelnet.py -q
+
+# Kaggle 2x T4: prepare once, then run all controls/ablations on both GPUs
+bash experiments/modelnet/run_adaptive_kaggle_2gpu.sh
+```
+
+This separate experiment samples 1,024 points with normals, builds a PyTorch
+kNN graph, and compares `none`, `uniform`, `curvature`, `random`, `inverse`,
+and the cheaper `curvature_012` delay schedule. Results are written to
+`experiments/results/modelnet40_<label>.txt`. Override `EPOCHS`, `POINTS`,
+`BS`, `WORKERS`, `GPUS`, or `DATA_DIR` in the shell environment.
+
 ### Generate Report
 ```bash
 python experiments/generate_report.py

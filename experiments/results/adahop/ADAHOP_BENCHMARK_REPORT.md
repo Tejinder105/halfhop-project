@@ -58,3 +58,4 @@ While Lazy Walk dominated at depth $L=2$ (Step 2), at depth $L=4$, MultiDelay ($
 * Texas: **73.24%** vs. 67.30% (+5.94%)
 * Cornell: **62.43%** vs. 60.00% (+2.43%)
 This confirms the structural shift: as depth increases, physical path dilation outperforms pure diagonal self-loop weighting.
+
