@@ -11,8 +11,12 @@
 # Results are saved to:
 #   experiments/results/reproduction/wisconsin_reproduction.json
 #   experiments/results/reproduction/chameleon_reproduction.json
+#
+# FIX: typing_extensions >= 4.12 conflicts with Python 3.12 ssl module on Kaggle,
+# causing "AttributeError: module 'ssl' has no attribute 'SSLWantReadError'" on
+# torch import. Pin to <4.12 before any Python execution.
 
-set -e
+set -uo pipefail
 
 echo "============================================="
 echo " Step 1: Reproduce Wisconsin & Chameleon"
@@ -21,8 +25,11 @@ echo "GPU 0 → Wisconsin  (target: 72.55%)"
 echo "GPU 1 → Chameleon  (target: 62.64%)"
 echo ""
 
-# Install dependencies (Kaggle has torch/pyg pre-installed)
-pip install -q pyyaml scipy
+# Fix: pin typing_extensions to avoid ssl conflict on Kaggle Python 3.12 + torch
+echo "=== Fixing typing_extensions / ssl conflict ==="
+pip install -q "typing_extensions==4.11.0" pyyaml scipy
+echo "typing_extensions pinned. Verifying torch import..."
+python -c "import torch; print('torch OK, version:', torch.__version__)"
 
 # Wisconsin on GPU 0
 python experiments/reproduce_wisconsin_chameleon.py \
