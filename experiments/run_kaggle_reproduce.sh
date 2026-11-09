@@ -67,3 +67,4 @@ for ds, target in [("wisconsin", 72.55), ("chameleon", 62.64)]:
         ) else ""
         print(f"  {exp:40s}: {v['mean']:5.2f}% ± {v['std']:.2f}%  (gap {gap:+.2f}){marker}")
 PYEOF
+
