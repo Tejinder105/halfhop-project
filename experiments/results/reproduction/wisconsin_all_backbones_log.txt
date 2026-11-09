@@ -1,0 +1,107 @@
+=== Running All-Backbones Reproduction Suite on WISCONSIN ===
+Device: cuda:0 | Epochs: 200
+
+--- Running: gcn_baseline (10 splits) ---
+  split 00: 52.94%
+  split 01: 54.90%
+  split 02: 52.94%
+  split 03: 52.94%
+  split 04: 39.22%
+  split 05: 50.98%
+  split 06: 56.86%
+  split 07: 54.90%
+  split 08: 52.94%
+  split 09: 49.02%
+  --> gcn_baseline MEAN: 51.76 ± 4.66%
+
+--- Running: hh_gcn_table5 (10 splits) ---
+  split 00: 58.82%
+  split 01: 49.02%
+  split 02: 54.90%
+  split 03: 54.90%
+  split 04: 37.25%
+  split 05: 54.90%
+  split 06: 45.10%
+  split 07: 56.86%
+  split 08: 54.90%
+  split 09: 39.22%
+  --> hh_gcn_table5 MEAN: 50.59 ± 7.22%
+
+--- Running: hh_gcn_alpha_flipped_0.0063 (10 splits) ---
+  split 00: 62.75%
+  split 01: 52.94%
+  split 02: 52.94%
+  split 03: 60.78%
+  split 04: 52.94%
+  split 05: 64.71%
+  split 06: 58.82%
+  split 07: 56.86%
+  split 08: 58.82%
+  split 09: 60.78%
+  --> hh_gcn_alpha_flipped_0.0063 MEAN: 58.24 ± 4.02%
+
+--- Running: graphsage_baseline (10 splits) ---
+  split 00: 78.43%
+  split 01: 88.24%
+  split 02: 82.35%
+  split 03: 80.39%
+  split 04: 74.51%
+  split 05: 76.47%
+  split 06: 84.31%
+  split 07: 84.31%
+  split 08: 76.47%
+  split 09: 84.31%
+  --> graphsage_baseline MEAN: 80.98 ± 4.21%
+
+--- Running: hh_graphsage_table5 (10 splits) ---
+  split 00: 74.51%
+  split 01: 78.43%
+  split 02: 80.39%
+  split 03: 90.20%
+  split 04: 72.55%
+  split 05: 76.47%
+  split 06: 90.20%
+  split 07: 76.47%
+  split 08: 78.43%
+  split 09: 90.20%
+  --> hh_graphsage_table5 MEAN: 80.78 ± 6.49%
+
+--- Running: gat_baseline (10 splits) ---
+  split 00: 50.98%
+  split 01: 50.98%
+  split 02: 43.14%
+  split 03: 45.10%
+  split 04: 49.02%
+  split 05: 54.90%
+  split 06: 45.10%
+  split 07: 50.98%
+  split 08: 54.90%
+  split 09: 54.90%
+  --> gat_baseline MEAN: 50.00 ± 4.14%
+
+--- Running: hh_gat_table5 (10 splits) ---
+  split 00: 64.71%
+  split 01: 80.39%
+  split 02: 76.47%
+  split 03: 74.51%
+  split 04: 74.51%
+  split 05: 72.55%
+  split 06: 80.39%
+  split 07: 70.59%
+  split 08: 68.63%
+  split 09: 76.47%
+  --> hh_gat_table5 MEAN: 73.92 ± 4.73%
+
+Saved results to experiments/results/reproduction/wisconsin_all_backbones.json
+
+======================================================================
+FINAL SUMMARY TABLE: WISCONSIN
+======================================================================
+  gcn_baseline                    : 51.76 ± 4.66%
+  hh_gcn_table5                   : 50.59 ± 7.22%
+  hh_gcn_alpha_flipped_0.0063     : 58.24 ± 4.02%
+  graphsage_baseline              : 80.98 ± 4.21%
+  hh_graphsage_table5             : 80.78 ± 6.49%
+  gat_baseline                    : 50.00 ± 4.14%
+  hh_gat_table5                   : 73.92 ± 4.73%
+======================================================================

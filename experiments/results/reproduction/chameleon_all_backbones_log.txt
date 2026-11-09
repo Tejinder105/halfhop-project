@@ -1,0 +1,107 @@
+=== Running All-Backbones Reproduction Suite on CHAMELEON ===
+Device: cuda:0 | Epochs: 200
+
+--- Running: gcn_baseline (10 splits) ---
+  split 00: 38.16%
+  split 01: 37.94%
+  split 02: 36.84%
+  split 03: 40.57%
+  split 04: 35.53%
+  split 05: 36.84%
+  split 06: 37.50%
+  split 07: 35.75%
+  split 08: 40.79%
+  split 09: 39.69%
+  --> gcn_baseline MEAN: 37.96 ± 1.77%
+
+--- Running: hh_gcn_table5 (10 splits) ---
+  split 00: 44.08%
+  split 01: 48.25%
+  split 02: 44.30%
+  split 03: 46.93%
+  split 04: 46.05%
+  split 05: 46.93%
+  split 06: 42.32%
+  split 07: 41.67%
+  split 08: 46.05%
+  split 09: 44.08%
+  --> hh_gcn_table5 MEAN: 45.07 ± 2.02%
+
+--- Running: graphsage_baseline (10 splits) ---
+  split 00: 51.75%
+  split 01: 53.07%
+  split 02: 49.56%
+  split 03: 53.51%
+  split 04: 53.51%
+  split 05: 51.32%
+  split 06: 50.00%
+  split 07: 50.66%
+  split 08: 50.88%
+  split 09: 50.22%
+  --> graphsage_baseline MEAN: 51.45 ± 1.39%
+
+--- Running: hh_graphsage_table5 (10 splits) ---
+  split 00: 51.97%
+  split 01: 50.44%
+  split 02: 50.44%
+  split 03: 53.51%
+  split 04: 51.97%
+  split 05: 50.66%
+  split 06: 49.56%
+  split 07: 51.54%
+  split 08: 47.59%
+  split 09: 51.32%
+  --> hh_graphsage_table5 MEAN: 50.90 ± 1.51%
+
+--- Running: gat_baseline (10 splits) ---
+  split 00: 46.71%
+  split 01: 43.64%
+  split 02: 41.89%
+  split 03: 47.59%
+  split 04: 43.20%
+  split 05: 41.23%
+  split 06: 42.98%
+  split 07: 45.61%
+  split 08: 44.08%
+  split 09: 43.86%
+  --> gat_baseline MEAN: 44.08 ± 1.92%
+
+--- Running: hh_gat_table5 (10 splits) ---
+  split 00: 48.25%
+  split 01: 45.83%
+  split 02: 42.54%
+  split 03: 46.49%
+  split 04: 44.08%
+  split 05: 42.76%
+  split 06: 43.42%
+  split 07: 44.96%
+  split 08: 43.42%
+  split 09: 45.61%
+  --> hh_gat_table5 MEAN: 44.74 ± 1.73%
+
+--- Running: hh_gcn_eval_orig_g (10 splits) ---
+  split 00: 42.98%
+  split 01: 44.08%
+  split 02: 39.91%
+  split 03: 44.08%
+  split 04: 43.64%
+  split 05: 46.05%
+  split 06: 41.67%
+  split 07: 41.89%
+  split 08: 42.98%
+  split 09: 44.74%
+  --> hh_gcn_eval_orig_g MEAN: 43.20 ± 1.65%
+
+Saved results to experiments/results/reproduction/chameleon_all_backbones.json
+
+======================================================================
+FINAL SUMMARY TABLE: CHAMELEON
+======================================================================
+  gcn_baseline                    : 37.96 ± 1.77%
+  hh_gcn_table5                   : 45.07 ± 2.02%
+  graphsage_baseline              : 51.45 ± 1.39%
+  hh_graphsage_table5             : 50.90 ± 1.51%
+  gat_baseline                    : 44.08 ± 1.92%
+  hh_gat_table5                   : 44.74 ± 1.73%
+  hh_gcn_eval_orig_g              : 43.20 ± 1.65%
+======================================================================
