@@ -4,7 +4,9 @@ hh-gcn:
   depth: 3
   hidden: 128
   dropout: 0.6612
-  alpha: 0.0063  # Corrected from 0.9937 (1 - 0.9937); aligns with Texas 0.0043 & Cornell 0.0145
+  alpha: 0.9937  # Paper Table 5 value; src-dominant slow nodes on Wisconsin (heterophilic)
+  # NOTE: 0.0063 (= 1 - 0.9937) was tried but gave lower accuracy (58.24% vs 52.0% at 200ep).
+  # alpha=0.9937 is the value directly from the paper; keeping it. See reproduce_wisconsin_chameleon.py E0/E1.
   p: 0.7140
 
 hh-sage:
