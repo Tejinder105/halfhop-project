@@ -1,0 +1,75 @@
+
+==================================================================
+Step 3: Depth-Matched Dilation Study on CHAMELEON
+Depths: [2, 3, 4, 6, 8, 16] | Methods: ['plain', 'lazywalk', 'halfhop_k1', 'halfhop_k2', 'halfhop_k3', 'appnp', 'gcn_res']
+Device: cuda:0 | Base Config: {'lr': 0.01, 'hidden': 128, 'dropout': 0.3, 'wd': 0.0001, 'beta': 0.9854, 'alpha': 0.025}
+==================================================================
+
+--- 1. Weightless / Linear Propagation Diagnostic ---
+  [Diagnostic] Running Plain GCN...
+  [Diagnostic] Running LazyWalk (beta=0.1)...
+  [Diagnostic] Running LazyWalk (beta=0.5)...
+  [Diagnostic] Running Half-Hop (k=1, a=0.05)...
+  [Diagnostic] Running Half-Hop (k=1, a=0.5)...
+  [Diagnostic] Running MultiDelay (k=2, a=0.05)...
+  [Diagnostic] Running MultiDelay (k=3, a=0.05)...
+  [Diagnostic] Running APPNP (tele=0.2)...
+
+--- 2. Supervised Depth Scaling Sweep ---
+
+Evaluating Method: PLAIN (Nodes: 2277, Edges: 36101)
+  [L= 2 (eff= 2.0)] Val: 38.92% | Test: 37.74 ± 2.07% | Dirichlet: 30.0226 | MAD: 0.6714 (4.5s)
+  [L= 3 (eff= 3.0)] Val: 38.85% | Test: 37.37 ± 1.82% | Dirichlet: 30.6703 | MAD: 0.5378 (5.9s)
+  [L= 4 (eff= 4.0)] Val: 36.58% | Test: 35.13 ± 2.04% | Dirichlet: 31.6242 | MAD: 0.4015 (7.3s)
+  [L= 6 (eff= 6.0)] Val: 34.31% | Test: 31.78 ± 2.45% | Dirichlet: 28.6290 | MAD: 0.4422 (12.5s)
+  [L= 8 (eff= 8.0)] Val: 33.76% | Test: 31.27 ± 1.35% | Dirichlet: 26.9936 | MAD: 0.3942 (15.8s)
+  [L=16 (eff=16.0)] Val: 34.27% | Test: 31.82 ± 3.78% | Dirichlet: 31.3988 | MAD: 0.3617 (35.9s)
+
+Evaluating Method: LAZYWALK (Nodes: 2277, Edges: 36101)
+  [L= 2 (eff= 2.0)] Val: 67.60% | Test: 67.06 ± 2.49% | Dirichlet:  3.3567 | MAD: 0.5130 (9.7s)
+  [L= 3 (eff= 3.0)] Val: 62.15% | Test: 60.94 ± 3.07% | Dirichlet:  2.1791 | MAD: 0.4651 (13.2s)
+  [L= 4 (eff= 4.0)] Val: 54.95% | Test: 53.64 ± 2.42% | Dirichlet:  1.3064 | MAD: 0.5146 (13.6s)
+  [L= 6 (eff= 6.0)] Val: 46.91% | Test: 47.15 ± 3.62% | Dirichlet:  0.9628 | MAD: 0.4403 (20.4s)
+  [L= 8 (eff= 8.0)] Val: 35.21% | Test: 34.01 ± 7.58% | Dirichlet:  0.4618 | MAD: 0.3378 (20.0s)
+  [L=16 (eff=16.0)] Val: 22.94% | Test: 22.21 ± 2.22% | Dirichlet:  0.0012 | MAD: 0.0004 (13.8s)
+
+Evaluating Method: HALFHOP_K1 (Nodes: 38328, Edges: 108203)
+  [L= 2 (eff= 1.0)] Val: 43.65% | Test: 42.61 ± 2.64% | Dirichlet: 102.1469 | MAD: 0.5473 (19.7s)
+  [L= 3 (eff= 1.5)] Val: 42.51% | Test: 41.86 ± 2.18% | Dirichlet: 65.0370 | MAD: 0.4614 (22.9s)
+  [L= 4 (eff= 2.0)] Val: 41.34% | Test: 39.21 ± 2.40% | Dirichlet: 75.9920 | MAD: 0.4211 (29.1s)
+  [L= 6 (eff= 3.0)] Val: 35.50% | Test: 34.87 ± 2.64% | Dirichlet: 43.3783 | MAD: 0.3545 (41.3s)
+  [L= 8 (eff= 4.0)] Val: 33.36% | Test: 32.02 ± 2.75% | Dirichlet: 35.6772 | MAD: 0.3392 (56.3s)
+  [L=16 (eff= 8.0)] Val: 30.30% | Test: 29.54 ± 2.80% | Dirichlet: 36.1062 | MAD: 0.1983 (137.1s)
+
+Evaluating Method: HALFHOP_K2 (Nodes: 74379, Edges: 180305)
+  [L= 3 (eff= 1.0)] Val: 48.48% | Test: 47.06 ± 2.07% | Dirichlet: 79.8743 | MAD: 0.3844 (51.8s)
+  [L= 4 (eff= 1.3)] Val: 45.20% | Test: 44.28 ± 1.70% | Dirichlet: 112.4603 | MAD: 0.4207 (56.7s)
+  [L= 6 (eff= 2.0)] Val: 39.92% | Test: 40.29 ± 2.64% | Dirichlet: 96.4670 | MAD: 0.3746 (82.9s)
+  [L= 8 (eff= 2.7)] Val: 35.58% | Test: 33.79 ± 3.02% | Dirichlet: 57.5646 | MAD: 0.3626 (95.9s)
+  [L=16 (eff= 5.3)] Val: 30.45% | Test: 29.21 ± 4.44% | Dirichlet: 37.1193 | MAD: 0.1747 (219.0s)
+
+Evaluating Method: HALFHOP_K3 (Nodes: 110430, Edges: 252407)
+  [L= 4 (eff= 1.0)] Val: 50.10% | Test: 49.28 ± 1.45% | Dirichlet: 107.4419 | MAD: 0.4484 (112.0s)
+  [L= 6 (eff= 1.5)] Val: 45.29% | Test: 43.16 ± 2.57% | Dirichlet: 113.1210 | MAD: 0.4555 (121.6s)
+  [L= 8 (eff= 2.0)] Val: 40.04% | Test: 38.62 ± 3.29% | Dirichlet: 91.3541 | MAD: 0.3902 (139.5s)
+  [L=16 (eff= 4.0)] Val: 27.17% | Test: 25.04 ± 3.91% | Dirichlet: 34.5301 | MAD: 0.0859 (290.7s)
+
+Evaluating Method: APPNP (Nodes: 2277, Edges: 36101)
+  [L= 2 (eff= 2.0)] Val: 41.54% | Test: 40.50 ± 3.09% | Dirichlet:  9.4812 | MAD: 0.8701 (2.8s)
+  [L= 3 (eff= 3.0)] Val: 41.67% | Test: 40.37 ± 2.95% | Dirichlet:  9.8536 | MAD: 0.8673 (3.1s)
+  [L= 4 (eff= 4.0)] Val: 41.73% | Test: 40.44 ± 2.77% | Dirichlet: 10.2628 | MAD: 0.8993 (3.5s)
+  [L= 6 (eff= 6.0)] Val: 41.76% | Test: 40.22 ± 2.97% | Dirichlet:  9.9088 | MAD: 0.8666 (4.1s)
+  [L= 8 (eff= 8.0)] Val: 41.67% | Test: 40.31 ± 3.01% | Dirichlet:  9.8606 | MAD: 0.8617 (4.5s)
+  [L=16 (eff=16.0)] Val: 41.67% | Test: 40.37 ± 2.99% | Dirichlet:  9.8692 | MAD: 0.8619 (6.9s)
+
+Evaluating Method: GCN_RES (Nodes: 2277, Edges: 36101)
+  [L= 2 (eff= 2.0)] Val: 38.92% | Test: 37.74 ± 2.07% | Dirichlet: 30.0226 | MAD: 0.6714 (3.4s)
+  [L= 3 (eff= 3.0)] Val: 39.11% | Test: 37.57 ± 2.48% | Dirichlet: 32.0909 | MAD: 0.6206 (4.9s)
+  [L= 4 (eff= 4.0)] Val: 38.27% | Test: 35.83 ± 3.24% | Dirichlet: 25.0719 | MAD: 0.6088 (6.8s)
+  [L= 6 (eff= 6.0)] Val: 34.17% | Test: 32.04 ± 3.71% | Dirichlet: 20.0631 | MAD: 0.5290 (14.9s)
+  [L= 8 (eff= 8.0)] Val: 30.40% | Test: 28.73 ± 4.46% | Dirichlet: 29.8831 | MAD: 0.2147 (17.7s)
+  [L=16 (eff=16.0)] Val: 25.14% | Test: 22.98 ± 1.88% | Dirichlet: 24.5232 | MAD: 0.0172 (28.3s)
+
+[Saved JSON] -> experiments/results/depth/depth_study_chameleon.json
+[Saved Plot] -> experiments/results/depth/weightless_diagnostic_chameleon.png
+[Saved Plot] -> experiments/results/depth/depth_scaling_chameleon.png

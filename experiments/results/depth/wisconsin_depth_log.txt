@@ -1,0 +1,75 @@
+
+==================================================================
+Step 3: Depth-Matched Dilation Study on WISCONSIN
+Depths: [2, 3, 4, 6, 8, 16] | Methods: ['plain', 'lazywalk', 'halfhop_k1', 'halfhop_k2', 'halfhop_k3', 'appnp', 'gcn_res']
+Device: cuda:0 | Base Config: {'lr': 0.01, 'hidden': 32, 'dropout': 0.25, 'wd': 0.0001, 'beta': 0.1033, 'alpha': 0.25}
+==================================================================
+
+--- 1. Weightless / Linear Propagation Diagnostic ---
+  [Diagnostic] Running Plain GCN...
+  [Diagnostic] Running LazyWalk (beta=0.1)...
+  [Diagnostic] Running LazyWalk (beta=0.5)...
+  [Diagnostic] Running Half-Hop (k=1, a=0.05)...
+  [Diagnostic] Running Half-Hop (k=1, a=0.5)...
+  [Diagnostic] Running MultiDelay (k=2, a=0.05)...
+  [Diagnostic] Running MultiDelay (k=3, a=0.05)...
+  [Diagnostic] Running APPNP (tele=0.2)...
+
+--- 2. Supervised Depth Scaling Sweep ---
+
+Evaluating Method: PLAIN (Nodes: 251, Edges: 515)
+  [L= 2 (eff= 2.0)] Val: 54.25% | Test: 50.98 ± 6.96% | Dirichlet:  0.4192 | MAD: 0.2618 (10.4s)
+  [L= 3 (eff= 3.0)] Val: 54.38% | Test: 48.24 ± 4.31% | Dirichlet:  0.3767 | MAD: 0.2144 (11.8s)
+  [L= 4 (eff= 4.0)] Val: 53.88% | Test: 54.31 ± 4.73% | Dirichlet:  0.3578 | MAD: 0.1790 (13.8s)
+  [L= 6 (eff= 6.0)] Val: 55.00% | Test: 54.31 ± 5.82% | Dirichlet:  0.4257 | MAD: 0.1493 (24.3s)
+  [L= 8 (eff= 8.0)] Val: 55.75% | Test: 53.33 ± 5.74% | Dirichlet:  0.3855 | MAD: 0.1113 (33.4s)
+  [L=16 (eff=16.0)] Val: 54.25% | Test: 54.51 ± 7.63% | Dirichlet:  0.3437 | MAD: 0.0976 (67.2s)
+
+Evaluating Method: LAZYWALK (Nodes: 251, Edges: 515)
+  [L= 2 (eff= 2.0)] Val: 78.38% | Test: 74.90 ± 5.46% | Dirichlet:  0.8768 | MAD: 0.3308 (5.6s)
+  [L= 3 (eff= 3.0)] Val: 74.50% | Test: 69.61 ± 5.70% | Dirichlet:  0.8202 | MAD: 0.3821 (7.0s)
+  [L= 4 (eff= 4.0)] Val: 71.13% | Test: 66.27 ± 6.89% | Dirichlet:  0.7984 | MAD: 0.4538 (11.5s)
+  [L= 6 (eff= 6.0)] Val: 61.63% | Test: 57.84 ± 5.77% | Dirichlet:  0.5841 | MAD: 0.3279 (15.3s)
+  [L= 8 (eff= 8.0)] Val: 56.13% | Test: 53.92 ± 8.65% | Dirichlet:  0.3958 | MAD: 0.1434 (15.7s)
+  [L=16 (eff=16.0)] Val: 47.63% | Test: 47.65 ± 6.45% | Dirichlet:  0.0209 | MAD: 0.0008 (26.8s)
+
+Evaluating Method: HALFHOP_K1 (Nodes: 750, Edges: 1513)
+  [L= 2 (eff= 1.0)] Val: 77.38% | Test: 76.47 ± 4.02% | Dirichlet:  1.4093 | MAD: 0.3254 (5.5s)
+  [L= 3 (eff= 1.5)] Val: 69.75% | Test: 63.73 ± 3.75% | Dirichlet:  0.9007 | MAD: 0.3251 (6.6s)
+  [L= 4 (eff= 2.0)] Val: 63.88% | Test: 60.98 ± 3.09% | Dirichlet:  0.7610 | MAD: 0.2731 (7.3s)
+  [L= 6 (eff= 3.0)] Val: 60.00% | Test: 56.47 ± 5.17% | Dirichlet:  0.5985 | MAD: 0.2098 (10.2s)
+  [L= 8 (eff= 4.0)] Val: 56.13% | Test: 54.12 ± 6.21% | Dirichlet:  0.6159 | MAD: 0.2406 (15.5s)
+  [L=16 (eff= 8.0)] Val: 53.50% | Test: 53.53 ± 4.73% | Dirichlet:  0.3615 | MAD: 0.1535 (32.7s)
+
+Evaluating Method: HALFHOP_K2 (Nodes: 1249, Edges: 2511)
+  [L= 3 (eff= 1.0)] Val: 83.25% | Test: 79.02 ± 5.26% | Dirichlet:  1.4203 | MAD: 0.3749 (7.8s)
+  [L= 4 (eff= 1.3)] Val: 80.00% | Test: 75.88 ± 4.39% | Dirichlet:  1.4683 | MAD: 0.4143 (9.0s)
+  [L= 6 (eff= 2.0)] Val: 73.75% | Test: 68.63 ± 6.50% | Dirichlet:  1.2234 | MAD: 0.3564 (15.8s)
+  [L= 8 (eff= 2.7)] Val: 67.00% | Test: 60.98 ± 5.51% | Dirichlet:  1.0397 | MAD: 0.3088 (16.5s)
+  [L=16 (eff= 5.3)] Val: 55.00% | Test: 53.92 ± 5.77% | Dirichlet:  0.7031 | MAD: 0.1952 (35.3s)
+
+Evaluating Method: HALFHOP_K3 (Nodes: 1748, Edges: 3509)
+  [L= 4 (eff= 1.0)] Val: 84.25% | Test: 79.41 ± 7.40% | Dirichlet:  1.5798 | MAD: 0.3942 (9.4s)
+  [L= 6 (eff= 1.5)] Val: 81.13% | Test: 75.49 ± 5.13% | Dirichlet:  1.6540 | MAD: 0.4626 (16.8s)
+  [L= 8 (eff= 2.0)] Val: 78.38% | Test: 73.53 ± 5.42% | Dirichlet:  1.4340 | MAD: 0.4079 (23.0s)
+  [L=16 (eff= 4.0)] Val: 55.38% | Test: 52.16 ± 7.45% | Dirichlet:  0.7391 | MAD: 0.1263 (28.5s)
+
+Evaluating Method: APPNP (Nodes: 251, Edges: 515)
+  [L= 2 (eff= 2.0)] Val: 61.00% | Test: 59.61 ± 5.76% | Dirichlet:  0.9709 | MAD: 0.3232 (3.4s)
+  [L= 3 (eff= 3.0)] Val: 61.50% | Test: 57.84 ± 5.28% | Dirichlet:  1.0431 | MAD: 0.3590 (3.8s)
+  [L= 4 (eff= 4.0)] Val: 61.38% | Test: 58.63 ± 5.51% | Dirichlet:  1.0805 | MAD: 0.3736 (4.5s)
+  [L= 6 (eff= 6.0)] Val: 60.88% | Test: 58.24 ± 5.89% | Dirichlet:  1.0781 | MAD: 0.3739 (5.1s)
+  [L= 8 (eff= 8.0)] Val: 61.13% | Test: 58.43 ± 5.93% | Dirichlet:  1.1021 | MAD: 0.3862 (5.9s)
+  [L=16 (eff=16.0)] Val: 61.50% | Test: 57.45 ± 4.48% | Dirichlet:  1.1855 | MAD: 0.4321 (9.4s)
+
+Evaluating Method: GCN_RES (Nodes: 251, Edges: 515)
+  [L= 2 (eff= 2.0)] Val: 54.25% | Test: 50.98 ± 6.96% | Dirichlet:  0.4192 | MAD: 0.2618 (4.3s)
+  [L= 3 (eff= 3.0)] Val: 53.13% | Test: 47.65 ± 6.33% | Dirichlet:  0.4194 | MAD: 0.2824 (5.7s)
+  [L= 4 (eff= 4.0)] Val: 55.50% | Test: 49.41 ± 6.89% | Dirichlet:  0.3720 | MAD: 0.2152 (6.7s)
+  [L= 6 (eff= 6.0)] Val: 54.13% | Test: 52.75 ± 6.59% | Dirichlet:  0.4417 | MAD: 0.1884 (11.3s)
+  [L= 8 (eff= 8.0)] Val: 53.50% | Test: 52.55 ± 5.17% | Dirichlet:  0.3428 | MAD: 0.1108 (14.2s)
+  [L=16 (eff=16.0)] Val: 48.63% | Test: 46.86 ± 8.11% | Dirichlet:  0.3314 | MAD: 0.0905 (23.0s)
+
+[Saved JSON] -> experiments/results/depth/depth_study_wisconsin.json
+[Saved Plot] -> experiments/results/depth/weightless_diagnostic_wisconsin.png
+[Saved Plot] -> experiments/results/depth/depth_scaling_wisconsin.png
