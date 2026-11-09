@@ -50,3 +50,4 @@ wait $PID0 $PID1
 echo ""
 echo "=== 4. Fair Comparison Completed! ==="
 ls -la experiments/results/fair/
+
