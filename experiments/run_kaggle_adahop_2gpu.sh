@@ -13,8 +13,7 @@ echo "=== 1. Checking GPU Environment ==="
 nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader || true
 
 echo "=== 2. Installing Dependencies on Kaggle ==="
-# Pin typing_extensions to avoid ssl conflict on Kaggle Python 3.12 + torch
-pip install -q "typing_extensions==4.11.0" pyyaml matplotlib tqdm torch-geometric
+pip install -q pyyaml matplotlib tqdm torch-geometric
 python -c "import torch; print('torch OK:', torch.__version__)"
 
 echo "=== 3. Running AdaHop Parallel Multi-GPU Runner ==="
