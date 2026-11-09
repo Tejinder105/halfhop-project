@@ -179,3 +179,4 @@ class AdaHopGNN(nn.Module):
 
         # 4. Extract original node predictions
         return h[:N_orig]
+
