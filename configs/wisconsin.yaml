@@ -4,7 +4,7 @@ hh-gcn:
   depth: 3
   hidden: 128
   dropout: 0.6612
-  alpha: 0.9937
+  alpha: 0.0063  # Corrected from 0.9937 (1 - 0.9937); aligns with Texas 0.0043 & Cornell 0.0145
   p: 0.7140
 
 hh-sage:
