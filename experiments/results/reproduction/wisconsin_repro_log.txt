@@ -1,21 +1,98 @@
-Traceback (most recent call last):
-  File "/kaggle/working/halfhop-project/experiments/reproduce_wisconsin_chameleon.py", line 24, in <module>
-    import torch
-  File "/usr/local/lib/python3.12/dist-packages/torch/__init__.py", line 2142, in <module>
-    _C._initExtension(_manager_path())
-  File "/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py", line 1513, in <module>
-    from .memory import *  # noqa: F403
-    ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/torch/cuda/memory.py", line 657, in <module>
-    @deprecated(
-     ^^^^^^^^^^^
-  File "/usr/local/lib/python3.12/dist-packages/typing_extensions.py", line 2997, in __call__
-    import asyncio.coroutines
-  File "/usr/lib/python3.12/asyncio/__init__.py", line 8, in <module>
-    from .base_events import *
-  File "/usr/lib/python3.12/asyncio/base_events.py", line 44, in <module>
-    from . import sslproto
-  File "/usr/lib/python3.12/asyncio/sslproto.py", line 20, in <module>
-    SSLAgainErrors = (ssl.SSLWantReadError, ssl.SSLSyscallError)
-                      ^^^^^^^^^^^^^^^^^^^^
-AttributeError: module 'ssl' has no attribute 'SSLWantReadError'
+Dataset: wisconsin  Device: cuda:0
+
+=== E0: Paper alpha, 200 epochs ===
+  [E0] split 00: 58.82%
+  [E0] split 01: 49.02%
+  [E0] split 02: 54.90%
+  [E0] split 03: 54.90%
+  [E0] split 04: 37.25%
+  [E0] split 05: 54.90%
+  [E0] split 06: 45.10%
+  [E0] split 07: 56.86%
+  [E0] split 08: 54.90%
+  [E0] split 09: 39.22%
+  [E0] MEAN=50.59 ± 7.22%
+
+
+=== E1: 'Corrected' alpha (prev. run), 200 epochs ===
+  [E1] split 00: 62.75%
+  [E1] split 01: 52.94%
+  [E1] split 02: 52.94%
+  [E1] split 03: 60.78%
+  [E1] split 04: 52.94%
+  [E1] split 05: 64.71%
+  [E1] split 06: 58.82%
+  [E1] split 07: 56.86%
+  [E1] split 08: 58.82%
+  [E1] split 09: 60.78%
+  [E1] MEAN=58.24 ± 4.02%
+
+
+=== E2: Paper alpha, 500 epochs ===
+  [E2] split 00: 58.82%
+  [E2] split 01: 49.02%
+  [E2] split 02: 54.90%
+  [E2] split 03: 54.90%
+  [E2] split 04: 37.25%
+  [E2] split 05: 54.90%
+  [E2] split 06: 45.10%
+  [E2] split 07: 56.86%
+  [E2] split 08: 54.90%
+  [E2] split 09: 39.22%
+  [E2] MEAN=50.59 ± 7.22%
+
+
+=== E3: Paper alpha, 1000 epochs ===
+  [E3] split 00: 58.82%
+  [E3] split 01: 49.02%
+  [E3] split 02: 54.90%
+  [E3] split 03: 54.90%
+  [E3] split 04: 37.25%
+  [E3] split 05: 54.90%
+  [E3] split 06: 45.10%
+  [E3] split 07: 56.86%
+  [E3] split 08: 54.90%
+  [E3] split 09: 39.22%
+  [E3] MEAN=50.59 ± 7.22%
+
+
+=== E4: Paper alpha, 500 epochs, cosine LR ===
+  [E4] split 00: 58.82%
+  [E4] split 01: 49.02%
+  [E4] split 02: 54.90%
+  [E4] split 03: 54.90%
+  [E4] split 04: 37.25%
+  [E4] split 05: 54.90%
+  [E4] split 06: 45.10%
+  [E4] split 07: 56.86%
+  [E4] split 08: 54.90%
+  [E4] split 09: 43.14%
+  [E4] MEAN=50.98 ± 6.68%
+
+
+=== E5: Paper alpha, 1000 epochs, cosine LR ===
+  [E5] split 00: 58.82%
+  [E5] split 01: 49.02%
+  [E5] split 02: 54.90%
+  [E5] split 03: 54.90%
+  [E5] split 04: 37.25%
+  [E5] split 05: 54.90%
+  [E5] split 06: 45.10%
+  [E5] split 07: 56.86%
+  [E5] split 08: 54.90%
+  [E5] split 09: 52.94%
+  [E5] MEAN=51.96 ± 6.15%
+
+
+Results saved to experiments/results/reproduction/wisconsin_reproduction.json
+
+============================================================
+SUMMARY: WISCONSIN
+Paper target: 72.55% (Table 2, HH-GCN)
+============================================================
+  E0_paper_alpha_200ep               : 50.59 ± 7.22%
+  E1_corrected_alpha_200ep           : 58.24 ± 4.02%
+  E2_paper_alpha_500ep               : 50.59 ± 7.22%
+  E3_paper_alpha_1000ep              : 50.59 ± 7.22%
+  E4_paper_alpha_500ep_cosine        : 50.98 ± 6.68%
+  E5_paper_alpha_1000ep_cosine       : 51.96 ± 6.15%
