@@ -1,0 +1,69 @@
+{
+  "dataset": "cornell",
+  "depth": 4,
+  "results": {
+    "plain_gcn": {
+      "val_mean": 0.5033898323774337,
+      "test_mean": 0.3945946007966995,
+      "test_std": 0.05821799835620484,
+      "total_nodes": 183,
+      "total_edges": 298,
+      "extra_nodes_pct": 0.0,
+      "runtime_sec": 7.427837610244751
+    },
+    "lazywalk": {
+      "val_mean": 0.6372881293296814,
+      "test_mean": 0.600000011920929,
+      "test_std": 0.055124536324656345,
+      "total_nodes": 183,
+      "total_edges": 298,
+      "extra_nodes_pct": 0.0,
+      "runtime_sec": 4.152838230133057
+    },
+    "uniform_halfhop": {
+      "val_mean": 0.6,
+      "test_mean": 0.5243243396282196,
+      "test_std": 0.0717108084636755,
+      "total_nodes": 478,
+      "total_edges": 888,
+      "extra_nodes_pct": 161.20218579234972,
+      "runtime_sec": 7.1874918937683105
+    },
+    "uniform_multidelay_k2": {
+      "val_mean": 0.7322033882141114,
+      "test_mean": 0.6243243277072906,
+      "test_std": 0.07094272854774662,
+      "total_nodes": 773,
+      "total_edges": 1478,
+      "extra_nodes_pct": 322.40437158469945,
+      "runtime_sec": 7.259450674057007
+    },
+    "adahop_b25": {
+      "val_mean": 0.5220338970422744,
+      "test_mean": 0.43513514697551725,
+      "test_std": 0.05597924130352264,
+      "total_nodes": 331,
+      "total_edges": 700,
+      "extra_nodes_pct": 80.87431693989072,
+      "runtime_sec": 10.258458137512207
+    },
+    "adahop_b50": {
+      "val_mean": 0.5627118647098541,
+      "test_mean": 0.49459460079669954,
+      "test_std": 0.08720143440912817,
+      "total_nodes": 479,
+      "total_edges": 922,
+      "extra_nodes_pct": 161.74863387978144,
+      "runtime_sec": 12.380380153656006
+    },
+    "adahop_soft": {
+      "val_mean": 0.5847457647323608,
+      "test_mean": 0.494594606757164,
+      "test_std": 0.06169033227489325,
+      "total_nodes": 478,
+      "total_edges": 1180,
+      "extra_nodes_pct": 161.20218579234972,
+      "runtime_sec": 17.55402374267578
+    }
+  }
+}

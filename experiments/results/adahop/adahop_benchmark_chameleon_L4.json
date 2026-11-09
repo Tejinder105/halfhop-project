@@ -1,0 +1,69 @@
+{
+  "dataset": "chameleon",
+  "depth": 4,
+  "results": {
+    "plain_gcn": {
+      "val_mean": 0.3658436149358749,
+      "test_mean": 0.35131579339504243,
+      "test_std": 0.020402988276458676,
+      "total_nodes": 2277,
+      "total_edges": 36101,
+      "extra_nodes_pct": 0.0,
+      "runtime_sec": 6.742940187454224
+    },
+    "lazywalk": {
+      "val_mean": 0.5513031601905822,
+      "test_mean": 0.5383771896362305,
+      "test_std": 0.017246654382237808,
+      "total_nodes": 2277,
+      "total_edges": 36101,
+      "extra_nodes_pct": 0.0,
+      "runtime_sec": 12.150851726531982
+    },
+    "uniform_halfhop": {
+      "val_mean": 0.4133058965206146,
+      "test_mean": 0.39188596308231355,
+      "test_std": 0.023923617842813643,
+      "total_nodes": 38328,
+      "total_edges": 108203,
+      "extra_nodes_pct": 1583.2674571805005,
+      "runtime_sec": 26.643563747406006
+    },
+    "uniform_multidelay_k2": {
+      "val_mean": 0.4525377243757248,
+      "test_mean": 0.44188596606254577,
+      "test_std": 0.01912426406818658,
+      "total_nodes": 74379,
+      "total_edges": 180305,
+      "extra_nodes_pct": 3166.534914361001,
+      "runtime_sec": 54.602664947509766
+    },
+    "adahop_b25": {
+      "val_mean": 0.37187928557395933,
+      "test_mean": 0.3664473742246628,
+      "test_std": 0.03137498348532922,
+      "total_nodes": 20303,
+      "total_edges": 65367,
+      "extra_nodes_pct": 791.6556873078612,
+      "runtime_sec": 81.6050865650177
+    },
+    "adahop_b50": {
+      "val_mean": 0.39190671741962435,
+      "test_mean": 0.3879386007785797,
+      "test_std": 0.02846572480510889,
+      "total_nodes": 38329,
+      "total_edges": 92406,
+      "extra_nodes_pct": 1583.3113746157223,
+      "runtime_sec": 106.24921584129333
+    },
+    "adahop_soft": {
+      "val_mean": 0.39382716119289396,
+      "test_mean": 0.3769736856222153,
+      "test_std": 0.04060809470491553,
+      "total_nodes": 38328,
+      "total_edges": 144204,
+      "extra_nodes_pct": 1583.2674571805005,
+      "runtime_sec": 103.89062070846558
+    }
+  }
+}
