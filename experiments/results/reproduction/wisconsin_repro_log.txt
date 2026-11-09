@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/kaggle/working/halfhop-project/experiments/reproduce_wisconsin_chameleon.py", line 24, in <module>
+    import torch
+  File "/usr/local/lib/python3.12/dist-packages/torch/__init__.py", line 2142, in <module>
+    _C._initExtension(_manager_path())
+  File "/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py", line 1513, in <module>
+    from .memory import *  # noqa: F403
+    ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/cuda/memory.py", line 657, in <module>
+    @deprecated(
+     ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/typing_extensions.py", line 2997, in __call__
+    import asyncio.coroutines
+  File "/usr/lib/python3.12/asyncio/__init__.py", line 8, in <module>
+    from .base_events import *
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 44, in <module>
+    from . import sslproto
+  File "/usr/lib/python3.12/asyncio/sslproto.py", line 20, in <module>
+    SSLAgainErrors = (ssl.SSLWantReadError, ssl.SSLSyscallError)
+                      ^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'ssl' has no attribute 'SSLWantReadError'
