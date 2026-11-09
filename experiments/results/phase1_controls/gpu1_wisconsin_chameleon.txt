@@ -1,0 +1,56 @@
+
+=======================================================
+Phase 1 Controls Evaluation on: WISCONSIN (device=cuda)
+=======================================================
+  Split 00 complete. HH: 62.75% | SelfLoop: 62.75% | LazyWalk: 70.59% | MLP: 80.39%
+  Split 01 complete. HH: 52.94% | SelfLoop: 76.47% | LazyWalk: 82.35% | MLP: 84.31%
+  Split 02 complete. HH: 52.94% | SelfLoop: 74.51% | LazyWalk: 72.55% | MLP: 88.24%
+  Split 03 complete. HH: 60.78% | SelfLoop: 76.47% | LazyWalk: 78.43% | MLP: 92.16%
+  Split 04 complete. HH: 52.94% | SelfLoop: 72.55% | LazyWalk: 68.63% | MLP: 82.35%
+  Split 05 complete. HH: 64.71% | SelfLoop: 60.78% | LazyWalk: 78.43% | MLP: 80.39%
+  Split 06 complete. HH: 58.82% | SelfLoop: 68.63% | LazyWalk: 70.59% | MLP: 84.31%
+  Split 07 complete. HH: 56.86% | SelfLoop: 62.75% | LazyWalk: 74.51% | MLP: 82.35%
+  Split 08 complete. HH: 58.82% | SelfLoop: 70.59% | LazyWalk: 72.55% | MLP: 84.31%
+  Split 09 complete. HH: 60.78% | SelfLoop: 74.51% | LazyWalk: 80.39% | MLP: 92.16%
+
+======================================================================
+PHASE 1 CONTROLS SUMMARY: WISCONSIN
+======================================================================
+  mlp                      :  85.10% ± 4.13% (Δ vs HH: +26.86%)
+  gcn_standard             :  47.84% ± 5.96% (Δ vs HH: -10.39%)
+  gcn_selfloop_tuned       :  70.00% ± 5.69% (Δ vs HH: +11.76%)
+  lazy_walk_tuned          :  74.90% ± 4.45% (Δ vs HH: +16.67%)
+  appnp_tuned              :  74.90% ± 4.37% (Δ vs HH: +16.67%)
+  hh_alpha_0               :  58.43% ± 3.70% (Δ vs HH: +0.20%) [CONTROL MATCHES HH]
+  hh_alpha_1               :  53.14% ± 6.82% (Δ vs HH: -5.10%)
+  hh_config                :  58.24% ± 4.02% (Δ vs HH: +0.00%)
+
+Saved results to experiments/results/phase1_controls/wisconsin_phase1_controls.json
+
+=======================================================
+Phase 1 Controls Evaluation on: CHAMELEON (device=cuda)
+=======================================================
+  Split 00 complete. HH: 43.64% | SelfLoop: 42.32% | LazyWalk: 47.81% | MLP: 48.46%
+  Split 01 complete. HH: 45.18% | SelfLoop: 40.57% | LazyWalk: 47.59% | MLP: 47.81%
+  Split 02 complete. HH: 44.08% | SelfLoop: 41.01% | LazyWalk: 46.27% | MLP: 49.56%
+  Split 03 complete. HH: 46.71% | SelfLoop: 46.93% | LazyWalk: 49.12% | MLP: 51.54%
+  Split 04 complete. HH: 42.98% | SelfLoop: 41.67% | LazyWalk: 49.34% | MLP: 50.88%
+  Split 05 complete. HH: 46.93% | SelfLoop: 44.74% | LazyWalk: 46.71% | MLP: 48.68%
+  Split 06 complete. HH: 43.42% | SelfLoop: 41.67% | LazyWalk: 46.71% | MLP: 48.68%
+  Split 07 complete. HH: 41.67% | SelfLoop: 42.98% | LazyWalk: 48.90% | MLP: 51.32%
+  Split 08 complete. HH: 46.05% | SelfLoop: 43.86% | LazyWalk: 48.25% | MLP: 48.90%
+  Split 09 complete. HH: 44.08% | SelfLoop: 45.61% | LazyWalk: 48.46% | MLP: 50.00%
+
+======================================================================
+PHASE 1 CONTROLS SUMMARY: CHAMELEON
+======================================================================
+  mlp                      :  49.58% ± 1.23% (Δ vs HH: +5.11%)
+  gcn_standard             :  38.71% ± 1.30% (Δ vs HH: -5.77%)
+  gcn_selfloop_tuned       :  43.14% ± 1.99% (Δ vs HH: -1.34%) [CONTROL MATCHES HH]
+  lazy_walk_tuned          :  47.92% ± 1.03% (Δ vs HH: +3.44%)
+  appnp_tuned              :  45.88% ± 1.31% (Δ vs HH: +1.40%) [CONTROL MATCHES HH]
+  hh_alpha_0               :  45.07% ± 1.82% (Δ vs HH: +0.59%) [CONTROL MATCHES HH]
+  hh_alpha_1               :  40.83% ± 1.65% (Δ vs HH: -3.64%)
+  hh_config                :  44.47% ± 1.62% (Δ vs HH: +0.00%)
+
+Saved results to experiments/results/phase1_controls/chameleon_phase1_controls.json
