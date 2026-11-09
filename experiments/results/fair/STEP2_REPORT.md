@@ -84,3 +84,4 @@ This provides explicit, decoupled control over ego-preservation without creating
 | **Graph Expansion** | $1\times$ | $\approx 2.5\times - 4\times$ | $1\times$ |
 | **Additional Learnable Params** | 0 | 0 | 0 |
 | **Memory Footprint** | Baseline | High | Low (identical to GCN) |
+
