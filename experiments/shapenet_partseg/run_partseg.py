@@ -222,7 +222,9 @@ def run_condition(args, condition: str, seed: int, device: torch.device) -> dict
     # Eagerly apply transform
     def build(raw_ds, split):
         t = GraphBuild(condition, args.k, args.budget, split)
-        return [t(d) for d in tqdm(raw_ds, desc=f"build {split}")]
+        # Use simple non-clobbering print if in parallel / non-tty environment
+        desc = f"[{condition}|gpu:{device}] build {split}"
+        return [t(d) for d in tqdm(raw_ds, desc=desc, position=0, leave=True)]
 
     train_ds = build(raw_train, 'train')
     val_ds = build(raw_val, 'val')
