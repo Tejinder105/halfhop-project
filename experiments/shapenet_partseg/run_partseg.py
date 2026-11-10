@@ -138,23 +138,19 @@ def evaluate(loader, model, device, valid_classes: list[int]):
     for data in loader:
         data = data.to(device)
         logits = model(data)
-
-        # Build target — slow nodes are masked out in model.forward
-        mask = getattr(data, 'slow_node_mask', None)
-        if mask is not None:
-            y = data.y[~mask]
-        else:
-            y = data.y
-
+        # model(data) already discards slow nodes, so logits aligns exactly with data.y
+        y = data.y
         pred = logits.argmax(dim=-1)
         total_correct += (pred == y).sum().item()
         total_nodes += y.numel()
 
         # Per-graph mIoU (batch may contain multiple graphs)
+        # We need batch index for original nodes only
+        mask = getattr(data, 'slow_node_mask', None)
         batch_vec = getattr(data, 'batch', None)
         if batch_vec is None:
             batch_vec = torch.zeros(y.size(0), dtype=torch.long, device=device)
-        if mask is not None:
+        elif mask is not None:
             batch_vec = batch_vec[~mask]
 
         for g in batch_vec.unique():
@@ -176,14 +172,9 @@ def train_one_epoch(loader, model, optimizer, device) -> float:
         data = data.to(device)
         optimizer.zero_grad()
         logits = model(data)
-
-        mask = getattr(data, 'slow_node_mask', None)
-        if mask is not None:
-            y = data.y[~mask]
-        else:
-            y = data.y
-
-        loss = F.cross_entropy(logits, y)
+        # model(data) already discards slow nodes (out = out[~mask]),
+        # so logits has shape [N_orig, num_classes], matching data.y [N_orig] directly.
+        loss = F.cross_entropy(logits, data.y)
         loss.backward()
         optimizer.step()
 
