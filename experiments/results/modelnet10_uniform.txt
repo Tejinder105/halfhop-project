@@ -1,0 +1,1 @@
+FINAL RESULTS: uniform ModelNet10 best_val=0.8496 test_at_best_val=0.7676 seed=0 mode=uniform delays=(1, 1, 1) backward=last points=512 knn=12
