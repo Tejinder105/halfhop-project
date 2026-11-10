@@ -313,9 +313,14 @@ def main():
                         help='JSONL file to append results to')
     parser.add_argument('--prepare-only', action='store_true',
                         help='Download data and exit (no training)')
+    parser.add_argument('--device', default='auto',
+                        help='cuda / cuda:0 / cuda:1 / cpu / auto')
     args = parser.parse_args()
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    if args.device == 'auto':
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    else:
+        device = torch.device(args.device)
     print(f"Device: {device}")
 
     if args.prepare_only:
