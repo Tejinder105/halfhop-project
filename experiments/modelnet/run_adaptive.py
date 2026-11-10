@@ -112,6 +112,10 @@ def run_one(args: argparse.Namespace) -> None:
     set_seed(args.seed)
     device = torch.device(args.device if args.device != "auto" else "cuda" if torch.cuda.is_available() else "cpu")
     if device.type == "cuda":
+        # The launcher masks each child to one physical GPU, so that GPU is
+        # logical device 0 inside the child process.
+        if device.index is None:
+            device = torch.device("cuda:0")
         torch.cuda.set_device(device)
     train_dataset, test_dataset = load_datasets(args)
     generator = torch.Generator().manual_seed(args.seed)
@@ -253,7 +257,7 @@ def run_all(args: argparse.Namespace) -> None:
             "--seed",
             str(args.seed),
             "--device",
-            "cuda",
+            "cuda:0",
             "--data-dir",
             args.data_dir,
             "--output",
@@ -271,7 +275,7 @@ def run_all(args: argparse.Namespace) -> None:
             for running_label, process in processes:
                 code = process.wait()
                 if code:
-                    raise subprocess.CalledProcessError(code, command, env=env)
+                    raise subprocess.CalledProcessError(code, command)
                 print(f"Completed {running_label}", flush=True)
             processes.clear()
 
