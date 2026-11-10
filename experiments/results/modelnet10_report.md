@@ -69,3 +69,4 @@ Why does allocating delays randomly beat allocating them based on Pauly surface 
 | **Wisconsin / Chameleon** | Heterophilic Relational | Shallow ($L=2$) | $\approx$ Matched by Lazy Walk ($p < 0.005$) | Ego-weight damping; structural dilation adds no topological advantage. |
 | **Heterophilic at Scale** | Heterophilic Relational | Deep ($L \ge 6$) | **Strong Win (+19.6% at $L=8$)** | Anti-over-smoothing gearbox; preserves Dirichlet energy ($0.68$ vs $0.02$). |
 | **ModelNet10** | 3D Geometric Manifold | Moderate ($L=6$) | **Negative Impact ($-4.52\%$)** | Receptive field starvation ($L_{\text{eff}} \le 1.5$) + chordal manifold distortion. |
+
