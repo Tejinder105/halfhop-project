@@ -115,3 +115,4 @@ def test_feature_dim_preserved():
     data = Data(pos=pos, normal=normal, y=y, num_nodes=n)
     out = BoundaryHalfHop(knn=5, use_labels=True)(data)
     assert out.x.size(1) == 6  # pos + normal
+
