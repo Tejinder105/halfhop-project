@@ -78,3 +78,4 @@ print(f"{'Condition':<12}  {'Runs':>5}  {'Mean test mIoU':>14}  {'Best':>8}")
 for cond, vals in sorted(by_cond.items()):
     print(f"{cond:<12}  {len(vals):>5}  {sum(vals)/len(vals):>14.4f}  {max(vals):>8.4f}")
 PY
+
