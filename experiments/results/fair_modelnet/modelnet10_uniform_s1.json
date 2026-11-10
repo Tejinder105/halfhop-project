@@ -1,0 +1,13 @@
+{
+  "condition": "uniform",
+  "seed": 1,
+  "dataset": "10",
+  "backbone": "edgeconv",
+  "points": 512,
+  "best_val": 0.9148,
+  "test_at_best_val": 0.8403,
+  "best_epoch": 48,
+  "epochs": 50,
+  "num_params": 266762,
+  "log": "experiments/results/fair_modelnet/logs/uniform_seed1.jsonl"
+}

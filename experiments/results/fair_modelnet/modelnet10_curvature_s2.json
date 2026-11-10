@@ -1,0 +1,13 @@
+{
+  "condition": "curvature",
+  "seed": 2,
+  "dataset": "10",
+  "backbone": "edgeconv",
+  "points": 512,
+  "best_val": 0.9098,
+  "test_at_best_val": 0.848,
+  "best_epoch": 33,
+  "epochs": 50,
+  "num_params": 266762,
+  "log": "experiments/results/fair_modelnet/logs/curvature_seed2.jsonl"
+}

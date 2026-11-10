@@ -1,0 +1,255 @@
+{
+  "summary": {
+    "curvature": {
+      "mean": 0.8403,
+      "std": 0.0083,
+      "n": 3,
+      "scores": [
+        0.8315,
+        0.8414,
+        0.848
+      ],
+      "wilcoxon_p_gt_baseline": 1.0
+    },
+    "none": {
+      "mean": 0.8583,
+      "std": 0.0046,
+      "n": 3,
+      "scores": [
+        0.8634,
+        0.8568,
+        0.8546
+      ]
+    },
+    "random": {
+      "mean": 0.8531,
+      "std": 0.0028,
+      "n": 3,
+      "scores": [
+        0.8557,
+        0.8535,
+        0.8502
+      ],
+      "wilcoxon_p_gt_baseline": 1.0
+    },
+    "sparse_inv": {
+      "mean": 0.8575,
+      "std": 0.0063,
+      "n": 3,
+      "scores": [
+        0.8524,
+        0.8645,
+        0.8557
+      ],
+      "wilcoxon_p_gt_baseline": 0.625
+    },
+    "uniform": {
+      "mean": 0.8465,
+      "std": 0.0056,
+      "n": 3,
+      "scores": [
+        0.8513,
+        0.8403,
+        0.848
+      ],
+      "wilcoxon_p_gt_baseline": 1.0
+    }
+  },
+  "results": [
+    {
+      "condition": "none",
+      "seed": 0,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9273,
+      "test_at_best_val": 0.8634,
+      "best_epoch": 50,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/none_seed0.jsonl"
+    },
+    {
+      "condition": "none",
+      "seed": 1,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9348,
+      "test_at_best_val": 0.8568,
+      "best_epoch": 47,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/none_seed1.jsonl"
+    },
+    {
+      "condition": "none",
+      "seed": 2,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9073,
+      "test_at_best_val": 0.8546,
+      "best_epoch": 45,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/none_seed2.jsonl"
+    },
+    {
+      "condition": "sparse_inv",
+      "seed": 0,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.8997,
+      "test_at_best_val": 0.8524,
+      "best_epoch": 35,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/sparse_inv_seed0.jsonl"
+    },
+    {
+      "condition": "sparse_inv",
+      "seed": 1,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9323,
+      "test_at_best_val": 0.8645,
+      "best_epoch": 48,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/sparse_inv_seed1.jsonl"
+    },
+    {
+      "condition": "sparse_inv",
+      "seed": 2,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9048,
+      "test_at_best_val": 0.8557,
+      "best_epoch": 49,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/sparse_inv_seed2.jsonl"
+    },
+    {
+      "condition": "uniform",
+      "seed": 0,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9023,
+      "test_at_best_val": 0.8513,
+      "best_epoch": 50,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/uniform_seed0.jsonl"
+    },
+    {
+      "condition": "uniform",
+      "seed": 1,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9148,
+      "test_at_best_val": 0.8403,
+      "best_epoch": 48,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/uniform_seed1.jsonl"
+    },
+    {
+      "condition": "uniform",
+      "seed": 2,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9098,
+      "test_at_best_val": 0.848,
+      "best_epoch": 48,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/uniform_seed2.jsonl"
+    },
+    {
+      "condition": "curvature",
+      "seed": 0,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9073,
+      "test_at_best_val": 0.8315,
+      "best_epoch": 48,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/curvature_seed0.jsonl"
+    },
+    {
+      "condition": "curvature",
+      "seed": 1,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9298,
+      "test_at_best_val": 0.8414,
+      "best_epoch": 42,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/curvature_seed1.jsonl"
+    },
+    {
+      "condition": "curvature",
+      "seed": 2,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9098,
+      "test_at_best_val": 0.848,
+      "best_epoch": 33,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/curvature_seed2.jsonl"
+    },
+    {
+      "condition": "random",
+      "seed": 0,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9273,
+      "test_at_best_val": 0.8557,
+      "best_epoch": 46,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/random_seed0.jsonl"
+    },
+    {
+      "condition": "random",
+      "seed": 1,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.9223,
+      "test_at_best_val": 0.8535,
+      "best_epoch": 49,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/random_seed1.jsonl"
+    },
+    {
+      "condition": "random",
+      "seed": 2,
+      "dataset": "10",
+      "backbone": "edgeconv",
+      "points": 512,
+      "best_val": 0.8972,
+      "test_at_best_val": 0.8502,
+      "best_epoch": 44,
+      "epochs": 50,
+      "num_params": 266762,
+      "log": "experiments/results/fair_modelnet/logs/random_seed2.jsonl"
+    }
+  ]
+}
