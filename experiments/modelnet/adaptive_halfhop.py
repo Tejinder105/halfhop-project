@@ -137,17 +137,47 @@ def build_graph(
     mode: str,
     uniform_m: int,
     backward: str,
+    edge_index: Tensor | None = None,
+    curvature: Tensor | None = None,
 ) -> AdaptiveGraph:
-    edge_index = knn_edge_index(pos, knn)
-    curvature = surface_variation(pos, curv_k)
+    if edge_index is None:
+        edge_index = knn_edge_index(pos, knn)
     if mode == "none":
-        edge_delays = torch.zeros(edge_index.size(1), dtype=torch.long, device=pos.device)
-    else:
-        edge_delays = assign_delays(
-            curvature, edge_index, delays, quantiles, mode=mode, uniform_m=uniform_m
-        )
+        slow_mask = torch.zeros(x.size(0), dtype=torch.bool, device=x.device)
+        edge_delays = torch.zeros(edge_index.size(1), dtype=torch.long, device=x.device)
+        curv_out = curvature if curvature is not None else torch.zeros(x.size(0), device=x.device)
+        return AdaptiveGraph(x, edge_index, slow_mask, curv_out, edge_delays)
+
+    if curvature is None:
+        curvature = surface_variation(pos, curv_k)
+    edge_delays = assign_delays(
+        curvature, edge_index, delays, quantiles, mode=mode, uniform_m=uniform_m
+    )
     new_x, new_edges, slow_mask = insert_slow_chains(x, edge_index, edge_delays, backward)
     return AdaptiveGraph(new_x, new_edges, slow_mask, curvature, edge_delays)
+
+
+class PointCloudPreTransform:
+    """Pre-transform to sample points, compute curvature, and base KNN graph once."""
+
+    def __init__(self, points: int = 512, knn: int = 12, curv_k: int = 16):
+        from torch_geometric.transforms import NormalizeScale, SamplePoints
+
+        self.points = points
+        self.knn = knn
+        self.curv_k = curv_k
+        self.norm = NormalizeScale()
+        self.sampler = SamplePoints(points, include_normals=True)
+
+    def __call__(self, data):
+        data = self.norm(data)
+        data = self.sampler(data)
+        pos = data.pos.float()
+        data.curvature = surface_variation(pos, self.curv_k)
+        data.base_edge_index = knn_edge_index(pos, self.knn)
+        if hasattr(data, "face"):
+            data.face = None
+        return data
 
 
 class AdaptiveHalfHop:
@@ -172,6 +202,7 @@ class AdaptiveHalfHop:
         self.backward = backward
 
     def __call__(self, data):
+        data = data.clone()
         if data.pos is None:
             raise ValueError("AdaptiveHalfHop requires data.pos")
         pos = data.pos.float()
@@ -179,6 +210,12 @@ class AdaptiveHalfHop:
             raise ValueError("point cloud must contain more points than knn and curv_k")
         normals = getattr(data, "normal", None)
         features = pos if normals is None else torch.cat((pos, normals.float()), dim=1)
+
+        base_edge_index = getattr(data, "base_edge_index", None)
+        if base_edge_index is None and hasattr(data, "edge_index") and data.edge_index is not None:
+            base_edge_index = data.edge_index
+        curvature = getattr(data, "curvature", None)
+
         graph = build_graph(
             pos,
             features,
@@ -189,6 +226,8 @@ class AdaptiveHalfHop:
             self.mode,
             self.uniform_m,
             self.backward,
+            edge_index=base_edge_index,
+            curvature=curvature,
         )
         data.x = graph.x
         data.edge_index = graph.edge_index
@@ -197,4 +236,8 @@ class AdaptiveHalfHop:
         data.pos = None
         if hasattr(data, "normal"):
             data.normal = None
+        if hasattr(data, "curvature"):
+            data.curvature = None
+        if hasattr(data, "base_edge_index"):
+            data.base_edge_index = None
         return data
