@@ -4,20 +4,24 @@ cd "$(dirname "$0")/../.."
 
 # ============================================================
 # Fair ModelNet10 Experiment — Kaggle Free Tier Optimized
-# Fixes all 7 flaws from run_adaptive.py:
-#   F1: Controlled expansion (sparse_inv ~6.9x vs 21x for curvature)
-#   F2: Correct metadata stored per condition (delays=(0,0,0) for none)
-#   F3: Dynamic 3D data augmentation per epoch (rotation, jitter, scale)
-#   F4: Multi-seed (seeds 0 1 2) with mean ± std and Wilcoxon test
-#   F5: 50 epochs + cosine annealing LR + per-epoch JSONL logging
-#   F6: Modern EdgeConv backbone (DGCNN-style relative position features)
-#   F7: Isolated pre_transform cache per point count (no PyG cache collisions)
-#
-# New approach: sparse_inv delays only planar (low-curv) edges (m=1),
-# leaving boundary/corner edges undelayed (m=0) so diagnostic landmarks
-# flow freely across the object.
 # ============================================================
 
+# 1. Clean up stale/leftover datasets and caches to ensure plenty of disk space on Kaggle
+echo "=== Disk Space Management ==="
+echo "Cleaning up any stale ModelNet40 / temporary files to free disk space..."
+rm -rf data/ModelNetPoint data/ModelNet40 /tmp/ModelNet* data/ModelNet10/pts_* data/ModelNet10/*.zip 2>/dev/null || true
+
+# If raw ModelNet10 was downloaded previously in ModelNetPoint, reuse it
+if [ -d "data/ModelNetPoint/raw/ModelNet10" ] && [ ! -d "data/ModelNet10/raw/ModelNet10" ]; then
+    echo "Reusing existing raw ModelNet10 files..."
+    mkdir -p data/ModelNet10/raw
+    cp -r data/ModelNetPoint/raw/ModelNet10 data/ModelNet10/raw/ 2>/dev/null || true
+fi
+
+df -h .
+echo "============================="
+
+# 2. Configuration
 DATASET="${DATASET:-10}"
 DATA_DIR="${DATA_DIR:-data/ModelNet10}"
 POINTS="${POINTS:-512}"
@@ -36,6 +40,16 @@ echo "Conditions: ${CONDITIONS}"
 echo "Seeds: ${SEEDS}"
 echo "============================================================"
 
+# 3. Prepare dataset sequentially first (prevents download race conditions and disk errors)
+echo "Step 1: Preparing base dataset once sequentially..."
+python -u -m experiments.modelnet.run_fair \
+  --dataset "$DATASET" \
+  --data-dir "$DATA_DIR" \
+  --points "$POINTS" \
+  --prepare-only
+
+# 4. Run the ablation experiments in parallel across GPUs
+echo "Step 2: Launching ablation matrix across GPUs..."
 python -u -m experiments.modelnet.run_fair \
   --run-all \
   --dataset "$DATASET" \

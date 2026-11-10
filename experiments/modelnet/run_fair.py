@@ -7,7 +7,7 @@ Fixes all 7 flaws identified in run_adaptive.py:
   F4: Multi-seed support (default seeds 0, 1, 2) reporting mean ± std & Wilcoxon test.
   F5: 50 epochs + cosine annealing LR schedule + per-epoch JSONL logs saved to disk.
   F6: Modern EdgeConv backbone (DGCNN-style relative position features) + optional GraphSAGE.
-  F7: Dedicated isolated pre_transform cache per point count (no PyG cache collisions).
+  F7: Single sequential preparation step prevents race conditions and disk overflow.
 
 New approach — sparse_inv:
   mode=inverse, delays=(0, 0, 1), quantiles=(0.5, 0.85)
@@ -31,6 +31,7 @@ import argparse
 import json
 import math
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -64,7 +65,7 @@ SEEDS = [0, 1, 2]
 
 
 # ---------------------------------------------------------------------------
-# Data augmentation
+# Data Augmentation
 # ---------------------------------------------------------------------------
 def augment_shape(data: Data) -> Data:
     """Random Z-rotation, jitter, and scale applied to coordinates and normals.
@@ -172,12 +173,11 @@ class SAGEClassifier(nn.Module):
 # ---------------------------------------------------------------------------
 # Dataset Helpers
 # ---------------------------------------------------------------------------
-def load_base_dataset(dataset: str, data_dir: str, points: int) -> tuple:
-    """Load ModelNet with isolated cache per point count to avoid PyG cache collisions."""
-    cond_dir = os.path.join(data_dir, f"pts_{points}")
+def load_base_dataset(dataset: str, data_dir: str, points: int, force_reload: bool = False) -> tuple:
+    """Load ModelNet base dataset with pre-computed curvature and base KNN."""
     pre = PointCloudPreTransform(points=points, knn=12, curv_k=16)
-    train = ModelNet(cond_dir, name=dataset, train=True, pre_transform=pre)
-    test = ModelNet(cond_dir, name=dataset, train=False, pre_transform=pre)
+    train = ModelNet(data_dir, name=dataset, train=True, pre_transform=pre, force_reload=force_reload)
+    test = ModelNet(data_dir, name=dataset, train=False, pre_transform=pre, force_reload=force_reload)
     return train, test
 
 
@@ -370,9 +370,22 @@ def summarize(results: list[dict], baseline: str = "none") -> dict:
 
 
 # ---------------------------------------------------------------------------
-# run_all: launches parallel jobs across available GPUs
+# run_all: sequential preparation then parallel GPU execution
 # ---------------------------------------------------------------------------
 def run_all(args: argparse.Namespace) -> None:
+    # 1. Sequentially prepare dataset once to prevent race conditions and disk overflow
+    print(f"Preparing ModelNet{args.dataset} base point clouds in {args.data_dir}...", flush=True)
+    prepare_cmd = [
+        sys.executable, "-m", "experiments.modelnet.run_fair",
+        "--dataset", args.dataset,
+        "--data-dir", args.data_dir,
+        "--points", str(args.points),
+        "--prepare-only",
+    ]
+    if args.force_reload:
+        prepare_cmd.append("--force-reload")
+    subprocess.run(prepare_cmd, check=True)
+
     gpu_ids = [g.strip() for g in args.gpus.split(",") if g.strip()]
     if torch.cuda.is_available():
         avail = torch.cuda.device_count()
@@ -488,17 +501,40 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--seeds", type=int, nargs="+", default=SEEDS)
     p.add_argument("--device", default="auto")
     p.add_argument("--output", default=None)
+    p.add_argument("--prepare-only", action="store_true")
+    p.add_argument("--force-reload", action="store_true")
     p.add_argument("--run-all", action="store_true")
     p.add_argument("--gpus", default="0,1")
     return p.parse_args()
 
 
-def main() -> None:
-    args = parse_args()
+def main(args: argparse.Namespace | None = None) -> None:
+    if args is None:
+        args = parse_args()
     os.environ.setdefault("OMP_NUM_THREADS", "1")
+
+    # Check disk space
+    total, used, free = shutil.disk_usage(".")
+    free_gb = free / (1024 ** 3)
+    if free_gb < 1.0:
+        print(f"Warning: Low disk space detected ({free_gb:.2f} GB free).", flush=True)
+
+    if args.prepare_only:
+        train, test = load_base_dataset(args.dataset, args.data_dir, args.points, force_reload=args.force_reload)
+        print(f"Prepared ModelNet{args.dataset}: train={len(train)} test={len(test)}", flush=True)
+        # Clean up any leftover zip file in data_dir to reclaim disk space
+        zip_path = Path(args.data_dir) / f"ModelNet{args.dataset}.zip"
+        if zip_path.exists():
+            try:
+                zip_path.unlink()
+            except OSError:
+                pass
+        return
+
     if args.run_all:
         run_all(args)
         return
+
     args.seed = getattr(args, "seed", 0)
     result = run_one(args, args.seed)
     print(json.dumps(result, indent=2))
