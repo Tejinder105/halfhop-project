@@ -51,6 +51,8 @@ class BoundaryHalfHop:
             bnd_mask = inter_part_boundary_edges(edge_index, y.view(-1))
         else:
             normal = getattr(data, 'normal', None)
+            if normal is None and x is not None and x.size(1) >= 6:
+                normal = x[:, 3:6]
             bnd_mask = boundary_edge_mask(
                 pos, edge_index,
                 normal.float() if normal is not None else None,

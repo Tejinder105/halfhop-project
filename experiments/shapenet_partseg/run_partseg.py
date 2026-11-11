@@ -71,15 +71,18 @@ class GraphBuild:
         data = copy.copy(data)
 
         pos = data.pos.float()  # [N, 3]
+        # In PyG ShapeNet(..., include_normals=True), normals are loaded in data.x
         normal = getattr(data, 'normal', None)
+        if normal is None and hasattr(data, 'x') and data.x is not None and data.x.size(-1) == 3:
+            normal = data.x.float()
 
-        # Node features: pos + normal if available, else just pos
+        # Node features: pos + normal (6D) if available, else just pos (3D)
         if normal is not None:
-            x = torch.cat([pos, normal.float()], dim=-1)  # [N, 6]
+            data.x = torch.cat([pos, normal], dim=-1)
+            data.normal = normal
         else:
-            x = pos  # [N, 3]
+            data.x = pos
 
-        data.x = x
         data.y = data.y.view(-1).long()
         data.edge_index = _knn(pos, self.k)
 
@@ -87,12 +90,13 @@ class GraphBuild:
             return data
 
         if self.condition == 'boundary':
-            # Let BoundaryHalfHop handle edge construction from pos + y
-            # It needs pos and y; pass data with both set.
+            # Strictly geometric boundary detection across train, val, and test
+            # Budget matched to random: top (1 - budget) sharpest boundary edges slowed
             data = BoundaryHalfHop(
                 knn=self.k,
                 alpha=0.4,
-                use_labels=(self.split == 'train'),
+                use_labels=False,
+                curv_quantile=max(0.0, 1.0 - self.budget),
             )(data)
             return data
 
@@ -253,7 +257,7 @@ def run_condition(args, condition: str, seed: int, device: torch.device) -> dict
         scheduler.step()
         if epoch % max(1, args.epochs // 10) == 0 or epoch == args.epochs:
             val_acc, val_miou = evaluate(val_loader, model, device, valid_classes)
-            print(f"  epoch {epoch:3d}  loss={loss:.4f}  "
+            print(f"[{condition}] epoch {epoch:3d}  loss={loss:.4f}  "
                   f"val_acc={val_acc:.4f}  val_mIoU={val_miou:.4f}")
             if val_miou > best_val_miou:
                 best_val_miou = val_miou
@@ -262,7 +266,7 @@ def run_condition(args, condition: str, seed: int, device: torch.device) -> dict
     # Reload best and evaluate test
     model.load_state_dict(best_state)
     test_acc, test_miou = evaluate(test_loader, model, device, valid_classes)
-    print(f"  TEST  acc={test_acc:.4f}  mIoU={test_miou:.4f}")
+    print(f"[{condition}] TEST  acc={test_acc:.4f}  mIoU={test_miou:.4f}")
 
     return dict(
         condition=condition,
