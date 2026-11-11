@@ -19,11 +19,12 @@ class BoundaryHalfHop:
     Interior edges are never slowed.
     """
 
-    def __init__(self, knn=16, alpha=0.4, use_labels=True, curv_quantile=0.85):
+    def __init__(self, knn=16, alpha=0.4, use_labels=True, curv_quantile=0.95, min_score=0.15):
         self.knn = knn
         self.alpha = alpha
         self.use_labels = use_labels
         self.curv_quantile = curv_quantile
+        self.min_score = min_score
 
     def __call__(self, data):
         data = data.clone()
@@ -56,7 +57,8 @@ class BoundaryHalfHop:
             bnd_mask = boundary_edge_mask(
                 pos, edge_index,
                 normal.float() if normal is not None else None,
-                self.knn, self.curv_quantile
+                self.knn, self.curv_quantile,
+                min_score=self.min_score,
             )
 
         if not bnd_mask.any():

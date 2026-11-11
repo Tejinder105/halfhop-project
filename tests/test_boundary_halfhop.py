@@ -56,10 +56,22 @@ def test_geometry_boundary_score_shape():
 def test_boundary_edge_mask_fraction():
     pos = torch.randn(30, 3)
     edge_index = torch.randint(0, 30, (2, 100))
-    mask = boundary_edge_mask(pos, edge_index, quantile=0.85)
+    mask = boundary_edge_mask(pos, edge_index, quantile=0.85, min_score=0.0)
     assert mask.shape == (100,)
     # roughly 15% should be True
     assert 5 <= mask.sum().item() <= 30
+
+
+def test_boundary_edge_mask_min_score_suppresses_flat():
+    # Pure flat plane with identical normals
+    pos = torch.zeros(30, 3)
+    pos[:, 0] = torch.linspace(-1, 1, 30)
+    nrm = torch.zeros(30, 3)
+    nrm[:, 2] = 1.0
+    ei = torch.stack([torch.arange(29), torch.arange(1, 30)])
+    # min_score=0.15 should produce 0 boundary edges even at low quantile
+    mask = boundary_edge_mask(pos, ei, normals=nrm, quantile=0.5, min_score=0.15)
+    assert mask.sum().item() == 0
 
 
 def test_compute_normals_unit_length():

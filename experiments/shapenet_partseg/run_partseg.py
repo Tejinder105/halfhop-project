@@ -59,13 +59,16 @@ def _knn(pos: torch.Tensor, k: int) -> torch.Tensor:
 class GraphBuild:
     """Pre-process a ShapeNet Data object into a graph ready for training."""
 
-    def __init__(self, condition: str, k: int, budget: float, split: str):
+    def __init__(self, condition: str, k: int, budget: float, split: str,
+                 curv_quantile: float | None = None, min_score: float = 0.15):
         assert condition in CONDITIONS
         assert split in ('train', 'val', 'test')
         self.condition = condition
         self.k = k
         self.budget = budget
         self.split = split
+        self.curv_quantile = curv_quantile if curv_quantile is not None else max(0.0, 1.0 - budget)
+        self.min_score = min_score
 
     def __call__(self, data):
         data = copy.copy(data)
@@ -90,13 +93,15 @@ class GraphBuild:
             return data
 
         if self.condition == 'boundary':
-            # Strictly geometric boundary detection across train, val, and test
-            # Budget matched to random: top (1 - budget) sharpest boundary edges slowed
+            # Dynamic gated boundary detection:
+            # 1. curv_quantile: selects only top percentile sharpest edges (e.g. 90th, 95th, 98th)
+            # 2. min_score: absolute physical crease gate to avoid slowing smooth/planar surfaces
             data = BoundaryHalfHop(
                 knn=self.k,
                 alpha=0.4,
                 use_labels=False,
-                curv_quantile=max(0.0, 1.0 - self.budget),
+                curv_quantile=self.curv_quantile,
+                min_score=self.min_score,
             )(data)
             return data
 
@@ -216,7 +221,14 @@ def run_condition(args, condition: str, seed: int, device: torch.device) -> dict
 
     # Eagerly apply transform
     def build(raw_ds, split):
-        t = GraphBuild(condition, args.k, args.budget, split)
+        t = GraphBuild(
+            condition,
+            args.k,
+            args.budget,
+            split,
+            curv_quantile=getattr(args, 'curv_quantile', None),
+            min_score=getattr(args, 'min_score', 0.15),
+        )
         # Use simple non-clobbering print if in parallel / non-tty environment
         desc = f"[{condition}|gpu:{device}] build {split}"
         return [t(d) for d in tqdm(raw_ds, desc=desc, position=0, leave=True)]
@@ -272,6 +284,9 @@ def run_condition(args, condition: str, seed: int, device: torch.device) -> dict
         condition=condition,
         category=category,
         seed=seed,
+        budget=args.budget,
+        curv_quantile=args.curv_quantile,
+        min_score=args.min_score,
         best_val_miou=best_val_miou,
         test_miou=test_miou,
         test_acc=test_acc,
@@ -301,8 +316,12 @@ def main():
     parser.add_argument('--weight-decay', type=float, default=1e-4)
     parser.add_argument('--k', type=int, default=16,
                         help='KNN neighbourhood size')
-    parser.add_argument('--budget', type=float, default=0.3,
+    parser.add_argument('--budget', type=float, default=0.05,
                         help='Fraction of edges to half-hop (random condition)')
+    parser.add_argument('--curv-quantile', type=float, default=0.95,
+                        help='Percentile threshold for boundary edges (e.g. 0.90, 0.95, 0.98)')
+    parser.add_argument('--min-score', type=float, default=0.15,
+                        help='Absolute minimum geometric crease score (avoids slowing flat surfaces)')
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--data-dir', default='data',
                         help='Root directory for datasets')

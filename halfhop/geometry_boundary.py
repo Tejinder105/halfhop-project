@@ -78,9 +78,20 @@ def boundary_edge_mask(
     edge_index: Tensor,
     normals: Optional[Tensor] = None,
     knn: int = 16,
-    quantile: float = 0.85,
+    quantile: float = 0.95,
+    min_score: float = 0.15,
 ) -> Tensor:
-    """Bool [E]: True for edges with geometry_boundary_score >= quantile threshold."""
+    """Bool [E]: True for edges with geometry_boundary_score >= quantile threshold AND >= min_score.
+
+    The combination of quantile and min_score prevents receptive-field starvation:
+    - quantile ensures only the sharpest edges in the shape are chosen.
+    - min_score (physical crease gate) ensures that if an object or region is mostly
+      planar/smooth, edges with negligible curvature or coplanar normals are NEVER slowed.
+    """
     score = geometry_boundary_score(pos, edge_index, normals=normals, knn=knn)
-    threshold = torch.quantile(score, quantile)
-    return score >= threshold
+    if quantile is not None and 0.0 <= quantile < 1.0:
+        threshold = torch.quantile(score, quantile)
+        mask = (score >= threshold) & (score >= min_score)
+    else:
+        mask = score >= min_score
+    return mask
