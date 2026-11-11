@@ -112,25 +112,26 @@ def prepare_datasets_and_mlps(categories: list[str], args):
         if mlp_path.exists():
             print(f"[{cat}] Confidence MLP checkpoint already exists at {mlp_path}", flush=True)
         else:
-            print(f"[{cat}] Training Edge-Confidence MLP (fast CPU pass)...", flush=True)
+            mlp_device = "cuda:0" if (args.gpus != "cpu" and torch.cuda.is_available()) else "cpu"
+            print(f"[{cat}] Training Edge-Confidence MLP on {mlp_device} (batch_size=65536, high GPU throughput)...", flush=True)
             cmd_mlp = [
                 sys.executable, "-u", "-m", "halfhop.confidence.train_gate",
                 "--category", cat,
                 "--data-dir", args.data_dir,
                 "--k", str(args.k),
-                "--epochs", "50",
-                "--lr", "0.001",
-                "--batch-size", "4096",
+                "--epochs", "25",
+                "--lr", "0.002",
+                "--batch-size", "65536",
                 "--dropout", "0.2",
                 "--budget", str(args.budget),
-                "--device", "cpu",
+                "--device", mlp_device,
                 "--output", str(mlp_path),
             ]
             p_mlp = subprocess.run(cmd_mlp, text=True)
             if p_mlp.returncode != 0:
                 print(f"[{cat}] Warning during MLP training: returncode={p_mlp.returncode}", flush=True)
             else:
-                print(f"[{cat}] ✓ Edge-Confidence MLP trained and saved.", flush=True)
+                print(f"[{cat}] ✓ Edge-Confidence MLP trained and saved on {mlp_device}.", flush=True)
     print("=" * 65, flush=True)
     print("All MLPs and datasets ready! Starting multi-GPU dispatch...\n", flush=True)
 
