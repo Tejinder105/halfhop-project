@@ -1,0 +1,43 @@
+# CAHH configuration — confidence-aware Half-Hop experiment
+
+# Dataset
+data_dir: data/ShapeNet
+categories:
+  - Airplane
+  - Chair
+  - Lamp
+  - Table
+
+# Graph construction
+k: 16            # kNN neighbourhood size
+num_points: 2048 # ShapeNet provides 2048 points per shape
+
+# MLP training (halfhop.confidence.train_gate)
+mlp:
+  epochs: 50
+  lr: 0.001
+  batch_size: 4096
+  dropout: 0.2
+
+# Augmentation budget (fraction of undirected edges to half-hop)
+budget: 0.10
+
+# GNN training (experiments.confidence_aware.train_cahh)
+gnn:
+  depth: 3
+  hidden: 64
+  dropout: 0.5
+  epochs: 100
+  lr: 0.001
+  batch_size: 16
+  seeds: [0, 1, 2, 3, 4]
+
+# Budget sensitivity sweep (§5.3)
+budget_sweep: [0.05, 0.10, 0.25, 0.50]
+
+# Output paths
+mlp_ckpt_dir: experiments/results
+seg_results: experiments/results/cahh_segmentation.jsonl
+eval_metrics: experiments/results/cahh_eval_metrics.jsonl
+ablation_results: experiments/results/cahh_ablations.jsonl
+
