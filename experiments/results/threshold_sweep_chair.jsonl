@@ -1,0 +1,4 @@
+{"condition": "boundary", "category": "Chair", "seed": 0, "budget": 0.05, "curv_quantile": 0.95, "min_score": 0.15, "best_val_miou": 0.8709736718962605, "test_miou": 0.8512681885493006, "test_acc": 0.9413224052908828}
+{"condition": "boundary", "category": "Chair", "seed": 0, "budget": 0.05, "curv_quantile": 0.9, "min_score": 0.15, "best_val_miou": 0.8655259575139911, "test_miou": 0.8478423056840755, "test_acc": 0.9364484212518531}
+{"condition": "boundary", "category": "Chair", "seed": 0, "budget": 0.05, "curv_quantile": 0.98, "min_score": 0.15, "best_val_miou": 0.8690633497280096, "test_miou": 0.8527583567692681, "test_acc": 0.9417734761899755}
+{"condition": "boundary", "category": "Chair", "seed": 0, "budget": 0.05, "curv_quantile": 0.95, "min_score": 0.2, "best_val_miou": 0.8716084770367303, "test_miou": 0.8505813139307807, "test_acc": 0.9411930772708633}
