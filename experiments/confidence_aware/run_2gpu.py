@@ -86,28 +86,33 @@ def load_completed_keys(output_file: Path) -> set[tuple]:
 
 def prepare_datasets_and_mlps(categories: list[str], args):
     """Sequential prep: ensures zero download collision and trains MLPs."""
-    print("=" * 65)
-    print("PREPARATION STEP: Verifying ShapeNet datasets & training MLPs...")
-    print("=" * 65)
+    print("=" * 65, flush=True)
+    print("PREPARATION STEP: Verifying ShapeNet datasets & training MLPs...", flush=True)
+    print("=" * 65, flush=True)
     
     ckpt_dir = Path("experiments/results")
     ckpt_dir.mkdir(parents=True, exist_ok=True)
 
     for cat in categories:
         # Pre-verify dataset download
-        print(f"[{cat}] Checking dataset presence...")
+        print(f"[{cat}] Checking dataset presence / downloading...", flush=True)
         cmd_prep = [
             sys.executable, "-u", "-m", "experiments.segmentation.run",
             "--category", cat, "--prepare-only", "--data-dir", args.data_dir
         ]
-        subprocess.run(cmd_prep, capture_output=True, text=True)
+        # Run without suppressing output so download/extract progress is visible
+        p_prep = subprocess.run(cmd_prep, text=True)
+        if p_prep.returncode != 0:
+            print(f"[{cat}] Note/warning during dataset preparation (rc={p_prep.returncode})", flush=True)
+        else:
+            print(f"[{cat}] Dataset verified on disk.", flush=True)
 
         # Train confidence MLP if not already present
         mlp_path = ckpt_dir / f"cahh_mlp_{cat}.pt"
         if mlp_path.exists():
-            print(f"[{cat}] Confidence MLP checkpoint already exists at {mlp_path}")
+            print(f"[{cat}] Confidence MLP checkpoint already exists at {mlp_path}", flush=True)
         else:
-            print(f"[{cat}] Training Edge-Confidence MLP (CPU/fast)...")
+            print(f"[{cat}] Training Edge-Confidence MLP (fast CPU pass)...", flush=True)
             cmd_mlp = [
                 sys.executable, "-u", "-m", "halfhop.confidence.train_gate",
                 "--category", cat,
@@ -121,21 +126,20 @@ def prepare_datasets_and_mlps(categories: list[str], args):
                 "--device", "cpu",
                 "--output", str(mlp_path),
             ]
-            res = subprocess.run(cmd_mlp, capture_output=True, text=True)
-            if res.returncode != 0:
-                print(f"[{cat}] Warning during MLP training: {res.stderr[-300:]}")
+            p_mlp = subprocess.run(cmd_mlp, text=True)
+            if p_mlp.returncode != 0:
+                print(f"[{cat}] Warning during MLP training: returncode={p_mlp.returncode}", flush=True)
             else:
-                print(f"[{cat}] ✓ Edge-Confidence MLP ready.")
-    print("=" * 65)
-    print("All MLPs and datasets ready! Starting multi-GPU dispatch...\n")
+                print(f"[{cat}] ✓ Edge-Confidence MLP trained and saved.", flush=True)
+    print("=" * 65, flush=True)
+    print("All MLPs and datasets ready! Starting multi-GPU dispatch...\n", flush=True)
 
 
 def stream_reader(pipe, prefix: str):
     for line in iter(pipe.readline, ""):
         line_s = line.strip()
         if line_s:
-            if any(k in line_s for k in ("epoch", "FINAL", "Building graphs", "skip", "Error")):
-                print(f"[{prefix}] {line_s}", flush=True)
+            print(f"[{prefix}] {line_s}", flush=True)
     pipe.close()
 
 
