@@ -89,6 +89,13 @@ class GraphBuild:
         data.y = data.y.view(-1).long()
         data.edge_index = _knn(pos, self.k)
 
+        # Ground-truth boundary points (points having at least one neighbor with a different part label)
+        src, dst = data.edge_index[0], data.edge_index[1]
+        cross = (data.y[src] != data.y[dst])
+        bnd_mask = torch.zeros(pos.size(0), dtype=torch.bool)
+        bnd_mask.index_fill_(0, dst[cross], True)
+        data.is_bnd_pt = bnd_mask
+
         if self.condition == 'none':
             return data
 
@@ -138,11 +145,15 @@ def instance_miou(
 
 @torch.no_grad()
 def evaluate(loader, model, device, valid_classes: list[int]):
-    """Returns (accuracy, instance_mIoU) over the loader."""
+    """Returns a dict with overall, boundary, and interior accuracy and instance mIoU."""
     model.eval()
     total_correct = 0
     total_nodes = 0
+    bnd_correct = bnd_nodes = 0
+    int_correct = int_nodes = 0
     shape_mious = []
+    bnd_shape_mious = []
+    int_shape_mious = []
 
     for data in loader:
         data = data.to(device)
@@ -152,6 +163,15 @@ def evaluate(loader, model, device, valid_classes: list[int]):
         pred = logits.argmax(dim=-1)
         total_correct += (pred == y).sum().item()
         total_nodes += y.numel()
+
+        is_bnd = getattr(data, 'is_bnd_pt', None)
+        if is_bnd is not None:
+            is_bnd = is_bnd.bool()
+            bnd_correct += (pred[is_bnd] == y[is_bnd]).sum().item()
+            bnd_nodes += is_bnd.sum().item()
+            is_int = ~is_bnd
+            int_correct += (pred[is_int] == y[is_int]).sum().item()
+            int_nodes += is_int.sum().item()
 
         # Per-graph mIoU (batch may contain multiple graphs)
         # We need batch index for original nodes only
@@ -163,12 +183,31 @@ def evaluate(loader, model, device, valid_classes: list[int]):
             batch_vec = batch_vec[~mask]
 
         for g in batch_vec.unique():
-            m = batch_vec == g
+            m = (batch_vec == g)
             shape_mious.append(instance_miou(pred[m], y[m], valid_classes))
+            if is_bnd is not None:
+                mg_bnd = m & is_bnd
+                if mg_bnd.any():
+                    bnd_shape_mious.append(instance_miou(pred[mg_bnd], y[mg_bnd], valid_classes))
+                mg_int = m & (~is_bnd)
+                if mg_int.any():
+                    int_shape_mious.append(instance_miou(pred[mg_int], y[mg_int], valid_classes))
 
     acc = total_correct / max(total_nodes, 1)
     miou = float(sum(shape_mious) / len(shape_mious)) if shape_mious else 0.0
-    return acc, miou
+    bnd_acc = bnd_correct / max(bnd_nodes, 1) if bnd_nodes > 0 else 0.0
+    bnd_miou = float(sum(bnd_shape_mious) / len(bnd_shape_mious)) if bnd_shape_mious else 0.0
+    int_acc = int_correct / max(int_nodes, 1) if int_nodes > 0 else 0.0
+    int_miou = float(sum(int_shape_mious) / len(int_shape_mious)) if int_shape_mious else 0.0
+
+    return {
+        'acc': acc,
+        'miou': miou,
+        'bnd_acc': bnd_acc,
+        'bnd_miou': bnd_miou,
+        'int_acc': int_acc,
+        'int_miou': int_miou,
+    }
 
 
 def train_one_epoch(loader, model, optimizer, device) -> float:
@@ -268,28 +307,36 @@ def run_condition(args, condition: str, seed: int, device: torch.device) -> dict
         loss = train_one_epoch(train_loader, model, optimizer, device)
         scheduler.step()
         if epoch % max(1, args.epochs // 10) == 0 or epoch == args.epochs:
-            val_acc, val_miou = evaluate(val_loader, model, device, valid_classes)
+            val_metrics = evaluate(val_loader, model, device, valid_classes)
             print(f"[{condition}] epoch {epoch:3d}  loss={loss:.4f}  "
-                  f"val_acc={val_acc:.4f}  val_mIoU={val_miou:.4f}")
-            if val_miou > best_val_miou:
-                best_val_miou = val_miou
+                  f"val_acc={val_metrics['acc']:.4f}  val_mIoU={val_metrics['miou']:.4f}  "
+                  f"(bnd_mIoU={val_metrics['bnd_miou']:.4f})")
+            if val_metrics['miou'] > best_val_miou:
+                best_val_miou = val_metrics['miou']
                 best_state = copy.deepcopy(model.state_dict())
 
     # Reload best and evaluate test
     model.load_state_dict(best_state)
-    test_acc, test_miou = evaluate(test_loader, model, device, valid_classes)
-    print(f"[{condition}] TEST  acc={test_acc:.4f}  mIoU={test_miou:.4f}")
+    test_metrics = evaluate(test_loader, model, device, valid_classes)
+    print(f"[{condition}] TEST  acc={test_metrics['acc']:.4f}  mIoU={test_metrics['miou']:.4f}  |  "
+          f"BND_mIoU={test_metrics['bnd_miou']:.4f} (acc={test_metrics['bnd_acc']:.4f})  |  "
+          f"INT_mIoU={test_metrics['int_miou']:.4f} (acc={test_metrics['int_acc']:.4f})")
 
     return dict(
         condition=condition,
         category=category,
         seed=seed,
+        depth=args.depth,
         budget=args.budget,
         curv_quantile=args.curv_quantile,
         min_score=args.min_score,
         best_val_miou=best_val_miou,
-        test_miou=test_miou,
-        test_acc=test_acc,
+        test_miou=test_metrics['miou'],
+        test_acc=test_metrics['acc'],
+        test_bnd_miou=test_metrics['bnd_miou'],
+        test_bnd_acc=test_metrics['bnd_acc'],
+        test_int_miou=test_metrics['int_miou'],
+        test_int_acc=test_metrics['int_acc'],
     )
 
 

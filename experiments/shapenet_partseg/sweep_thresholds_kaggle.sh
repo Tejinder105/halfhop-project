@@ -61,3 +61,4 @@ if p.exists():
         print(f"{r['condition']:<10} {str(r.get('curv_quantile')):>10} {str(r.get('min_score')):>10} "
               f"{r.get('best_val_miou', 0):>15.4f} {r.get('test_miou', 0):>12.4f} {r.get('test_acc', 0):>10.4f}")
 PY
+
