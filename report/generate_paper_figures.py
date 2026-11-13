@@ -101,12 +101,12 @@ def plot_reproduction_bars():
 def plot_concept_diagram():
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.6, 3.4), dpi=300)
 
-    # Cohesive geometry coordinates designed for zero overlap
+    # Geometry coordinates with guaranteed clearance for text and legends
     top_x = np.array([0.12, 0.32, 0.50, 0.68, 0.88])
     top_y = np.array([0.80, 0.82, 0.80, 0.82, 0.80])
 
     leg_x = np.array([0.50, 0.50, 0.50])
-    leg_y = np.array([0.50, 0.32, 0.14])
+    leg_y = np.array([0.51, 0.38, 0.25])
 
     # -------------------------------------------------------------
     # Subplot 1: Baseline EdgeConv
@@ -130,15 +130,15 @@ def plot_concept_diagram():
                 edgecolors=CLR_SECONDARY_DARK, lw=1.2)
 
     # Bleeding label positioned cleanly to the right of the vertical seam
-    ax1.text(0.56, 0.65, 'Rapid Feature\nBleeding (1-hop)', color=CLR_CREASE,
+    ax1.text(0.56, 0.655, 'Rapid Feature\nBleeding (1-hop)', color=CLR_CREASE,
              fontsize=8.5, fontweight='bold', va='center', ha='left',
              bbox=dict(boxstyle='round,pad=0.25', facecolor='#FEE2E2', edgecolor='#FCA5A5', lw=0.8, alpha=0.9))
 
     ax1.set_xlim(0.04, 0.96)
     ax1.set_ylim(0.04, 0.96)
     ax1.axis('off')
-    # Legend safely placed in bottom-left corner away from leg at x=0.50
-    ax1.legend(loc='lower left', bbox_to_anchor=(0.02, 0.04), fontsize=8.0, frameon=True, framealpha=0.95)
+    # Legend centered at bottom with abundant clearance from leg
+    ax1.legend(ncol=2, loc='lower center', bbox_to_anchor=(0.50, 0.02), fontsize=8.0, frameon=True, framealpha=0.95)
 
     # -------------------------------------------------------------
     # Subplot 2: Geometry-Aware Boundary Half-Hop
@@ -157,7 +157,7 @@ def plot_concept_diagram():
 
     # Virtual Slow Node at boundary seam
     slow_x = 0.50
-    slow_y = (top_y[2] + leg_y[0]) / 2.0  # (0.80 + 0.50)/2 = 0.65
+    slow_y = (top_y[2] + leg_y[0]) / 2.0  # (0.80 + 0.51)/2 = 0.655
 
     # Asymmetric connections: leg -> slow <-> top
     ax2.annotate('', xy=(slow_x, slow_y), xytext=(leg_x[0], leg_y[0]),
@@ -169,19 +169,19 @@ def plot_concept_diagram():
                 edgecolors=CLR_GREEN_DARK, lw=1.2, label='Virtual Slow Node (ν_k)', zorder=6)
 
     # Boundary delay label cleanly to the right
-    ax2.text(0.56, 0.65, 'Boundary Delay\nPreserves Seam', color=CLR_SLOW_NODE,
+    ax2.text(0.56, 0.655, 'Boundary Delay\nPreserves Seam', color=CLR_SLOW_NODE,
              fontsize=8.5, fontweight='bold', va='center', ha='left',
              bbox=dict(boxstyle='round,pad=0.25', facecolor='#D1FAE5', edgecolor='#6EE7B7', lw=0.8, alpha=0.9))
 
     # Smooth Plane text safely above the tabletop
-    ax2.text(0.32, 0.89, 'Smooth Surface: Direct 1-hop', color=CLR_PRIMARY_DARK,
+    ax2.text(0.32, 0.90, 'Smooth Surface: Direct 1-hop', color=CLR_PRIMARY_DARK,
              fontsize=8.0, style='italic', ha='center', va='bottom')
 
     ax2.set_xlim(0.04, 0.96)
     ax2.set_ylim(0.04, 0.96)
     ax2.axis('off')
-    # Legend safely placed in bottom-left corner away from leg at x=0.50
-    ax2.legend(loc='lower left', bbox_to_anchor=(0.02, 0.04), fontsize=8.0, frameon=True, framealpha=0.95)
+    # Legend centered at bottom with abundant clearance from leg
+    ax2.legend(loc='lower center', bbox_to_anchor=(0.50, 0.02), fontsize=8.0, frameon=True, framealpha=0.95)
 
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, 'fig_boundary_halfhop_concept.pdf'))
