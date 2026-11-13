@@ -46,7 +46,9 @@ plt.rcParams.update({
     'grid.linestyle': '--'
 })
 
-out_dir = "report/figures"
+# Robust output directory (works from repo root or report/ dir)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+out_dir = os.path.join(script_dir, "figures")
 os.makedirs(out_dir, exist_ok=True)
 
 # -----------------------------------------------------------------------------
@@ -62,7 +64,7 @@ def plot_reproduction_bars():
     x = np.arange(len(datasets))
     width = 0.20
 
-    fig, ax = plt.subplots(figsize=(7.2, 3.6))
+    fig, ax = plt.subplots(figsize=(7.2, 3.5), dpi=300)
 
     rects1 = ax.bar(x - 1.5*width, gcn_base, width, label='GCN Base',
                     color=CLR_PRIMARY_LIGHT, edgecolor=CLR_PRIMARY_DARK, lw=1.0)
@@ -73,20 +75,26 @@ def plot_reproduction_bars():
     rects4 = ax.bar(x + 1.5*width, sage_hh,   width, label='GraphSAGE + Half-Hop',
                     color=CLR_SECONDARY, edgecolor=CLR_SECONDARY_DARK, lw=1.2)
 
-    ax.set_ylabel('Test Accuracy (%)')
-    ax.set_title('Reproduction: 10-Split Mean Accuracy on Heterophilic Benchmarks')
+    ax.set_ylabel('Test Accuracy (%)', fontsize=9.5, fontweight='bold')
+    ax.set_title('Reproduction: 10-Split Mean Accuracy on Heterophilic Benchmarks', fontsize=10.5, fontweight='bold', pad=10)
     ax.set_xticks(x)
-    ax.set_xticklabels(datasets)
-    ax.set_ylim(20, 92)
-    ax.legend(ncol=2, loc='upper left', frameon=True, framealpha=0.95)
-    ax.grid(axis='y')
+    ax.set_xticklabels(datasets, fontsize=9.0, fontweight='bold')
+    ax.set_ylim(20, 102)
 
-    # Add delta annotations for prominent gains
-    ax.annotate('+14.86%', xy=(x[0] - 0.5*width, 73.51), xytext=(x[0] - 0.85*width, 79),
-                arrowprops=dict(arrowstyle="->", color=CLR_PRIMARY, lw=1.3),
+    # Single horizontal legend across the top with guaranteed clearance
+    ax.legend(ncol=4, loc='upper center', bbox_to_anchor=(0.50, 0.99),
+              frameon=True, framealpha=0.95, edgecolor='#CBD5E1', fontsize=8.0,
+              columnspacing=1.0, handletextpad=0.4)
+    ax.grid(axis='y', linestyle='--', alpha=0.5)
+
+    # Add delta annotations for prominent gains with generous vertical clearance
+    ax.annotate('+14.86%', xy=(x[0] - 0.5*width, 74.0), xytext=(x[0] - 0.5*width, 84.5),
+                ha='center', va='bottom',
+                arrowprops=dict(arrowstyle="->", color=CLR_PRIMARY, lw=1.4),
                 fontsize=8.5, fontweight='bold', color=CLR_PRIMARY)
-    ax.annotate('+21.62%', xy=(x[5] - 0.5*width, 62.97), xytext=(x[5] - 0.85*width, 68),
-                arrowprops=dict(arrowstyle="->", color=CLR_PRIMARY, lw=1.3),
+    ax.annotate('+21.62%', xy=(x[5] - 0.5*width, 63.5), xytext=(x[5] - 0.5*width, 74.0),
+                ha='center', va='bottom',
+                arrowprops=dict(arrowstyle="->", color=CLR_PRIMARY, lw=1.4),
                 fontsize=8.5, fontweight='bold', color=CLR_PRIMARY)
 
     plt.tight_layout()
