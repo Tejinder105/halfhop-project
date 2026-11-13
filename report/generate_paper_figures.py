@@ -258,9 +258,12 @@ def plot_rigid_gains():
     ax.set_title('Performance Gains on Rigid Categories (ShapeNet-Part)')
     ax.set_xticks(x)
     ax.set_xticklabels(categories)
-    ax.set_ylim(45, 86)
-    ax.legend(loc='upper left', frameon=True, framealpha=0.95)
-    ax.grid(axis='y')
+    ax.set_ylim(45, 92)
+    ax.set_yticks([45, 55, 65, 75, 85])
+    ax.legend(ncol=2, loc='upper center', bbox_to_anchor=(0.50, 0.99),
+              frameon=True, framealpha=0.95, edgecolor='#CBD5E1', fontsize=8.2,
+              columnspacing=1.2, handletextpad=0.5)
+    ax.grid(axis='y', linestyle='--', alpha=0.5)
 
     # Add delta badges on top of bars in uniform Primary Blue
     for idx, (b, val, delta) in enumerate(zip(baseline, boundary_hh, deltas)):
