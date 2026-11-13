@@ -99,70 +99,95 @@ def plot_reproduction_bars():
 # Figure 1: Conceptual Diagram of Geometry-Aware Boundary Half-Hop
 # -----------------------------------------------------------------------------
 def plot_concept_diagram():
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.2, 3.2))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.6, 3.4), dpi=300)
 
-    # Subplot 1: Baseline EdgeConv (Feature Bleeding)
-    ax1.set_title('(a) Baseline Point Cloud Graph\n(Indiscriminate Message Mixing)', fontsize=10.5, pad=8)
-    top_x = np.array([0.2, 0.4, 0.6, 0.8, 0.5])
-    top_y = np.array([0.7, 0.72, 0.69, 0.71, 0.75])
-    leg_x = np.array([0.5, 0.5, 0.52, 0.48])
-    leg_y = np.array([0.5, 0.35, 0.2, 0.1])
+    # Cohesive geometry coordinates designed for zero overlap
+    top_x = np.array([0.12, 0.32, 0.50, 0.68, 0.88])
+    top_y = np.array([0.80, 0.82, 0.80, 0.82, 0.80])
 
-    ax1.scatter(top_x, top_y, color=CLR_PRIMARY, s=90, label='Part A (Tabletop)', zorder=4, edgecolors=CLR_PRIMARY_DARK)
-    ax1.scatter(leg_x, leg_y, color=CLR_SECONDARY, s=90, label='Part B (Leg)', zorder=4, edgecolors=CLR_SECONDARY_DARK)
+    leg_x = np.array([0.50, 0.50, 0.50])
+    leg_y = np.array([0.50, 0.32, 0.14])
+
+    # -------------------------------------------------------------
+    # Subplot 1: Baseline EdgeConv
+    # -------------------------------------------------------------
+    ax1.set_title('(a) Baseline Point Cloud Graph\n(Indiscriminate Message Mixing)', fontsize=10.5, pad=10)
+
+    # Plot internal edges
+    for i in range(len(top_x)-1):
+        ax1.plot([top_x[i], top_x[i+1]], [top_y[i], top_y[i+1]], color=CLR_PRIMARY_LIGHT, lw=2.0, zorder=2)
+    for i in range(len(leg_y)-1):
+        ax1.plot([leg_x[i], leg_x[i+1]], [leg_y[i], leg_y[i+1]], color=CLR_SECONDARY_LIGHT, lw=2.0, zorder=2)
+
+    # Cross-boundary edge (Bleeding)
+    ax1.annotate('', xy=(top_x[2], top_y[2]), xytext=(leg_x[0], leg_y[0]),
+                 arrowprops=dict(arrowstyle="<->", color=CLR_CREASE, lw=2.5, ls='--'), zorder=3)
+
+    # Scatter points
+    ax1.scatter(top_x, top_y, color=CLR_PRIMARY, s=95, label='Part A (Tabletop)', zorder=5,
+                edgecolors=CLR_PRIMARY_DARK, lw=1.2)
+    ax1.scatter(leg_x, leg_y, color=CLR_SECONDARY, s=95, label='Part B (Leg)', zorder=5,
+                edgecolors=CLR_SECONDARY_DARK, lw=1.2)
+
+    # Bleeding label positioned cleanly to the right of the vertical seam
+    ax1.text(0.56, 0.65, 'Rapid Feature\nBleeding (1-hop)', color=CLR_CREASE,
+             fontsize=8.5, fontweight='bold', va='center', ha='left',
+             bbox=dict(boxstyle='round,pad=0.25', facecolor='#FEE2E2', edgecolor='#FCA5A5', lw=0.8, alpha=0.9))
+
+    ax1.set_xlim(0.04, 0.96)
+    ax1.set_ylim(0.04, 0.96)
+    ax1.axis('off')
+    # Legend safely placed in bottom-left corner away from leg at x=0.50
+    ax1.legend(loc='lower left', bbox_to_anchor=(0.02, 0.04), fontsize=8.0, frameon=True, framealpha=0.95)
+
+    # -------------------------------------------------------------
+    # Subplot 2: Geometry-Aware Boundary Half-Hop
+    # -------------------------------------------------------------
+    ax2.set_title('(b) Geometry-Aware Boundary Half-Hop\n(Dual-Gated Crease Throttling)', fontsize=10.5, pad=10)
 
     # Internal edges
     for i in range(len(top_x)-1):
-        ax1.plot([top_x[i], top_x[i+1]], [top_y[i], top_y[i+1]], color=CLR_PRIMARY_LIGHT, lw=1.5, zorder=2)
-    for i in range(len(leg_x)-1):
-        ax1.plot([leg_x[i], leg_x[i+1]], [leg_y[i], leg_y[i+1]], color=CLR_SECONDARY_LIGHT, lw=1.5, zorder=2)
+        ax2.plot([top_x[i], top_x[i+1]], [top_y[i], top_y[i+1]], color=CLR_PRIMARY_LIGHT, lw=2.0, zorder=2)
+    for i in range(len(leg_y)-1):
+        ax2.plot([leg_x[i], leg_x[i+1]], [leg_y[i], leg_y[i+1]], color=CLR_SECONDARY_LIGHT, lw=2.0, zorder=2)
 
-    # Boundary cross-edge (bleeds features)
-    ax1.annotate('', xy=(top_x[4], top_y[4]), xytext=(leg_x[0], leg_y[0]),
-                 arrowprops=dict(arrowstyle="<->", color=CLR_CREASE, lw=2.5, ls='--'), zorder=3)
-    ax1.text(0.53, 0.61, 'Rapid Feature\nBleeding (1-hop)', color=CLR_CREASE, fontsize=8.5, fontweight='bold')
+    # Scatter nodes
+    ax2.scatter(top_x, top_y, color=CLR_PRIMARY, s=95, zorder=5, edgecolors=CLR_PRIMARY_DARK, lw=1.2)
+    ax2.scatter(leg_x, leg_y, color=CLR_SECONDARY, s=95, zorder=5, edgecolors=CLR_SECONDARY_DARK, lw=1.2)
 
-    ax1.set_xlim(0.05, 0.95)
-    ax1.set_ylim(0.0, 0.9)
-    ax1.axis('off')
-    ax1.legend(loc='lower left', fontsize=8, frameon=True)
-
-    # Subplot 2: Geometry-Aware Boundary Half-Hop
-    ax2.set_title('(b) Geometry-Aware Boundary Half-Hop\n(Dual-Gated Crease Throttling)', fontsize=10.5, pad=8)
-    ax2.scatter(top_x, top_y, color=CLR_PRIMARY, s=90, zorder=4, edgecolors=CLR_PRIMARY_DARK)
-    ax2.scatter(leg_x, leg_y, color=CLR_SECONDARY, s=90, zorder=4, edgecolors=CLR_SECONDARY_DARK)
-
-    # Internal edges (unimpeded)
-    for i in range(len(top_x)-1):
-        ax2.plot([top_x[i], top_x[i+1]], [top_y[i], top_y[i+1]], color=CLR_PRIMARY_LIGHT, lw=1.5, zorder=2)
-    for i in range(len(leg_x)-1):
-        ax2.plot([leg_x[i], leg_x[i+1]], [leg_y[i], leg_y[i+1]], color=CLR_SECONDARY_LIGHT, lw=1.5, zorder=2)
-
-    # Virtual Slow Node at boundary
-    slow_x = (top_x[4] + leg_x[0]) / 2.0
-    slow_y = (top_y[4] + leg_y[0]) / 2.0
-    ax2.scatter(slow_x, slow_y, color=CLR_SLOW_NODE, s=130, marker='D',
-                edgecolors=CLR_GREEN_DARK, lw=1.0, label='Virtual Slow Node (ν_k)', zorder=5)
+    # Virtual Slow Node at boundary seam
+    slow_x = 0.50
+    slow_y = (top_y[2] + leg_y[0]) / 2.0  # (0.80 + 0.50)/2 = 0.65
 
     # Asymmetric connections: leg -> slow <-> top
     ax2.annotate('', xy=(slow_x, slow_y), xytext=(leg_x[0], leg_y[0]),
-                 arrowprops=dict(arrowstyle="->", color=CLR_SLOW_NODE, lw=2.0), zorder=3)
-    ax2.annotate('', xy=(top_x[4], top_y[4]), xytext=(slow_x, slow_y),
-                 arrowprops=dict(arrowstyle="<->", color=CLR_SLOW_NODE, lw=2.0), zorder=3)
-    ax2.text(0.56, 0.60, 'Boundary Delay\nPreserves Seam', color=CLR_SLOW_NODE, fontsize=8.5, fontweight='bold')
+                 arrowprops=dict(arrowstyle="->", color=CLR_SLOW_NODE, lw=2.2), zorder=3)
+    ax2.annotate('', xy=(top_x[2], top_y[2]), xytext=(slow_x, slow_y),
+                 arrowprops=dict(arrowstyle="<->", color=CLR_SLOW_NODE, lw=2.2), zorder=3)
 
-    ax2.text(0.12, 0.78, 'Smooth Plane: Direct 1-hop', color=CLR_PRIMARY_DARK, fontsize=8, style='italic')
+    ax2.scatter(slow_x, slow_y, color=CLR_SLOW_NODE, s=140, marker='D',
+                edgecolors=CLR_GREEN_DARK, lw=1.2, label='Virtual Slow Node (ν_k)', zorder=6)
 
-    ax2.set_xlim(0.05, 0.95)
-    ax2.set_ylim(0.0, 0.9)
+    # Boundary delay label cleanly to the right
+    ax2.text(0.56, 0.65, 'Boundary Delay\nPreserves Seam', color=CLR_SLOW_NODE,
+             fontsize=8.5, fontweight='bold', va='center', ha='left',
+             bbox=dict(boxstyle='round,pad=0.25', facecolor='#D1FAE5', edgecolor='#6EE7B7', lw=0.8, alpha=0.9))
+
+    # Smooth Plane text safely above the tabletop
+    ax2.text(0.32, 0.89, 'Smooth Surface: Direct 1-hop', color=CLR_PRIMARY_DARK,
+             fontsize=8.0, style='italic', ha='center', va='bottom')
+
+    ax2.set_xlim(0.04, 0.96)
+    ax2.set_ylim(0.04, 0.96)
     ax2.axis('off')
-    ax2.legend(loc='lower left', fontsize=8, frameon=True)
+    # Legend safely placed in bottom-left corner away from leg at x=0.50
+    ax2.legend(loc='lower left', bbox_to_anchor=(0.02, 0.04), fontsize=8.0, frameon=True, framealpha=0.95)
 
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, 'fig_boundary_halfhop_concept.pdf'))
     plt.savefig(os.path.join(out_dir, 'fig_boundary_halfhop_concept.png'), dpi=300)
     plt.close()
-    print("Saved fig_boundary_halfhop_concept (Uniform Palette)")
+    print("Saved fig_boundary_halfhop_concept (Zero Overlap)")
 
 # -----------------------------------------------------------------------------
 # Figure 4: Anti-Starvation Threshold Tuning (Chair Ablation)
