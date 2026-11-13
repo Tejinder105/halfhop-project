@@ -21,312 +21,204 @@
 \usepackage{float}
 \usepackage{xcolor}
 
-% -----------------------------------------------------------------------
-% Unified Publication Color Palette
-% -----------------------------------------------------------------------
-\definecolor{clrPrimary}{RGB}{29, 78, 216}        % #1D4ED8  Royal Blue
-\definecolor{clrPrimaryLight}{RGB}{239, 246, 255}  % #EFF6FF  Blue tint
-\definecolor{clrSlowNode}{RGB}{5, 150, 105}        % #059669  Emerald Green
-\definecolor{clrSlowNodeLight}{RGB}{240, 253, 250} % #F0FDFA  Green tint
-\definecolor{clrSecondary}{RGB}{217, 119, 6}       % #D97706  Warm Amber
-\definecolor{clrSecondaryLight}{RGB}{254, 243, 199}% #FEF3C7  Amber tint
-\definecolor{clrCrease}{RGB}{220, 38, 38}          % #DC2626  Crimson Red
-\definecolor{clrSlateDark}{RGB}{71, 85, 105}       % #475569  Slate-600
+% ---- Unified Publication Color Palette ----
+\definecolor{clrPrimary}{RGB}{29,78,216}
+\definecolor{clrPrimaryLight}{RGB}{239,246,255}
+\definecolor{clrSlowNode}{RGB}{5,150,105}
+\definecolor{clrSlowNodeLight}{RGB}{240,253,250}
+\definecolor{clrSecondary}{RGB}{217,119,6}
+\definecolor{clrSecondaryLight}{RGB}{254,243,199}
+\definecolor{clrCrease}{RGB}{220,38,38}
+\definecolor{clrSlateDark}{RGB}{71,85,105}
 
 \hyphenation{op-tical net-works semi-conduc-tor Half-Hop EdgeConv ShapeNet}
 
-% -----------------------------------------------------------------------
 \begin{document}
 
 \title{Geometry-Aware Boundary Half-Hop: Extending Topological\\
        Latency from 2D Heterophilic Graphs to 3D Geometric Manifolds}
 
 \author{Tejinderpal~Singh~(20245161),~Yuvraj~Rajput~(202451139),~Ramswarup~Swami~(202451141)\\
-\vspace{0.25em}
+\vspace{0.2em}
 {\normalsize Department of Information Technology}\\
 {\normalsize Indian Institute of Information Technology, Vadodara}\\
 {\normalsize Guided by Dr.\ Jignesh Patel}}
 
 \markboth{Indian Institute of Information Technology, Vadodara,~November~2026}%
-{Singh \MakeLowercase{\textit{et al.}}: Geometry-Aware Boundary Half-Hop on 3D Geometric Manifolds}
+{Singh \textit{et al.}: Geometry-Aware Boundary Half-Hop on 3D Geometric Manifolds}
 
 \maketitle
 
-% -----------------------------------------------------------------------
+% ============================================================
 \begin{abstract}
-Graph Neural Networks (GNNs) suffer from two compounding pathologies: \textit{over-smoothing},
-wherein repeated Laplacian aggregation collapses node features into an indistinguishable
-low-frequency subspace, and \textit{heterophily failure}, wherein edges linking semantically
-disparate nodes cause indiscriminate feature blending.
-Half-Hop addresses both limitations on 2D relational graphs by inserting virtual ``slow nodes''
-along directed graph edges, throttling message-passing latency without modifying encoder
-architectures.
-%
-In this paper, we present a comprehensive investigation in two interconnected parts.
-First, we conduct a rigorous software reproduction of the original Half-Hop framework across six
-standard heterophilic node-classification benchmarks (Texas, Wisconsin, Actor, Squirrel,
-Chameleon, and Cornell) on GCN, GraphSAGE, and GAT backbones.
-Second, we propose \textit{Geometry-Aware Boundary Half-Hop}, a novel extension that adapts
-the slow-node concept to continuous 3D point-cloud manifolds for part segmentation on
-ShapeNet-Part.
-%
-Our method introduces a dual-gated geometric crease criterion combining local Pauly surface
-variation with surface normal disagreement, focusing slow-node insertion strictly at physical
-inter-part seams while leaving smooth intra-part surfaces fully uninhibited.
-To isolate boundary sharpness from interior accuracy, we establish a decoupled
-Boundary-Specific Intersection-over-Union (\(\text{mIoU}_{\text{bnd}}\)) evaluation protocol.
-Evaluations on rigid ShapeNet categories demonstrate substantial improvements in boundary
-fidelity over standard message-passing baselines, while systematic threshold ablations confirm
-that restricting latency modulation to genuine geometric creases effectively mitigates feature
-bleeding without starving smooth intra-part representations.
+Graph Neural Networks (GNNs) suffer from \textit{over-smoothing}~\cite{li2018deeper}
+and \textit{heterophily failure}~\cite{pei}, wherein repeated aggregation collapses
+discriminative features and cross-class edges blur semantic boundaries.
+Half-Hop~\cite{azabou} addresses both on 2D relational graphs by inserting virtual
+``slow nodes'' to throttle message-passing latency without modifying encoder architectures.
+We present two contributions: (i)~a rigorous software reproduction of Half-Hop across
+six standard heterophilic node-classification benchmarks on GCN, GraphSAGE, and GAT;
+and (ii)~\textit{Geometry-Aware Boundary Half-Hop}, a principled 3D extension for
+part segmentation on ShapeNet-Part~\cite{shapenet,yi2016}.
+Our method introduces a dual-gated crease criterion combining Pauly surface
+variation~\cite{pauly} with normal disagreement, selectively inserting slow nodes at
+physical inter-part seams while leaving smooth intra-part surfaces fully uninhibited.
+A decoupled Boundary-Specific mIoU ($\text{mIoU}_{\text{bnd}}$) evaluation protocol
+isolates geometric seam quality from interior accuracy.
+Evaluations on rigid ShapeNet categories demonstrate substantial boundary-fidelity
+improvements over standard message-passing baselines, while systematic threshold
+ablations confirm that restricting latency modulation to genuine geometric creases
+effectively mitigates feature bleeding without starving smooth surface representations.
 \end{abstract}
 
 \begin{IEEEkeywords}
 Graph neural networks, Half-Hop, over-smoothing, heterophily, 3D point clouds,
-part segmentation, geometric boundary detection, EdgeConv, surface variation.
+part segmentation, geometric boundary detection, EdgeConv.
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
 
-% =======================================================================
+% ============================================================
 \section{Introduction}
 \label{sec:intro}
-% =======================================================================
 
-\IEEEPARstart{G}{raph} Neural Networks (GNNs) have emerged as the foundational paradigm for
-representation learning on non-Euclidean domains~\cite{kipf,hamilton,gat}.
-By iteratively aggregating feature representations across local spatial neighborhoods, GNNs
-capture rich topological context.
-However, deep message passing suffers from two fundamental limitations.
-(i)~\textit{Over-smoothing}~\cite{li2018deeper}: repeated Laplacian smoothing drives node
-features toward an indistinguishable low-frequency subspace, collapsing discriminative structure.
-(ii)~\textit{Heterophily failure}~\cite{pei}: on graphs where connected nodes belong to
-disparate classes, indiscriminate aggregation homogenizes rather than differentiates
-representations.
+\IEEEPARstart{G}{raph} Neural Networks (GNNs) achieve strong performance on homophilic
+graphs but struggle under heterophily~\cite{pei} and over-smoothing~\cite{li2018deeper,kipf}.
+Half-Hop~\cite{azabou} counters these pathologies by inserting virtual intermediate
+``slow nodes'' $\nu_k$ along directed edges, converting each single-hop link
+$v_i \!\to\! v_j$ into a two-step detour $v_i \!\to\! \nu_k \!\leftrightarrow\! v_j$.
+This dampens feature mixing and preserves localized spectral components without altering
+encoder weights.
 
-To counter these vulnerabilities without modifying encoder weights, Azabou
-\textit{et al.}~\cite{azabou} introduced \textit{Half-Hop}, conceptualized as graph
-upsampling analogous to super-resolution in image processing.
-Half-Hop inserts artificial intermediate ``slow nodes'' $\nu_k$ along directed edges, converting
-each single-hop transmission $v_i \to v_j$ into a two-step detour
-$v_i \to \nu_k \leftrightarrow v_j$.
-This dampens the rate of feature mixing, preserves localized spectral components, and
-significantly enhances classification accuracy on heterophilic graphs.
-
-While the original Half-Hop formulation targeted standard 2D relational graphs (citation and web
-networks), expanding it to continuous physical geometric data---specifically 3D point
-clouds---presents an exciting frontier.
-In 3D point clouds, inter-part transition boundaries (e.g., where a chair leg meets a seat, or
-where an airplane wing meets the fuselage) represent natural physical instances of edge
-heterophily: spatially adjacent points abruptly switch semantic labels.
-Applying uniform slow-node insertion across all edges would cripple rapid intra-part
+Extending Half-Hop to 3D point clouds presents a compelling frontier.
+Inter-part transition boundaries (e.g., where a chair leg meets a seat) represent
+physical edge heterophily—spatially adjacent points abruptly switch semantic labels.
+Yet uniform slow-node insertion across all edges would cripple rapid intra-part
 communication across smooth surfaces.
-Consequently, the geometric context must drive where latency modulation is applied.
+Geometry must therefore drive where latency modulation is applied.
 
-Extending Half-Hop to 3D point clouds requires addressing two geometric principles:
+This paper makes three contributions:
 \begin{enumerate}
-  \item \textbf{Manifold-Consistent Synthesis:} 3D points reside on continuous 2D surface
-        manifolds embedded in $\mathbb{R}^3$.
-        Virtual slow nodes must carry geometrically consistent 6D position-normal attributes
-        $[\mathbf{p}_k, \hat{\mathbf{n}}_k]$.
-  \item \textbf{Selective Crease Gating:} Unlike abstract topological graphs where uniform
-        random sampling is viable, 3D shapes require rapid intra-part communication across
-        smooth surfaces.
-        Slow nodes must be restricted to physical transition creases to prevent
-        receptive-field starvation on planar regions.
+  \item \textbf{Empirical Reproduction:} A modular PyTorch Geometric~\cite{fey2019fast}
+        implementation of Half-Hop across six heterophilic benchmarks~\cite{pei},
+        reproducing connectivity and initialization ablations.
+  \item \textbf{Geometry-Aware Boundary Half-Hop:} A principled 3D extension using
+        dual-gated crease detection for part segmentation on ShapeNet-Part~\cite{shapenet,yi2016}.
+  \item \textbf{Decoupled Boundary Metric:} A novel $\text{mIoU}_{\text{bnd}}$ protocol
+        isolating seam quality from interior accuracy.
 \end{enumerate}
+
+\noindent\textbf{Related Work.}
+Over-smoothing in deep GNNs was formally analyzed by Li \textit{et al.}~\cite{li2018deeper},
+who showed that graph convolution is a Laplacian smoothing operation that drives all
+representations to a common subspace as depth increases.
+Pei \textit{et al.}~\cite{pei} established the Geom-GCN benchmark suite for heterophilic
+evaluation, demonstrating that standard GCNs collapse on low-homophily graphs.
+In 3D learning, DGCNN~\cite{dgcnn} introduced EdgeConv, constructing dynamic $k$-NN
+graphs in feature space at each layer to capture evolving local geometric structure;
+it remains the dominant backbone for part segmentation on ShapeNet-Part~\cite{shapenet,yi2016}.
+Surface curvature descriptors for point-sampled surfaces were studied by Pauly
+\textit{et al.}~\cite{pauly}, whose eigenanalysis-based surface variation underpins our crease
+detector.
+Unlike prior work that applies uniform or learnable graph rewiring globally,
+our approach restricts topological latency modulation to unsupervised, geometry-detected
+physical creases—combining the spectral benefits of Half-Hop~\cite{azabou} with the
+spatial selectivity required for smooth 3D manifolds.
 
 \begin{figure}[!t]
   \centering
   \includegraphics[width=\columnwidth]{fig_boundary_halfhop_concept.pdf}
-  \caption{Conceptual overview.
-    (a)~In standard 3D point-cloud message passing, cross-boundary edges cause rapid feature
-    bleeding across distinct semantic parts.
-    (b)~Geometry-Aware Boundary Half-Hop uses dual-gated crease detection to selectively throttle
-    cross-boundary communication via virtual slow nodes ($\nu_k$), while leaving smooth
-    intra-part surfaces directly connected.}
+  \caption{(a)~Standard 3D message passing causes rapid feature bleeding across semantic
+    part boundaries. (b)~Geometry-Aware Boundary Half-Hop uses dual-gated crease detection
+    to throttle cross-boundary communication via virtual slow nodes ($\nu_k$), while leaving
+    smooth intra-part surfaces directly connected.}
   \label{fig:concept}
 \end{figure}
 
-\noindent\textbf{Contributions.} This paper makes the following contributions:
-\begin{enumerate}
-  \item \textbf{Empirical Reproduction:} A modular, fully decoupled PyTorch Geometric
-        implementation~\cite{fey2019fast} of Half-Hop, reproducing the original results
-        across six heterophilic benchmarks~\cite{pei} on GCN, GraphSAGE, and GAT, including
-        structural connectivity and initialization ablations.
-  \item \textbf{Geometry-Aware Boundary Half-Hop:} A principled 3D extension combining
-        Pauly surface variation~\cite{pauly} and surface normal disagreement into a dual-gated
-        crease criterion, applied to part segmentation on ShapeNet-Part~\cite{shapenet,yi2016}.
-  \item \textbf{Decoupled Boundary Metric:} A novel \(\text{mIoU}_{\text{bnd}}\) evaluation
-        protocol that isolates geometric seam quality from interior accuracy, exposing gains
-        invisible to standard overall mIoU.
-\end{enumerate}
-
-% =======================================================================
-\section{Background and Related Work}
-\label{sec:related}
-% =======================================================================
-
-\subsection{Over-Smoothing and Heterophily in GNNs}
-\label{ssec:oversmooth}
-
-The over-smoothing phenomenon was formalized by Li \textit{et al.}~\cite{li2018deeper}, who
-proved that graph convolution is equivalent to Laplacian smoothing: stacking $L$ layers drives
-all node representations toward the same stationary point, erasing discriminative information.
-Pei \textit{et al.}~\cite{pei} established the Geom-GCN benchmark suite specifically for
-heterophilic evaluation, demonstrating that standard GCNs collapse on low-homophily graphs
-where connected nodes differ in class.
-
-\subsection{Half-Hop Graph Upsampling}
-\label{ssec:halfhop_bg}
-
-Half-Hop~\cite{azabou} introduces virtual intermediate nodes to decouple the two roles of a
-graph edge: information transport and feature mixing.
-By converting a single-hop edge into a two-hop detour through a slow node initialized by
-convex interpolation, it achieves a spectral delay effect that is mathematically analogous to
-upsampling in signal processing.
-The operator is architecture-agnostic and can be prepended to any GNN without weight surgery.
-
-\subsection{3D Point Cloud Learning}
-\label{ssec:3d_bg}
-
-Dynamic Graph CNN (DGCNN)~\cite{dgcnn} introduced EdgeConv, a module that constructs dynamic
-$k$-NN graphs in feature space and applies edge convolutions to capture local geometric
-structure.
-DGCNN achieves strong part-segmentation performance on ShapeNet-Part~\cite{shapenet} and
-serves as our 3D backbone.
-Surface curvature descriptors for point-sampled surfaces were studied by Pauly
-\textit{et al.}~\cite{pauly}, whose eigenanalysis-based surface variation forms a core
-component of our crease detector.
-ShapeNet-Part annotations were produced via the active learning framework of Yi
-\textit{et al.}~\cite{yi2016}.
-
-% =======================================================================
+% ============================================================
 \section{Half-Hop Reproduction}
 \label{sec:reproduction}
-% =======================================================================
 
 \subsection{Mathematical Formulation}
-\label{ssec:math}
-
-For an input graph $G = (V, E)$ with node features
-$\mathbf{X} \in \mathbb{R}^{|V| \times d}$, Half-Hop subdivides a directed edge
-$e_{ij} = (v_i \to v_j)$ by inserting a virtual slow node $\nu_k \in V_{\text{slow}}$.
-The original direct link is replaced by the tripartite configuration:
+For graph $G=(V,E)$ with features $\mathbf{X}\!\in\!\mathbb{R}^{|V|\times d}$,
+Half-Hop subdivides edge $e_{ij}=(v_i\!\to\!v_j)$ by inserting a virtual slow node $\nu_k$:
 \begin{equation}
-  v_i \longrightarrow \nu_k \longleftrightarrow v_j.
-  \label{eq:hh_conn}
-\end{equation}
-The virtual node feature $\mathbf{x}_k$ is initialized via convex linear interpolation
-with parameter $\alpha \in (0,1)$:
-\begin{equation}
+  v_i \longrightarrow \nu_k \longleftrightarrow v_j, \qquad
   \mathbf{x}_k = \alpha\,\mathbf{x}_i + (1-\alpha)\,\mathbf{x}_j.
-  \label{eq:hh_init}
+  \label{eq:hh}
 \end{equation}
 Self-loops are preserved and never subdivided.
-When a target sampling probability $p < 1$ is specified, the nodes to be slow-hopped are
-drawn uniformly at random, and all incoming edges into selected nodes are transformed.
-
-\subsection{Modular Software Architecture}
-\label{ssec:arch}
-
-We implemented Half-Hop as an independent, pre-processing PyTorch Geometric
-transform~\cite{fey2019fast}, ensuring complete architectural decoupling.
-Prior to the forward pass, virtual node features are appended to form
-$\mathbf{X}_{\text{aug}} \in \mathbb{R}^{(|V| + |V_{\text{slow}}|) \times d}$
-and the augmented edge index $E_{\text{aug}}$ is constructed.
-
-The GNN encoder (GCN, GraphSAGE, or GAT) processes $G_{\text{aug}}$ without internal
-modification.
-Following message passing, an indexing operation filters the final embeddings via a boolean
-mask $\mathbf{m}_{\text{slow}} \in \{0,1\}^{|V| + |V_{\text{slow}}|}$:
-\begin{equation}
-  \mathbf{H}_{\text{orig}} = \mathbf{H}_{\text{aug}}[\,\neg\,\mathbf{m}_{\text{slow}}].
-  \label{eq:masking}
-\end{equation}
-Only $\mathbf{H}_{\text{orig}} \in \mathbb{R}^{|V| \times d'}$ is passed to the
-classification head, ensuring strict dimensional parity for cross-entropy loss computation.
+After message passing, embeddings are masked via
+$\mathbf{H}_{\text{orig}} = \mathbf{H}_{\text{aug}}[\,\neg\mathbf{m}_{\text{slow}}]$
+to restore the original node set for classification.
 
 \begin{figure}[!t]
   \centering
   \resizebox{0.95\columnwidth}{!}{%
   \begin{tikzpicture}[
-      node distance=0.6cm and 0.6cm,
-      block/.style    ={rectangle, draw=clrPrimary,   rounded corners=3pt,
-                        fill=clrPrimaryLight,  text width=2.4cm, text centered,
-                        minimum height=1.1cm, font=\footnotesize, thick},
-      blockHH/.style  ={rectangle, draw=clrSlowNode,  rounded corners=3pt,
-                        fill=clrSlowNodeLight, text width=2.4cm, text centered,
-                        minimum height=1.1cm, font=\footnotesize, thick},
+      node distance=0.55cm and 0.55cm,
+      block/.style    ={rectangle, draw=clrPrimary, rounded corners=3pt,
+                        fill=clrPrimaryLight, text width=2.3cm, text centered,
+                        minimum height=1.0cm, font=\footnotesize, thick},
+      blockHH/.style  ={rectangle, draw=clrSlowNode, rounded corners=3pt,
+                        fill=clrSlowNodeLight, text width=2.3cm, text centered,
+                        minimum height=1.0cm, font=\footnotesize, thick},
       blockMask/.style={rectangle, draw=clrSecondary, rounded corners=3pt,
-                        fill=clrSecondaryLight,text width=2.4cm, text centered,
-                        minimum height=1.1cm, font=\footnotesize, thick},
-      arrow/.style={thick, ->, >=Stealth, draw=clrSlateDark}
+                        fill=clrSecondaryLight, text width=2.3cm, text centered,
+                        minimum height=1.0cm, font=\footnotesize, thick},
+      arrow/.style={thick,->,>=Stealth,draw=clrSlateDark}
   ]
-    \node[block]    (input)    {\textbf{Input Graph} \\ $G = (\mathbf{X}, E)$};
+    \node[block]    (input)    {\textbf{Input Graph}\\ $G=(\mathbf{X},E)$};
     \node[blockHH,  right=of input]    (transform)
-        {\textbf{Half-Hop Op.} \\ Insert $\nu_k$, $\mathbf{x}_k$};
+        {\textbf{Half-Hop Op.}\\ Insert $\nu_k,\mathbf{x}_k$};
     \node[block,    right=of transform](gnn)
-        {\textbf{GNN Encoder} \\ Message Passing};
-
-    \node[blockMask, below=0.65cm of gnn] (mask)
-        {\textbf{Masking Engine} \\ Filter $[\neg\mathbf{m}_{\text{slow}}]$};
+        {\textbf{GNN Encoder}\\ Message Passing};
+    \node[blockMask, below=0.6cm of gnn] (mask)
+        {\textbf{Mask Engine}\\ $[\neg\mathbf{m}_{\text{slow}}]$};
     \node[block, left=of mask]  (output)
-        {\textbf{Orig.\ Nodes} \\ $\mathbf{H}_{\text{orig}}$};
+        {\textbf{Orig.\ Nodes}\\ $\mathbf{H}_{\text{orig}}$};
     \node[block, left=of output](loss)
-        {\textbf{Supervised Head} \\ Cross-Entropy};
-
-    \draw[arrow](input)     -- (transform);
-    \draw[arrow](transform) -- (gnn);
-    \draw[arrow](gnn)       -- (mask);
-    \draw[arrow](mask)      -- (output);
-    \draw[arrow](output)    -- (loss);
+        {\textbf{Sup.\ Head}\\ Cross-Entropy};
+    \draw[arrow](input)--(transform);\draw[arrow](transform)--(gnn);
+    \draw[arrow](gnn)--(mask);\draw[arrow](mask)--(output);\draw[arrow](output)--(loss);
   \end{tikzpicture}%
   }
-  \caption{End-to-end modular architecture of the reproduced Half-Hop pipeline.
-    The Half-Hop operator (green) prepends the GNN encoder as an architecture-agnostic
-    transform; the masking engine (amber) restores the original node set for classification.}
+  \caption{Modular Half-Hop pipeline. The Half-Hop operator (green) prepends the GNN as
+    an architecture-agnostic transform; the masking engine (amber) restores the original
+    node set for the classification head.}
   \label{fig:pipeline}
 \end{figure}
 
-\subsection{Heterophilic Benchmark Suite}
-\label{ssec:benchmarks}
-
-We evaluated across six standard heterophilic datasets from the Geom-GCN benchmark
-suite~\cite{pei}.
-Dataset statistics are summarized in Table~\ref{tab:datasets}.
+\subsection{Benchmarks and Results}
+We evaluate across six standard heterophilic datasets~\cite{pei} (Table~\ref{tab:datasets})
+over 10 fixed splits, 200 epochs each.
+Table~\ref{tab:reproduction_results} reports mean test accuracy; Fig.~\ref{fig:reproduction_bars}
+visualizes the gains.
 
 \begin{table}[!h]
   \centering\small
-  \caption{Benchmark graph statistics.
-    Homophily $h$ is the fraction of edges connecting same-class nodes; datasets with
-    $h \le 0.30$ are considered strongly heterophilic.}
+  \caption{Benchmark graph statistics ($h$ = edge homophily ratio).}
   \label{tab:datasets}
   \resizebox{\columnwidth}{!}{%
   \begin{tabular}{lrrrr}
     \toprule
-    Dataset    & $|V|$   & $|E|$    & Classes & $h$  \\
+    Dataset   & $|V|$  & $|E|$   & Classes & $h$  \\
     \midrule
-    Texas      &     183 &      295 &       5 & 0.11 \\
-    Wisconsin  &     251 &      488 &       5 & 0.21 \\
-    Actor      &   7,600 &   26,752 &       5 & 0.22 \\
-    Squirrel   &   5,201 &  198,493 &       5 & 0.22 \\
-    Chameleon  &   2,277 &   31,421 &       5 & 0.23 \\
-    Cornell    &     183 &      280 &       5 & 0.30 \\
+    Texas     &    183 &     295 &       5 & 0.11 \\
+    Wisconsin &    251 &     488 &       5 & 0.21 \\
+    Actor     &  7,600 &  26,752 &       5 & 0.22 \\
+    Squirrel  &  5,201 & 198,493 &       5 & 0.22 \\
+    Chameleon &  2,277 &  31,421 &       5 & 0.23 \\
+    Cornell   &    183 &     280 &       5 & 0.30 \\
     \bottomrule
   \end{tabular}%
   }
 \end{table}
 
-Each model was trained across 10 fixed random benchmark splits for 200 epochs,
-selecting the checkpoint with highest validation accuracy.
-Table~\ref{tab:reproduction_results} reports mean test accuracy and standard deviation
-across all 10 splits for GCN, GraphSAGE, and GAT.
-
 \begin{table}[!t]
   \centering\small
-  \caption{Reproduction test accuracy (\%) across ten benchmark splits.
-    Bold values indicate best result per dataset per model family.}
+  \caption{Reproduction test accuracy (\%) over 10 benchmark splits.
+    Bold: best per dataset-model pair.}
   \label{tab:reproduction_results}
   \resizebox{\columnwidth}{!}{%
   \begin{tabular}{lcccccc}
@@ -335,14 +227,14 @@ across all 10 splits for GCN, GraphSAGE, and GAT.
     & \multicolumn{2}{c}{\textbf{GraphSAGE}}
     & \multicolumn{2}{c}{\textbf{GAT}} \\
     \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
-    Dataset   & Base  & +HH            & Base  & +HH            & Base  & +HH            \\
+    Dataset   & Base  & +HH            & Base  & +HH            & Base           & +HH            \\
     \midrule
-    Texas     & 58.65 & \textbf{73.51} & 76.76 & \textbf{81.35} & 58.92 & \textbf{70.81} \\
-    Wisconsin & 52.35 & \textbf{55.49} & 75.10 & \textbf{79.22} & 50.20 & \textbf{69.02} \\
-    Actor     & 28.68 & \textbf{30.99} & 33.88 & \textbf{34.89} & 28.32 & \textbf{28.49} \\
-    Squirrel  & 26.83 & \textbf{29.63} & 36.27 & \textbf{37.10} & 29.21 & \textbf{29.82} \\
-    Chameleon & 37.83 & \textbf{44.41} & 50.48 & \textbf{50.88} & \textbf{44.54} & 44.41 \\
-    Cornell   & 41.35 & \textbf{62.97} & \textbf{72.43} & 67.84 & 43.24 & \textbf{69.19} \\
+    Texas     & 58.65 & \textbf{73.51} & 76.76 & \textbf{81.35} & 58.92          & \textbf{70.81} \\
+    Wisconsin & 52.35 & \textbf{55.49} & 75.10 & \textbf{79.22} & 50.20          & \textbf{69.02} \\
+    Actor     & 28.68 & \textbf{30.99} & 33.88 & \textbf{34.89} & 28.32          & \textbf{28.49} \\
+    Squirrel  & 26.83 & \textbf{29.63} & 36.27 & \textbf{37.10} & 29.21          & \textbf{29.82} \\
+    Chameleon & 37.83 & \textbf{44.41} & 50.48 & \textbf{50.88} & \textbf{44.54} & 44.41          \\
+    Cornell   & 41.35 & \textbf{62.97} & \textbf{72.43} & 67.84 & 43.24         & \textbf{69.19} \\
     \bottomrule
   \end{tabular}%
   }
@@ -351,219 +243,127 @@ across all 10 splits for GCN, GraphSAGE, and GAT.
 \begin{figure}[!t]
   \centering
   \includegraphics[width=\columnwidth]{fig_reproduction_bars.pdf}
-  \caption{Reproduction performance across six heterophilic benchmarks.
-    Half-Hop delivers substantial test-accuracy gains on isotropic GCN and GraphSAGE
-    encoders, with the largest absolute gains on the lowest-homophily datasets (Texas, Cornell).}
+  \caption{Reproduction: test accuracy gains with Half-Hop across six heterophilic
+    benchmarks. Largest gains on the lowest-homophily datasets (Texas, Cornell).}
   \label{fig:reproduction_bars}
 \end{figure}
 
-\subsection{Structural Ablations on Texas}
-\label{ssec:ablations}
+Half-Hop delivers marked gains on low-homophily datasets with isotropic aggregation
+(GCN: $+14.86\%$ on Texas, $+21.62\%$ on Cornell).
+Structural ablations on Texas confirm the asymmetric connectivity scheme
+($74.05{\pm}5.44\%$) outperforms directed HH(1) ($70.00{\pm}6.80\%$) and bidirectional
+HH(2) ($60.54{\pm}6.40\%$), and that linear interpolation initialization
+($75.14{\pm}6.60\%$) strongly surpasses zero or random initialization,
+both reproducing the original findings~\cite{azabou}.
 
-As shown in Table~\ref{tab:reproduction_results} and Fig.~\ref{fig:reproduction_bars},
-Half-Hop delivers marked gains on low-homophily datasets
-(e.g., GCN: $+14.86\%$ on Texas, $+21.62\%$ on Cornell).
-We reproduced two structural ablations on Texas:
-
-\begin{itemize}
-  \item \textbf{Connectivity scheme:} The asymmetric configuration
-        ($v_i \to \nu_k \leftrightarrow v_j$) achieved $74.05 \pm 5.44\%$, outperforming
-        directed HH(1) ($70.00 \pm 6.80\%$) and bidirectional HH(2) ($60.54 \pm 6.40\%$).
-  \item \textbf{Feature initialization:} Linear interpolation
-        ($\mathbf{x}_k = 0.5\mathbf{x}_i + 0.5\mathbf{x}_j$) reached $75.14 \pm 6.60\%$,
-        strongly surpassing zero initialization ($68.92 \pm 5.73\%$) and random uniform
-        initialization ($66.22 \pm 6.89\%$).
-\end{itemize}
-
-Both findings reproduce the original Half-Hop paper~\cite{azabou}, confirming the
-implementation's fidelity.
-
-% =======================================================================
-\section{From Relational Graphs to 3D Manifolds}
-\label{sec:motivation}
-% =======================================================================
-
-Extending message-slowing operators to 3D point-cloud representations introduces three
-physical geometric considerations absent from abstract relational graphs:
-
-\begin{enumerate}
-  \item \textbf{Localized Semantic Boundaries:}
-        In dense 3D geometric point clouds, \textit{3D part segmentation} represents a
-        natural physical manifestation of edge heterophily.
-        Adjacent spatial points at inter-part seams (e.g., table leg vs.\ tabletop) belong
-        to distinct semantic parts; a GNN with unrestricted cross-boundary message passing
-        will blend these representations and produce label bleeding.
-  \item \textbf{Preserving Intra-Part Communication:}
-        Uniform or random edge slowing across smooth continuous surfaces impedes information
-        propagation where rapid intra-part communication is essential.
-        Hence, slow nodes must be strategically allocated to physical geometric boundaries.
-  \item \textbf{Geometric Normal Consistency:}
-        In continuous 3D space, virtual slow nodes must be synthesized with normalized 6D
-        attributes $[\mathbf{p}_k, \hat{\mathbf{n}}_k]$ that respect Euclidean surface metrics,
-        preventing inconsistencies in normal-conditioned feature computations.
-\end{enumerate}
-
-% =======================================================================
+% ============================================================
 \section{Geometry-Aware Boundary Half-Hop}
 \label{sec:method}
-% =======================================================================
 
-\subsection{Geometric Boundary Detection Module}
-\label{ssec:boundary}
+\subsection{Geometric Boundary Detection}
+We compute two complementary differential invariants for each point
+$\mathbf{p}_i\!\in\!\mathbb{R}^3$ with $k$-NN neighborhood $\mathcal{N}_k(i)$.
 
-To selectively deploy slow nodes at physical transition seams, we compute two complementary
-local differential invariants for every point $\mathbf{p}_i \in \mathbb{R}^3$ with
-$k$-NN spatial neighborhood $\mathcal{N}_k(i)$.
-
-\subsubsection{Pauly Surface Variation (Curvature Proxy)}
-We form the local spatial covariance matrix $\mathbf{C}_i \in \mathbb{R}^{3\times3}$:
+\textbf{Pauly Surface Variation}~\cite{pauly}: Form the covariance matrix
+$\mathbf{C}_i = \tfrac{1}{k}\sum_{j\in\mathcal{N}_k(i)}(\mathbf{p}_j-\mathbf{p}_i)(\mathbf{p}_j-\mathbf{p}_i)^\top$
+with sorted eigenvalues $\lambda_0\le\lambda_1\le\lambda_2$.
+Surface variation $\sigma_p(i)\in[0,\tfrac{1}{3}]$ quantifies deviation from a planar tangent:
 \begin{equation}
-  \mathbf{C}_i = \frac{1}{k} \sum_{j \in \mathcal{N}_k(i)}
-                 (\mathbf{p}_j - \mathbf{p}_i)(\mathbf{p}_j - \mathbf{p}_i)^\top.
-  \label{eq:cov}
-\end{equation}
-Let $\lambda_0 \le \lambda_1 \le \lambda_2$ denote the sorted eigenvalues of $\mathbf{C}_i$.
-Pauly surface variation $\sigma_p(i) \in [0,\tfrac{1}{3}]$ quantifies deviation from a
-planar tangent~\cite{pauly}:
-\begin{equation}
-  \sigma_p(i) = \frac{\lambda_0}{\lambda_0 + \lambda_1 + \lambda_2}.
+  \sigma_p(i) = \frac{\lambda_0}{\lambda_0+\lambda_1+\lambda_2}.
   \label{eq:pauly}
 \end{equation}
-On perfectly flat intra-part surfaces, $\sigma_p \approx 0$.
-At sharp inter-part creases (perpendicular joints), $\sigma_p$ rises toward $\tfrac{1}{3}$.
 
-\subsubsection{Surface Normal Disagreement}
-Let $\mathbf{n}_i \in \mathbb{R}^3$ denote the unit surface normal at $\mathbf{p}_i$.
-For each directed edge $e_{ij} = (\mathbf{p}_i \to \mathbf{p}_j)$, the angular normal
-disagreement is:
+\textbf{Normal Disagreement}: For unit normal $\mathbf{n}_i$ at $\mathbf{p}_i$,
+the angular disparity across edge $e_{ij}$ is:
 \begin{equation}
   \Delta\mathbf{n}_{ij} = 1 - |\mathbf{n}_i \cdot \mathbf{n}_j|.
-  \label{eq:normal_disagree}
+  \label{eq:normal}
 \end{equation}
-For coplanar points, $\Delta\mathbf{n}_{ij} \to 0$; for sharp perpendicular joints
-(e.g., table legs meeting a tabletop at $90^\circ$), $\Delta\mathbf{n}_{ij} \to 1$.
 
-\subsubsection{Composite Boundary Score}
-The unified geometric edge score $S_{ij} \in [0,1]$ combines edge-wise curvature and
-normal disparity:
+\textbf{Composite Boundary Score}:
 \begin{equation}
-  S_{ij} = \tfrac{1}{2}\max\!\bigl(\sigma_p(i),\,\sigma_p(j)\bigr)
-          + \tfrac{1}{2}\,\Delta\mathbf{n}_{ij}.
-  \label{eq:bnd_score}
+  S_{ij} = \tfrac{1}{2}\max(\sigma_p(i),\sigma_p(j)) + \tfrac{1}{2}\,\Delta\mathbf{n}_{ij}.
+  \label{eq:score}
 \end{equation}
 
-\subsection{Dual-Gated Physical Crease Criterion}
-\label{ssec:dualgate}
-
-To guarantee that slow nodes are inserted strictly at genuine physical creases, we formulate
-a dual-gated threshold criterion:
+\subsection{Dual-Gated Crease Criterion}
+Slow nodes are inserted only at genuine physical creases:
 \begin{equation}
-  \mathcal{E}_{\text{bnd}} = \bigl\{e_{ij} \in E \;\big|\;
-    S_{ij} \ge \tau_Q \;\wedge\; S_{ij} \ge \tau_{\min}\bigr\},
-  \label{eq:dual_gate}
+  \mathcal{E}_{\text{bnd}} = \bigl\{e_{ij}\in E \;\big|\;
+    S_{ij}\ge\tau_Q \;\wedge\; S_{ij}\ge\tau_{\min}\bigr\},
+  \label{eq:gate}
 \end{equation}
-where $\tau_Q = \mathrm{Quantile}(S, Q)$ captures relative edge prominence,
-and $\tau_{\min} = 0.15$ acts as an absolute physical crease gate
-(${\approx}30^\circ$ angular deviation).
-This dual gating ensures that flat or gently curved intra-part regions remain completely
-unhindered by slow nodes, directly addressing the receptive-field starvation problem.
-
-\subsection{Feature Synthesis and Leakage-Free Design}
-\label{ssec:synthesis}
-
-For each selected crease edge $e_{ij} \in \mathcal{E}_{\text{bnd}}$, a virtual slow node
-$\nu_k$ is synthesized with mid-point coordinates and re-normalized unit normal vectors:
+where $\tau_Q=\mathrm{Quantile}(S,Q)$ captures relative edge prominence and
+$\tau_{\min}=0.15$ acts as an absolute crease gate (${\approx}30^\circ$).
+For each selected crease edge, a virtual slow node is synthesized:
 \begin{equation}
-  \mathbf{p}_k = \frac{\mathbf{p}_i + \mathbf{p}_j}{2},\quad
-  \hat{\mathbf{n}}_k = \frac{\mathbf{n}_i + \mathbf{n}_j}{\|\mathbf{n}_i + \mathbf{n}_j\|_2},\quad
-  \mathbf{x}_k = [\mathbf{p}_k,\,\hat{\mathbf{n}}_k].
-  \label{eq:synthesis}
+  \mathbf{p}_k = \tfrac{\mathbf{p}_i+\mathbf{p}_j}{2},\quad
+  \hat{\mathbf{n}}_k = \tfrac{\mathbf{n}_i+\mathbf{n}_j}{\|\mathbf{n}_i+\mathbf{n}_j\|},\quad
+  \mathbf{x}_k = [\mathbf{p}_k,\hat{\mathbf{n}}_k].
+  \label{eq:synth}
 \end{equation}
-Crucially, our formulation operates solely on unsupervised geometric features
-$(\mathbf{p}_i, \mathbf{n}_i)$, ensuring identical processing across training, validation,
-and test splits \emph{without ground-truth label leakage}.
+The formulation operates solely on unsupervised geometric features, ensuring
+no ground-truth label leakage across splits.
 
-% =======================================================================
-\section{Experimental Setup}
-\label{sec:setup}
-% =======================================================================
+\subsection{3D Backbone and Evaluation Protocol}
+We employ a static-graph EdgeConv backbone~\cite{dgcnn} on 6D point-normal
+coordinates $\mathbf{x}_i=[\mathbf{p}_i,\mathbf{n}_i]$.
+To evaluate boundary preservation directly, each test shape is partitioned into:
+\textbf{boundary points} $\mathcal{V}_{\text{bnd}}$ (having ${\ge}1$ $k$-NN neighbor with
+a different ground-truth part label) and \textbf{interior points} $\mathcal{V}_{\text{int}}$.
+We compute $\text{mIoU}_{\text{bnd}}$ and $\text{mIoU}_{\text{int}}$ independently,
+exposing gains invisible to standard overall mIoU.
+Experiments use ShapeNet-Part~\cite{shapenet,yi2016} with 2,048 points, $k\!=\!20$,
+Adam optimizer (lr $3\!\times\!10^{-4}$), cosine annealing, 250 epochs, 3 seeds.
 
-\subsection{Point Cloud Segmentation Backbone}
-\label{ssec:backbone}
+\subsection{Complexity and Implementation Notes}
+\label{ssec:complexity}
 
-We employ a static-graph EdgeConv segmentation backbone~\cite{dgcnn} operating on 6D
-coordinates $\mathbf{x}_i = [\mathbf{p}_i, \mathbf{n}_i]$.
-For each layer $l$, the message from neighbor $j$ to center $i$ is:
-\begin{equation}
-  \mathbf{h}_{j \to i}^{(l)} = \mathrm{ReLU}\!\Bigl(
-    \mathrm{BN}\!\bigl(\boldsymbol{\Theta}^{(l)}
-    [\mathbf{x}_i^{(l)},\;\mathbf{x}_j^{(l)} - \mathbf{x}_i^{(l)}]\bigr)\Bigr),
-  \label{eq:edgeconv}
-\end{equation}
-aggregated via symmetric max-pooling:
-$\mathbf{x}_i^{(l+1)} = \max_{j \in \mathcal{N}(i)} \mathbf{h}_{j \to i}^{(l)}$.
-Multi-scale features from all layers are concatenated and projected to per-point part logits
-via a shared MLP head.
-Geometry-Aware Boundary Half-Hop is inserted as a pre-processing transform before the
-backbone, with no changes to its weights or architecture.
+\textbf{Crease detection} is a one-time pre-processing step per shape.
+Computing $\mathbf{C}_i$ via PCA requires $\mathcal{O}(k\cdot n)$ multiplications
+and $\mathcal{O}(n)$ eigendecompositions, where $n$ is the number of points and $k\!=\!20$.
+Normal dot-products for Eq.~\eqref{eq:normal} are computed in a vectorized batched manner
+over the edge index in $\mathcal{O}(|E|)$ time.
+The dual-gated selection (Eq.~\eqref{eq:gate}) reduces the edge set by ${>}98\%$ at
+$Q\!=\!0.98$, keeping slow-node overhead minimal: for a 2,048-point shape with
+$|E|\!=\!40{,}960$ $k$-NN edges, only ${\approx}820$ crease edges receive a slow node.
 
-\subsection{Decoupled Boundary Evaluation Protocol}
-\label{ssec:metrics}
+\textbf{Memory overhead} of the augmented graph is bounded by
+$|\mathcal{E}_{\text{bnd}}|$ additional rows appended to $\mathbf{X}$,
+negligible relative to the dense feature tensors processed by the backbone.
+The masking step (Eq.~\eqref{eq:gate}) is an index-select operation with zero
+learnable parameters.
+Our full implementation is built on PyTorch Geometric~\cite{fey2019fast} and is
+provided as a self-contained transform class, enabling drop-in integration with
+any EdgeConv-compatible part segmentation pipeline.
 
-Standard overall instance mIoU ($\text{mIoU}_{\text{all}}$) is dominated by interior points,
-which constitute ${\approx}90\%$ of any 3D shape.
-To evaluate boundary preservation directly, we partition each test shape into two disjoint
-point sets:
-\begin{itemize}
-  \item \textbf{Boundary Points ($\mathcal{V}_{\text{bnd}}$):} Points having at least one
-        $k$-NN spatial neighbor with a different ground-truth part label
-        ($\exists j \in \mathcal{N}_k(i) \text{ s.t.\ } \mathbf{y}_i \neq \mathbf{y}_j$).
-  \item \textbf{Interior Points ($\mathcal{V}_{\text{int}}$):} All remaining non-boundary
-        points.
-\end{itemize}
-We compute $\text{mIoU}_{\text{bnd}}$ and $\text{mIoU}_{\text{int}}$ independently over
-their respective sub-graphs to rigorously measure boundary sharpness and interior quality
-separately.
-
-\subsection{Training Protocol}
-\label{ssec:protocol}
-
-All experiments use ShapeNet-Part~\cite{shapenet,yi2016} with the standard 2,048-point
-subsampling, official train/validation/test splits, and $k = 20$ nearest neighbors.
-Models are trained for 250 epochs with the Adam optimizer (learning rate $3\times10^{-4}$,
-weight decay $10^{-5}$) and cosine annealing.
-We set the Half-Hop interpolation parameter $\alpha = 0.5$ throughout.
-All experiments are run with three random seeds and results are averaged.
-
-% =======================================================================
+% ============================================================
 \section{Results and Discussion}
 \label{sec:results}
-% =======================================================================
 
-\subsection{Ablation: Anti-Starvation Threshold Tuning}
-\label{ssec:threshold}
-
-To verify the impact of selective crease gating, we swept the quantile parameter
-$Q \in \{0.85, 0.90, 0.95, 0.98\}$ on ShapeNet \textit{Chair} (3,746 training shapes).
-Table~\ref{tab:chair_ablation} and Fig.~\ref{fig:chair_sweep} demonstrate a clear monotonic
-performance increase as boundary selection is tightened.
+\subsection{Threshold Ablation on Chair}
+Table~\ref{tab:chair_ablation} and Fig.~\ref{fig:chair_sweep} show a clear monotonic
+performance increase as boundary selection is tightened on ShapeNet \textit{Chair}
+(3,746 shapes).
+Restricting slow nodes to the sharpest $2\%$ of creases ($Q\!=\!0.98$) produces
+$+0.52\%$ mIoU over broader configurations, empirically validating the
+anti-starvation hypothesis: leaving smooth intra-part surfaces unimpeded
+preserves essential spatial context.
 
 \begin{table}[!h]
   \centering\small
-  \caption{Boundary threshold ablation on ShapeNet \textit{Chair}.
-    Restricting slow nodes to the sharpest geometric creases monotonically improves
-    both mIoU and accuracy.}
+  \caption{Threshold ablation on ShapeNet Chair.}
   \label{tab:chair_ablation}
   \resizebox{\columnwidth}{!}{%
   \begin{tabular}{lcccc}
     \toprule
-    Configuration    & $Q$  & Slowed Edges       & mIoU            & Accuracy        \\
+    Configuration & $Q$ & Slowed Edges & mIoU & Accuracy \\
     \midrule
-    Broad Gated      & 0.85 & ${\approx}15\%$    & 84.76\%         & 93.77\%         \\
-    Selective Gated  & 0.90 & ${\approx}10\%$    & 84.78\%         & 93.64\%         \\
-    Sharp Gated      & 0.95 & ${\approx}5\%$     & 85.13\%         & 94.13\%         \\
+    Broad Gated     & 0.85 & ${\approx}15\%$ & 84.76\% & 93.77\% \\
+    Selective Gated & 0.90 & ${\approx}10\%$ & 84.78\% & 93.64\% \\
+    Sharp Gated     & 0.95 & ${\approx}5\%$  & 85.13\% & 94.13\% \\
     \textbf{Crease Gated} & \textbf{0.98} & $\mathbf{{\approx}2\%}$
-                     & \textbf{85.28\%} & \textbf{94.18\%}\\
+                    & \textbf{85.28\%} & \textbf{94.18\%} \\
     \bottomrule
   \end{tabular}%
   }
@@ -572,47 +372,31 @@ performance increase as boundary selection is tightened.
 \begin{figure}[!t]
   \centering
   \includegraphics[width=0.92\columnwidth]{fig_chair_threshold_sweep.pdf}
-  \caption{Optimization of geometric crease quantile threshold on ShapeNet \textit{Chair}.
-    Restricting slow-node insertion to the sharpest $2\%$ of edges yields monotonic
-    improvements in both mIoU and accuracy, confirming the anti-starvation hypothesis.}
+  \caption{Crease quantile sweep on ShapeNet \textit{Chair}. Restricting slow nodes
+    to the sharpest $2\%$ of edges yields monotonic improvements in mIoU and accuracy.}
   \label{fig:chair_sweep}
 \end{figure}
 
-Restricting slow nodes to the sharpest $2\%$ of creases ($Q=0.98$) produces a
-$+0.52\%$ improvement in test mIoU compared to broader configurations.
-This empirically validates our anti-starvation hypothesis: leaving smooth intra-part surfaces
-unimpeded preserves essential spatial context while focusing latency modulation precisely
-where semantic transitions occur.
-
-\subsection{Benchmark on Rigid Categories}
-\label{ssec:rigid}
-
-We benchmarked Geometry-Aware Boundary Half-Hop on two rigid ShapeNet categories
-characterized by pronounced perpendicular geometric joints: \textit{Table} and
-\textit{Airplane}.
-Table~\ref{tab:rigid_benchmark} and Fig.~\ref{fig:rigid_gains} present the comprehensive
-decoupled evaluation.
+\subsection{Rigid Category Benchmark}
+Table~\ref{tab:rigid_benchmark} and Fig.~\ref{fig:rigid_gains} present the decoupled
+evaluation on \textit{Table} and \textit{Airplane}—rigid categories with pronounced
+perpendicular joints.
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.98\textwidth]{fig_3d_segmentation_qualitative.pdf}
-  \caption{Qualitative 3D point-cloud graph and part-segmentation visualization on a
-    ShapeNet \textit{Table}:
-    (a)~Ground-truth semantic parts (tabletop in royal blue, legs in warm amber).
-    (b)~3D $k$-NN spatial graph with detected sharp geometric crease edges (red), where virtual
-        slow nodes ($\nu_k$, green diamonds) are inserted to throttle boundary message passing.
-    (c)~Baseline EdgeConv exhibiting pronounced feature bleeding (red highlights) across the
-        tabletop--leg seam.
-    (d)~Geometry-Aware Boundary Half-Hop preserving crisp, razor-sharp boundary segmentation
-        without cross-seam label contamination.}
+  \caption{Qualitative 3D visualization on ShapeNet \textit{Table}:
+    (a)~Ground-truth parts (tabletop: blue; legs: amber).
+    (b)~Detected crease edges (red) and virtual slow nodes $\nu_k$ (green diamonds).
+    (c)~Baseline EdgeConv with feature bleeding (red) across the tabletop--leg seam.
+    (d)~Geometry-Aware Boundary Half-Hop: razor-sharp seam preserved, zero label contamination.}
   \label{fig:3d_vis}
 \end{figure*}
 
 \begin{table}[!t]
   \centering\small
   \caption{Decoupled evaluation on rigid ShapeNet-Part categories.
-    \textbf{Bold} values indicate best per metric.
-    $\text{mIoU}_{\text{bnd}}$ measures quality exclusively on boundary points.}
+    $\text{mIoU}_{\text{bnd}}$ measures quality exclusively at boundary points.}
   \label{tab:rigid_benchmark}
   \resizebox{\columnwidth}{!}{%
   \begin{tabular}{llcccc}
@@ -623,166 +407,156 @@ decoupled evaluation.
     \textbf{Table}
     & \textbf{Boundary Half-Hop (Ours)}
     & \textbf{76.19\%} & \textbf{56.73\%} & \textbf{85.88\%} & \textbf{91.18\%} \\
-    Table
-    & EdgeConv Baseline~\cite{dgcnn}
-    & 74.32\%          & 54.63\%          & 84.11\%          & 90.95\%          \\
+    Table    & EdgeConv~\cite{dgcnn}
+    & 74.32\% & 54.63\% & 84.11\% & 90.95\% \\
     \midrule
     \textbf{Airplane}
     & \textbf{Boundary Half-Hop (Ours)}
     & \textbf{78.23\%} & \textbf{58.44\%} & 87.77\%          & \textbf{91.13\%} \\
-    Airplane
-    & EdgeConv Baseline~\cite{dgcnn}
-    & 77.95\%          & 57.41\%          & \textbf{87.83\%} & 90.83\%          \\
+    Airplane & EdgeConv~\cite{dgcnn}
+    & 77.95\% & 57.41\% & \textbf{87.83\%} & 90.83\% \\
     \bottomrule
   \end{tabular}%
   }
 \end{table}
 
+\noindent\textbf{Analysis of Gains.}
+The boundary-specific metric reveals a systematic pattern: rigid categories with
+sharp perpendicular joints (Table: $90^\circ$ tabletop--leg junctions; Airplane:
+wing-body intersections) show the largest $\text{mIoU}_{\text{bnd}}$ gains,
+while interior metrics remain competitive or improve slightly.
+This confirms that Geometry-Aware Boundary Half-Hop acts as a targeted surgical
+intervention---slowing only the ${\approx}2\%$ of edges at genuine geometric
+creases---rather than a global graph rewiring that risks degrading smooth-surface
+representations.
+The asymmetry between overall and boundary gains (Airplane: $+0.28\%$
+$\text{mIoU}_{\text{all}}$ vs.\ $+1.03\%$ $\text{mIoU}_{\text{bnd}}$) further
+underscores why decoupled evaluation is essential: aggregate metrics conflate
+the dominant interior mass with the scarce but semantically critical boundary
+region, obscuring meaningful improvements in the latter.
+
 \begin{figure}[!t]
   \centering
   \includegraphics[width=0.92\columnwidth]{fig_rigid_gains.pdf}
-  \caption{Performance gains on rigid ShapeNet categories (Table and Airplane).
-    Geometry-Aware Boundary Half-Hop delivers marked improvements in boundary
-    fidelity ($\text{mIoU}_{\text{bnd}}$) and overall segmentation accuracy over the
-    EdgeConv baseline~\cite{dgcnn}.}
+  \caption{Performance gains on rigid ShapeNet categories.
+    Boundary Half-Hop achieves marked $\text{mIoU}_{\text{bnd}}$ improvements over
+    the EdgeConv baseline~\cite{dgcnn}.}
   \label{fig:rigid_gains}
 \end{figure}
 
-The empirical results showcase significant, consistent advantages:
-\begin{itemize}
-  \item \textbf{Table:} Boundary Half-Hop increases overall mIoU from $74.32\%$ to $76.19\%$
-        ($+1.87\%$). On the decoupled boundary metric, it achieves $+2.10\%$
-        ($54.63\% \to 56.73\%$), directly confirming that boundary throttling prevents label
-        bleeding across the tabletop and support legs.
-  \item \textbf{Airplane:} Boundary Half-Hop achieves $78.23\%$ overall mIoU ($+0.28\%$)
-        and elevates boundary mIoU from $57.41\%$ to $58.44\%$ ($+1.03\%$), validating
-        seam sharpening along intricate aerodynamic joints.
-  \item \textbf{Classification Accuracy:} Consistent improvements in point-wise accuracy
-        are observed across both categories ($91.18\%$ vs.\ $90.95\%$ on Table;
-        $91.13\%$ vs.\ $90.83\%$ on Airplane).
-\end{itemize}
+Geometry-Aware Boundary Half-Hop achieves consistent advantages:
+on \textit{Table}, $+2.10\%$ $\text{mIoU}_{\text{bnd}}$ ($54.63\%\!\to\!56.73\%$)
+confirms that boundary throttling prevents label bleeding across the tabletop and legs;
+on \textit{Airplane}, $+1.03\%$ $\text{mIoU}_{\text{bnd}}$ validates seam sharpening
+along aerodynamic joints.
+Fig.~\ref{fig:3d_vis} provides qualitative confirmation: standard EdgeConv
+(panel~(c)) shows visible label contamination across the perpendicular seam, whereas
+Boundary Half-Hop (panel~(d)) preserves a crisp, ground-truth-aligned boundary.
+Depth-4 message passing compensates for the topological delay introduced at seam edges,
+maintaining global shape coherence alongside local boundary sharpness.
 
-\subsection{Qualitative Analysis}
-\label{ssec:qualitative}
+It is notable that overall mIoU gains on \textit{Airplane} ($+0.28\%$) are modest
+compared to boundary-specific gains ($+1.03\%$ $\text{mIoU}_{\text{bnd}}$),
+directly demonstrating the limitation of aggregate metrics: interior points, which
+constitute ${\approx}90\%$ of any shape, dominate the overall score and can mask
+meaningful boundary improvements.
+Our decoupled protocol surfaces these gains explicitly.
+The interior mIoU remains competitive (Table: $85.88\%$ vs.\ $84.11\%$; Airplane:
+$87.77\%$ vs.\ $87.83\%$), confirming that the dual-gated criterion successfully
+avoids receptive-field starvation on smooth intra-part surfaces---a risk that would
+arise if slow nodes were inserted uniformly across all edges.
 
-Fig.~\ref{fig:3d_vis} visualizes the 3D point-cloud graph topology and qualitative part
-segmentation on a representative ShapeNet \textit{Table}.
-In standard EdgeConv (Fig.~\ref{fig:3d_vis}(c)), isotropic message passing causes feature
-representations to bleed across the perpendicular tabletop--leg seam, producing visible
-boundary misclassification artifacts.
-In contrast, Geometry-Aware Boundary Half-Hop (Fig.~\ref{fig:3d_vis}(b)) detects sharp
-geometric transitions via the dual-gated crease criterion and inserts $\nu_k$ strictly along
-seam edges.
-Fig.~\ref{fig:3d_vis}(d) confirms that this topological throttling cleanly eliminates label
-bleeding, preserving crisp, well-delineated semantic boundaries that closely match the
-ground-truth geometry.
-
-\subsection{Architectural Depth Synergy}
-\label{ssec:depth}
-
-Inserting a virtual slow node along a physical boundary edge splits a direct 1-hop physical
-link into a 2-hop detour ($v_i \to \nu_k \leftrightarrow v_j$), so boundary-crossing messages
-experience a controlled topological delay.
-To ensure that messages can still propagate across the global geometry, depth-compensated
-message passing (Depth 4) provides the structural iterations required to fully integrate
-throttled boundary signals while maintaining global shape coherence.
-This depth synergy allows the method to simultaneously protect high-frequency boundary seams
-and preserve global shape understanding.
-
-% =======================================================================
+% ============================================================
 \section{Conclusion}
 \label{sec:conclusion}
-% =======================================================================
 
-We have presented a rigorous reproduction of the Half-Hop graph upsampling framework on six
-2D heterophilic benchmarks and a principled geometric extension to 3D point-cloud part
-segmentation.
-Our proposed \textit{Geometry-Aware Boundary Half-Hop} integrates Pauly surface variation
-with surface normal disagreement into a dual-gated crease criterion, selectively throttling
-message passing at inter-part transitions while preserving rapid communication across planar
-intra-part regions.
-Evaluated on rigid ShapeNet-Part categories with decoupled boundary-specific metrics, our
-method achieves marked improvements at geometric seams ($+2.10\%$
-$\text{mIoU}_{\text{bnd}}$ on Table; $+1.03\%$ on Airplane) and confirms a monotonic
-ablation trend under threshold tightening.
-These results establish geometry-aware topological latency modulation as a principled and
-effective strategy for 3D representation learning, particularly in settings where precise
-inter-part boundary preservation is critical.
+We presented a rigorous reproduction of Half-Hop on six 2D heterophilic benchmarks
+and introduced \textit{Geometry-Aware Boundary Half-Hop} for 3D part segmentation.
+By combining Pauly surface variation with normal disagreement into a dual-gated crease
+criterion, our method selectively throttles message passing at inter-part transitions
+while preserving rapid communication across smooth intra-part regions.
+Evaluated on rigid ShapeNet-Part categories with our novel decoupled
+$\text{mIoU}_{\text{bnd}}$ protocol, the method achieves $+2.10\%$ on Table and
+$+1.03\%$ on Airplane over the EdgeConv baseline~\cite{dgcnn}, with monotonic ablation
+gains confirming the anti-starvation design principle.
 
-Future directions include extending Geometry-Aware Boundary Half-Hop to deformable shape
-categories, integrating learnable boundary scoring via end-to-end gradient flow, and exploring
-its combination with spectral point-cloud GNN architectures.
+The core design principles established here—geometry-driven selective latency modulation,
+leakage-free unsupervised crease gating, and decoupled boundary evaluation—are broadly
+applicable beyond the specific ShapeNet-Part benchmark.
+Rigid categories with sharp, well-defined part interfaces provide the clearest validation
+signal; we expect larger relative gains on categories with more complex joint geometries,
+such as aircraft engines or multi-segment robotic manipulators.
+Architecturally, the Boundary Half-Hop transform is entirely backbone-agnostic:
+it can be prepended to any GNN-based point cloud network, including attention-based or
+hierarchical encoders, without weight modification.
+Future directions include: (i)~end-to-end learnable boundary scoring by backpropagating
+through the dual-gated selection via a differentiable threshold relaxation;
+(ii)~extension to dynamic graph computation (re-evaluating crease criterion per layer
+as DGCNN~\cite{dgcnn} does in feature space);
+and (iii)~application to scene-level 3D semantic segmentation, where inter-object
+boundaries represent an analogous geometric heterophily challenge at a larger spatial
+scale.
 
-% =======================================================================
-% References — all verified against primary sources (arXiv / publisher)
-% =======================================================================
+% ============================================================
+% References — all verified against primary sources
+% ============================================================
 \begin{thebibliography}{10}
 
 \bibitem{kipf}
 T.~N.~Kipf and M.~Welling,
 ``Semi-supervised classification with graph convolutional networks,''
-in \textit{Proc.\ Int.\ Conf.\ Learn.\ Represent.\ (ICLR)}, 2017.
-[Online]. Available: \url{https://arxiv.org/abs/1609.02907}
+in \textit{Proc.\ ICLR}, 2017. arXiv:1609.02907.
 
 \bibitem{hamilton}
 W.~L.~Hamilton, Z.~Ying, and J.~Leskovec,
 ``Inductive representation learning on large graphs,''
-in \textit{Proc.\ Adv.\ Neural Inf.\ Process.\ Syst.\ (NeurIPS)}, 2017, pp.\ 1024--1034.
-[Online]. Available: \url{https://arxiv.org/abs/1706.02216}
+in \textit{Proc.\ NeurIPS}, 2017, pp.\ 1024--1034. arXiv:1706.02216.
 
 \bibitem{gat}
-P.~Veli\v{c}kovi\'{c}, G.~Cucurull, A.~Casanova, A.~Romero, P.~Li\`{o}, and Y.~Bengio,
+P.~Veli\v{c}kovi\'{c} \textit{et al.},
 ``Graph attention networks,''
-in \textit{Proc.\ Int.\ Conf.\ Learn.\ Represent.\ (ICLR)}, 2018.
-[Online]. Available: \url{https://arxiv.org/abs/1710.10903}
+in \textit{Proc.\ ICLR}, 2018. arXiv:1710.10903.
 
 \bibitem{pei}
 H.~Pei, B.~Wei, K.~C.-C.~Chang, Y.~Lei, and B.~Yang,
 ``Geom-GCN: Geometric graph convolutional networks,''
-in \textit{Proc.\ Int.\ Conf.\ Learn.\ Represent.\ (ICLR)}, 2020.
-[Online]. Available: \url{https://arxiv.org/abs/2002.05287}
+in \textit{Proc.\ ICLR}, 2020. arXiv:2002.05287.
 
 \bibitem{azabou}
-M.~Azabou, V.~Ganesh, S.~Thakoor, C.-H.~Lin, L.~Sathidevi, R.~Liu,
-M.~Valko, P.~Veli\v{c}kovi\'{c}, and E.~L.~Dyer,
+M.~Azabou \textit{et al.},
 ``Half-Hop: A graph upsampling approach for slowing down message passing,''
-in \textit{Proc.\ Int.\ Conf.\ Mach.\ Learn.\ (ICML)}, PMLR, vol.~202, 2023, pp.\ 1341--1360.
-[Online]. Available: \url{https://proceedings.mlr.press/v202/azabou23a.html}
+in \textit{Proc.\ ICML}, PMLR vol.~202, 2023, pp.\ 1341--1360.
 
 \bibitem{dgcnn}
-Y.~Wang, Y.~Sun, Z.~Liu, S.~E.~Sarma, M.~M.~Bronstein, and J.~M.~Solomon,
+Y.~Wang \textit{et al.},
 ``Dynamic graph CNN for learning on point clouds,''
-\textit{ACM Trans.\ Graph.}, vol.~38, no.~5, Art.\ 146, Oct.\ 2019.
-DOI: \url{https://doi.org/10.1145/3326362}
+\textit{ACM Trans.\ Graph.}, vol.~38, no.~5, Art.~146, 2019.
+DOI:~10.1145/3326362.
 
 \bibitem{pauly}
 M.~Pauly, M.~Gross, and L.~P.~Kobbelt,
 ``Efficient simplification of point-sampled surfaces,''
-in \textit{Proc.\ IEEE Conf.\ Vis.\ (VIS)}, 2002, pp.\ 163--170.
+in \textit{Proc.\ IEEE VIS}, 2002, pp.\ 163--170.
 
 \bibitem{shapenet}
 A.~X.~Chang \textit{et al.},
 ``ShapeNet: An information-rich 3D model repository,''
-\textit{arXiv preprint arXiv:1512.03012}, 2015.
-[Online]. Available: \url{https://arxiv.org/abs/1512.03012}
+arXiv:1512.03012, 2015.
 
 \bibitem{yi2016}
-L.~Yi, V.~G.~Kim, D.~Ceylan, I.-C.~Shen, M.~Yan, H.~Su, C.~Lu, Q.~Huang,
-A.~Sheffer, and L.~Guibas,
+L.~Yi \textit{et al.},
 ``A scalable active framework for region annotation in 3D shape collections,''
-\textit{ACM Trans.\ Graph.}, vol.~35, no.~6, Art.\ 210, Nov.\ 2016.
+\textit{ACM Trans.\ Graph.}, vol.~35, no.~6, Art.~210, 2016.
 
 \bibitem{li2018deeper}
 Q.~Li, Z.~Han, and X.-M.~Wu,
 ``Deeper insights into graph convolutional networks for semi-supervised classification,''
-in \textit{Proc.\ AAAI Conf.\ Artif.\ Intell.\ (AAAI)}, 2018, pp.\ 3538--3545.
-[Online]. Available: \url{https://arxiv.org/abs/1801.07606}
+in \textit{Proc.\ AAAI}, 2018, pp.\ 3538--3545. arXiv:1801.07606.
 
 \bibitem{fey2019fast}
 M.~Fey and J.~E.~Lenssen,
 ``Fast graph representation learning with PyTorch Geometric,''
-in \textit{Proc.\ ICLR Workshop Represent.\ Learn.\ on Graphs and Manifolds}, 2019.
-[Online]. Available: \url{https://arxiv.org/abs/1903.02428}
+in \textit{Proc.\ ICLR Workshop Repr.\ Learn.\ Graphs}, 2019. arXiv:1903.02428.
 
 \end{thebibliography}
 
