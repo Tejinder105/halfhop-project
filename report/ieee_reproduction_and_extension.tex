@@ -20,6 +20,15 @@
 \usepackage{microtype}
 \usepackage{float}
 
+% Unified Publication Color Palette
+\definecolor{clrPrimary}{RGB}{29, 78, 216}       % #1D4ED8 Deep Royal Blue
+\definecolor{clrPrimaryLight}{RGB}{239, 246, 255}% #EFF6FF Tint
+\definecolor{clrSlowNode}{RGB}{5, 150, 105}      % #059669 Emerald Green
+\definecolor{clrSlowNodeLight}{RGB}{240, 253, 250}% #F0FDFA Tint
+\definecolor{clrSecondary}{RGB}{217, 119, 6}     % #D97706 Warm Amber
+\definecolor{clrSecondaryLight}{RGB}{254, 243, 199}% #FEF3C7 Tint
+\definecolor{clrSlateDark}{RGB}{71, 85, 105}     % #475569 Slate-600
+
 \hyphenation{op-tical net-works semi-conduc-tor Half-Hop}
 
 \begin{document}
@@ -32,7 +41,7 @@
 {\normalsize Indian Institute of Information Technology, Vadodara}\\
 {\normalsize Guided by Dr. Jignesh Patel}}
 
-\markboth{Indian Institute of Information Technology, Vadodara (Project Report),~November~2026}%
+\markboth{Indian Institute of Information Technology, Vadodara,~November~2026}%
 {Singh \MakeLowercase{\textit{et al.}}: Geometry-Aware Boundary Half-Hop on 3D Geometric Manifolds}
 
 \maketitle
@@ -103,14 +112,16 @@ Only $\mathbf{H}_{\text{orig}} \in \mathbb{R}^{|V| \times d'}$ is passed to the 
 \resizebox{0.95\columnwidth}{!}{%
 \begin{tikzpicture}[
     node distance=0.6cm and 0.6cm,
-    block/.style={rectangle, draw, rounded corners, fill=blue!5, text width=2.4cm, text centered, minimum height=1.1cm, font=\footnotesize, thick},
-    arrow/.style={thick, ->, >=Stealth}
+    block/.style={rectangle, draw=clrPrimary, rounded corners=3pt, fill=clrPrimaryLight, text width=2.4cm, text centered, minimum height=1.1cm, font=\footnotesize, thick},
+    blockHH/.style={rectangle, draw=clrSlowNode, rounded corners=3pt, fill=clrSlowNodeLight, text width=2.4cm, text centered, minimum height=1.1cm, font=\footnotesize, thick},
+    blockMask/.style={rectangle, draw=clrSecondary, rounded corners=3pt, fill=clrSecondaryLight, text width=2.4cm, text centered, minimum height=1.1cm, font=\footnotesize, thick},
+    arrow/.style={thick, ->, >=Stealth, draw=clrSlateDark}
 ]
     \node[block] (input) {\textbf{Input Graph} \\ $G = (\mathbf{X}, E)$};
-    \node[block, right=of input] (transform) {\textbf{Half-Hop Operator} \\ Insert $\nu_k$, $\mathbf{x}_k$};
+    \node[blockHH, right=of input] (transform) {\textbf{Half-Hop Operator} \\ Insert $\nu_k$, $\mathbf{x}_k$};
     \node[block, right=of transform] (gnn) {\textbf{GNN Encoder} \\ Message Passing};
     
-    \node[block, below=0.6cm of gnn] (mask) {\textbf{Masking Engine} \\ Filter $[\neg \mathbf{m}_{\text{slow}}]$};
+    \node[blockMask, below=0.6cm of gnn] (mask) {\textbf{Masking Engine} \\ Filter $[\neg \mathbf{m}_{\text{slow}}]$};
     \node[block, left=of mask] (output) {\textbf{Original Nodes} \\ $\mathbf{H}_{\text{orig}} \in \mathbb{R}^{|V| \times d'}$};
     \node[block, left=of output] (loss) {\textbf{Supervised Head} \\ Cross-Entropy Loss};
 
@@ -298,7 +309,7 @@ We benchmarked Geometry-Aware Boundary Half-Hop on rigid ShapeNet categories cha
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig_3d_segmentation_qualitative.pdf}
-\caption{Qualitative 3D point-cloud graph and part-segmentation visualization on ShapeNet \textit{Table}: (a) Ground-truth semantic parts (tabletop in blue, legs in amber, and support struts in green). (b) Underlying 3D $k$-NN spatial graph with detected sharp geometric crease edges highlighted in red, where virtual slow nodes ($\nu_k$, green triangles) are dynamically inserted to throttle boundary message passing. (c) Baseline EdgeConv segmentation exhibiting pronounced feature bleeding (highlighted in red) across the tabletop--leg intersection. (d) Geometry-Aware Boundary Half-Hop preserves crisp, razor-sharp boundary segmentation along the physical joint without cross-seam label contamination.}
+\caption{Qualitative 3D point-cloud graph and part-segmentation visualization on ShapeNet \textit{Table}: (a) Ground-truth semantic parts (tabletop in royal blue, legs in warm amber). (b) Underlying 3D $k$-NN spatial graph with detected sharp geometric crease edges highlighted in red, where virtual slow nodes ($\nu_k$, green diamonds) are dynamically inserted to throttle boundary message passing. (c) Baseline EdgeConv segmentation exhibiting pronounced feature bleeding (highlighted in red) across the tabletop--leg intersection. (d) Geometry-Aware Boundary Half-Hop preserves crisp, razor-sharp boundary segmentation along the physical joint without cross-seam label contamination.}
 \label{fig:3d_vis}
 \end{figure*}
 
