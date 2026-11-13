@@ -28,7 +28,8 @@ CLR_RED_TINT       = '#FEE2E2' # Soft Red Tint
 CLR_RED_DARK       = '#991B1B' # Dark Red outline
 
 def generate_crystal_clear_3d():
-    out_dir = "report/figures"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    out_dir = os.path.join(script_dir, "figures")
     os.makedirs(out_dir, exist_ok=True)
 
     # Use clean ShapeNet table shape
@@ -165,8 +166,8 @@ def generate_crystal_clear_3d():
                ha='center', fontsize=9.0, fontweight='bold', color=CLR_SLOW_NODE,
                bbox=dict(boxstyle='round,pad=0.35', facecolor=CLR_GREEN_TINT, edgecolor=CLR_SLOW_NODE, lw=1.0))
 
-    out_pdf = os.path.join(out_dir, "fig_3d_segmentation_qualitative.pdf")
-    out_png = os.path.join(out_dir, "fig_3d_segmentation_qualitative.png")
+    out_pdf = os.path.join(out_dir, "fig5_shapenet_qualitative_segmentation.pdf")
+    out_png = os.path.join(out_dir, "fig5_shapenet_qualitative_segmentation.png")
     plt.savefig(out_pdf, bbox_inches='tight')
     plt.savefig(out_png, dpi=300, bbox_inches='tight')
     plt.close()

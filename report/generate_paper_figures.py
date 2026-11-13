@@ -98,10 +98,10 @@ def plot_reproduction_bars():
                 fontsize=8.5, fontweight='bold', color=CLR_PRIMARY)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(out_dir, 'fig_reproduction_bars.pdf'))
-    plt.savefig(os.path.join(out_dir, 'fig_reproduction_bars.png'), dpi=300)
+    plt.savefig(os.path.join(out_dir, 'fig3_heterophilic_reproduction.pdf'))
+    plt.savefig(os.path.join(out_dir, 'fig3_heterophilic_reproduction.png'), dpi=300)
     plt.close()
-    print("Saved fig_reproduction_bars (Uniform Palette)")
+    print("Saved fig3_heterophilic_reproduction (Uniform Palette)")
 
 # -----------------------------------------------------------------------------
 # Figure 1: Conceptual Diagram of Geometry-Aware Boundary Half-Hop
@@ -192,10 +192,10 @@ def plot_concept_diagram():
     ax2.legend(loc='lower center', bbox_to_anchor=(0.50, 0.02), fontsize=8.0, frameon=True, framealpha=0.95)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(out_dir, 'fig_boundary_halfhop_concept.pdf'))
-    plt.savefig(os.path.join(out_dir, 'fig_boundary_halfhop_concept.png'), dpi=300)
+    plt.savefig(os.path.join(out_dir, 'fig1_boundary_halfhop_concept.pdf'))
+    plt.savefig(os.path.join(out_dir, 'fig1_boundary_halfhop_concept.png'), dpi=300)
     plt.close()
-    print("Saved fig_boundary_halfhop_concept (Zero Overlap)")
+    print("Saved fig1_boundary_halfhop_concept (Zero Overlap)")
 
 # -----------------------------------------------------------------------------
 # Figure 4: Anti-Starvation Threshold Tuning (Chair Ablation)
@@ -229,10 +229,10 @@ def plot_chair_threshold_sweep():
     plt.title('Threshold Optimization: Eliminating Receptive-Field Starvation')
     ax1.grid(True)
     plt.tight_layout()
-    plt.savefig(os.path.join(out_dir, 'fig_chair_threshold_sweep.pdf'))
-    plt.savefig(os.path.join(out_dir, 'fig_chair_threshold_sweep.png'), dpi=300)
+    plt.savefig(os.path.join(out_dir, 'fig4_crease_threshold_ablation.pdf'))
+    plt.savefig(os.path.join(out_dir, 'fig4_crease_threshold_ablation.png'), dpi=300)
     plt.close()
-    print("Saved fig_chair_threshold_sweep (Uniform Palette)")
+    print("Saved fig4_crease_threshold_ablation (Uniform Palette)")
 
 # -----------------------------------------------------------------------------
 # Figure 6: Rigid Category Positive Gains (Table & Airplane)
@@ -271,10 +271,10 @@ def plot_rigid_gains():
                 fontweight='bold', fontsize=9.5, color=CLR_PRIMARY)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(out_dir, 'fig_rigid_gains.pdf'))
-    plt.savefig(os.path.join(out_dir, 'fig_rigid_gains.png'), dpi=300)
+    plt.savefig(os.path.join(out_dir, 'fig6_rigid_categories_miou_gains.pdf'))
+    plt.savefig(os.path.join(out_dir, 'fig6_rigid_categories_miou_gains.png'), dpi=300)
     plt.close()
-    print("Saved fig_rigid_gains (Uniform Palette)")
+    print("Saved fig6_rigid_categories_miou_gains (Uniform Palette)")
 
 if __name__ == "__main__":
     plot_reproduction_bars()

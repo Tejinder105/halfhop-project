@@ -73,7 +73,7 @@ Extending Half-Hop to 3D point clouds requires addressing two geometric principl
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\columnwidth]{fig_boundary_halfhop_concept.pdf}
+\includegraphics[width=\columnwidth]{fig1_boundary_halfhop_concept.pdf}
 \caption{Conceptual overview: (a) In standard 3D point-cloud message passing, cross-boundary edges cause rapid feature bleeding across distinct semantic parts. (b) Geometry-Aware Boundary Half-Hop uses dual-gated crease detection to selectively throttle cross-boundary communication via virtual slow nodes ($\nu_k$), while leaving smooth intra-part surfaces directly connected.}
 \label{fig:concept}
 \end{figure}
@@ -187,7 +187,7 @@ Cornell & 41.35 & \textbf{62.97} & \textbf{72.43} & 67.84 & 43.24 & \textbf{69.1
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\columnwidth]{fig_reproduction_bars.pdf}
+\includegraphics[width=\columnwidth]{fig3_heterophilic_reproduction.pdf}
 \caption{Empirical reproduction performance across six heterophilic benchmarks, illustrating substantial test accuracy gains when Half-Hop is coupled with isotropic GCN and GraphSAGE encoders.}
 \label{fig:reproduction_bars}
 \end{figure}
@@ -301,7 +301,7 @@ Sharp Gated & 0.95 & $\approx 5\%$ & 85.13\% & 94.13\% \\
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=0.92\columnwidth]{fig_chair_threshold_sweep.pdf}
+\includegraphics[width=0.92\columnwidth]{fig4_crease_threshold_ablation.pdf}
 \caption{Optimization of geometric crease quantile threshold on ShapeNet Chair. Tightening boundary gating to the sharpest $2\%$ of creases yields monotonic improvements in both mIoU and classification accuracy.}
 \label{fig:chair_sweep}
 \end{figure}
@@ -313,7 +313,7 @@ We benchmarked Geometry-Aware Boundary Half-Hop on rigid ShapeNet categories cha
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig_3d_segmentation_qualitative.pdf}
+\includegraphics[width=0.98\textwidth]{fig5_shapenet_qualitative_segmentation.pdf}
 \caption{Qualitative 3D point-cloud graph and part-segmentation visualization on ShapeNet Table: (a) Ground-truth semantic parts (tabletop in royal blue, legs in warm amber). (b) Underlying 3D $k$-NN spatial graph with detected sharp geometric crease edges highlighted in red, where virtual slow nodes ($\nu_k$, green diamonds) are dynamically inserted to throttle boundary message passing. (c) Baseline EdgeConv segmentation exhibiting pronounced feature bleeding (highlighted in red) across the tabletop--leg intersection. (d) Geometry-Aware Boundary Half-Hop preserves crisp, razor-sharp boundary segmentation along the physical joint without cross-seam label contamination.}
 \label{fig:3d_vis}
 \end{figure*}
@@ -339,7 +339,7 @@ Airplane & EdgeConv Baseline \cite{dgcnn} & 77.95\% & 57.41\% & \textbf{87.83\%}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=0.92\columnwidth]{fig_rigid_gains.pdf}
+\includegraphics[width=0.92\columnwidth]{fig6_rigid_categories_miou_gains.pdf}
 \caption{Empirical gains on rigid 3D object categories (Table and Airplane), showing marked improvements in boundary fidelity ($\text{mIoU}_{\text{bnd}}$) and overall segmentation accuracy over the baseline.}
 \label{fig:rigid_gains}
 \end{figure}
