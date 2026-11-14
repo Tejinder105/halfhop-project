@@ -1,274 +1,122 @@
-# Half-Hop: A Graph Upsampling Approach for Slowing Down Message Passing
+# Geometry-Aware Boundary Half-Hop: 3D Point Cloud Part Segmentation
 
-This repository contains a clean reimplementation of the **Half-Hop** method from the ICML 2023 paper:
+This repository contains the official code, experiments, and benchmark results for **Geometry-Aware Boundary Half-Hop**, an extension of the Half-Hop framework ([Azabou et al., ICML 2023](https://proceedings.mlr.press/v202/azabou23a.html)) to 3D geometric point cloud manifolds.
 
-> Zhao, C., et al. *"Half-Hop: A graph upsampling approach for slowing down message passing."* ICML 2023.
-
-Half-Hop is a simple but powerful **graph augmentation** that inserts virtual "slow nodes" along each edge to slow down message passing — which substantially improves GNN performance on **heterophilic graphs** (where connected nodes tend to have different class labels).
+For the exhaustive mathematical formulation, geometric theory, and empirical findings, see **[EXTENSION.md](EXTENSION.md)**.
 
 ---
 
-## What is Half-Hop?
+## 1. Overview & Method
 
-Given a standard graph edge $(v_i, v_j)$, Half-Hop inserts a virtual node $\nu_k$ between them:
+While standard Half-Hop slows down message passing across abstract relational graphs (e.g., citation and webpage networks), applying uniform edge subdivision to physical 3D manifolds induces **receptive-field starvation** across smooth continuous surfaces.
 
-$$v_i \rightarrow \nu_k \leftrightarrow v_j$$
+**Geometry-Aware Boundary Half-Hop** resolves this by introducing a **dual-gated geometric boundary detector**:
+1. **Pauly Surface Variation ($\sigma_n$):** Measures local curvature and planar deviation from the local covariance matrix.
+2. **Surface Normal Disparity ($\Delta \mathbf{n}_{ij}$):** Detects sharp dihedral angles and structural part joints.
 
-The slow node features are interpolated:
-$$\mathbf{x}_{\nu_k} = \alpha \cdot \mathbf{x}_{v_i} + (1 - \alpha) \cdot \mathbf{x}_{v_j}$$
-
-After GNN message passing, the slow nodes are discarded — only original node embeddings are used for classification.
-
-**Why does this help?** On heterophilic graphs, direct message passing pollutes node representations with dissimilar neighbor information. Slow nodes act as buffers, letting the model optionally ignore distant neighbours.
+By selectively inserting virtual slow nodes ($\nu_k$) strictly along physical seams and part joints (throttling $\le 5\%$ of edges), our method eliminates cross-part feature bleeding while preserving fast 1-hop message passing across smooth surfaces.
 
 ---
 
-## Repository Structure
+## 2. Key Empirical Findings (ShapeNet-Part)
+
+- **Table:** Boosts overall mIoU from $74.32\%$ to **$76.19\%$** (**+1.87%**) and boundary fidelity from $54.63\%$ to **$56.73\%$** (**+2.10%** $\text{mIoU}_{\text{bnd}}$).
+- **Airplane:** Increases overall mIoU to **$78.23\%$** (**+0.28%**) and boundary fidelity from $57.41\%$ to **$58.44\%$** (**+1.03%** $\text{mIoU}_{\text{bnd}}$).
+- **Chair Anti-Starvation Sweep:** Pruning slow nodes to the top $2\%$ sharpest geometric seams ($Q=0.98$) achieves peak accuracy (**$85.28\%$** mIoU, **+0.52%** over unconstrained gating).
+
+---
+
+## 3. Repository Structure
 
 ```
-halfhop/
-├── halfhop.py          # Core Half-Hop transformation (HalfHop class)
-├── gcn.py              # Standard GCN backbone
-├── graphsage.py        # Standard GraphSAGE backbone
-├── gat.py              # Standard GAT backbone
-├── hh_gcn.py           # Half-Hop + GCN (HHGCN)
-├── hh_graphsage.py     # Half-Hop + GraphSAGE (HHGraphSAGE)
-├── hh_gat.py           # Half-Hop + GAT (HHGAT)
-├── datasets.py         # Dataset loading (11 benchmarks)
-├── splits.py           # Reproducible train/val/test splits
-├── training.py         # Training loop with automatic GPU detection
-├── evaluation.py       # Evaluation utilities
-└── reproducibility.py  # Seed management
-
-experiments/
-├── supervised/run.py       # Supervised experiment CLI
-├── ablations/
-│   ├── connectivity.py     # Connectivity ablation (proposed vs HH1 vs HH2)
-│   └── initialization.py  # Init ablation (linear vs zero vs random)
-├── ssl/
-│   ├── bgrl_prototype.py   # Prototype BGRL (not the paper reproduction)
-│   └── grace.py            # Half-Hop GRACE (Graph Contrastive Learning)
-├── generate_report.py      # Auto-generates tables and figures
-└── results/                # Experiment output files
-
-bgrl_original/              # Official Thakoor et al. BGRL (vendored)
-halfhop_bgrl/               # Half-Hop added on top of official BGRL
-run_bgrl_experiments.py     # Table 3 BGRL runner (use this on Kaggle)
-
-configs/                    # Optimal hyperparameters per dataset
-tests/                      # 43 unit and integration tests
+halfhop-project/
+├── halfhop/                         # Core Transformation Engine
+│   ├── __init__.py                  # Clean extension exports
+│   ├── boundary_halfhop.py          # BoundaryHalfHop class (dual-gated boundary slowing)
+│   ├── geometry_boundary.py         # Curvature, normal disparity & crease detection
+│   ├── halfhop.py                   # Base Half-Hop graph transform and slow node insertion
+│   ├── selective_halfhop.py         # Selective edge subset rewiring & topological primitives
+│   ├── reproducibility.py          # PRNG seeding across Torch, NumPy, and Python
+│   └── utils.py                     # Tensor helpers and utilities
+│
+├── experiments/
+│   ├── shapenet_partseg/            # ShapeNet-Part Execution Pipeline
+│   │   ├── model.py                 # Multi-scale EdgeConv part segmentation architecture
+│   │   ├── run_partseg.py           # Main training & evaluation driver (none, boundary, random)
+│   │   ├── run_rigid_benchmark.sh   # Multi-category benchmark runner (Table, Airplane, Chair)
+│   │   ├── sweep_thresholds_kaggle.sh # Quantile threshold ablation runner
+│   │   ├── run_kaggle.sh            # Single GPU Kaggle execution script
+│   │   └── run_kaggle_2gpu.sh       # Distributed multi-GPU execution script
+│   └── results/                     # Empirical Benchmark Results
+│       ├── partseg.jsonl            # ShapeNet-Part experimental runs
+│       ├── rigid_partseg_benchmark.jsonl # Rigid object category evaluation runs
+│       └── threshold_sweep_chair.jsonl   # Chair quantile threshold sweep logs
+│
+├── tests/                           # Unit and Integration Test Suite
+│   ├── test_boundary_halfhop.py     # Geometry boundary score, curvature, and normal tests
+│   ├── test_halfhop.py              # Base topological invariants and slow node tests
+│   └── test_selective_halfhop.py    # Edge rewiring, replacement, and mask tests
+│
+├── EXTENSION.md                     # Comprehensive Technical Specification and Paper
+├── pyproject.toml                   # Build configuration and package metadata
+├── requirements.txt                 # Project dependencies
+└── pytest.ini                       # PyTest configuration
 ```
 
 ---
 
-## Installation
+## 4. Installation
 
 ```bash
-# 1. Create virtual environment
+# 1. Create and activate a virtual environment
 python -m venv .venv
+# On Windows:
+.venv\Scripts\activate
+# On Linux/macOS:
 source .venv/bin/activate
 
 # 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Install the halfhop package
+# 3. Install package in editable mode
 pip install -e .
 ```
 
 ---
 
-## Quick Start: Run All Experiments
+## 5. Running Tests
+
+Run the complete test suite to verify topological invariants, edge rewiring, and differential geometry operators:
 
 ```bash
-bash run_experiments.sh
-```
-
-This will:
-1. **Phase 6 & 7:** Run GCN, SAGE, GAT vs HH-GCN, HH-SAGE, HH-GAT on all 6 heterophilic datasets
-2. **Phase 8:** Run connectivity and initialization ablation studies
-3. **Phase 9:** Run HH-BGRL and HH-GRACE SSL experiments
-4. **Phase 10:** Generate `experiments/results/final_report.md` with tables and figures
-
-> **Already-completed experiments are automatically skipped** — the script is safe to resume after interruption.
-
----
-
-## Running Individual Experiments
-
-### Supervised Experiment
-```bash
-# Single model on a dataset
-python -m experiments.supervised.run --dataset texas --model hh-gcn
-
-# Available datasets: texas, wisconsin, actor, cornell, squirrel, chameleon
-# Available models:   gcn, sage, gat, hh-gcn, hh-sage, hh-gat
-```
-
-### Ablation Studies
-```bash
-# Connectivity ablation (proposed vs hh1 vs hh2)
-python -m experiments.ablations.connectivity --dataset texas
-
-# Initialization ablation (linear vs zero vs random)
-python -m experiments.ablations.initialization --dataset texas
-```
-
-### SSL Experiments
-```bash
-# Official BGRL baseline (Amazon Computers, Table 3 FeatDrop+EdgeDrop)
-python run_bgrl_experiments.py --dataset computers --augmentation feat_edge --seed 0 --device cuda
-
-# Half-Hop + FeatDrop + EdgeDrop (use --low-memory on 15GB T4s if needed)
-python run_bgrl_experiments.py --dataset computers --augmentation feat_edge_hh --seed 0 --device cuda --low-memory
-
-# HH-GRACE (prototype)
-python -m experiments.ssl.grace --dataset amazon_photo --epochs 1000
-```
-
-### Amazon-ratings (real e-commerce heterophilous graph)
-```bash
-# Single model
-python -m experiments.supervised.run --dataset amazon-ratings --model gcn --epochs 200
-python -m experiments.supervised.run --dataset amazon-ratings --model hh-gcn --epochs 200
-
-# Kaggle 2x T4: GCN on GPU0, HH-GCN on GPU1
-bash experiments/supervised/run_amazon_ratings_2gpu.sh
-```
-
-Nodes = products, edges = frequently bought together, labels = rating class (5).
-Expect Half-Hop to help more than on ModelNet because this graph is heterophilous.
-
-### ModelNet 3D mesh graphs (extension)
-```bash
-# Single GPU / one model
-python -m experiments.modelnet.run --dataset 10 --model gcn --epochs 100 --device cuda
-python -m experiments.modelnet.run --dataset 10 --model hh-gcn --epochs 100 --device cuda --p 0.5
-
-# Kaggle 2x T4: one model per GPU
-bash experiments/modelnet/run_kaggle_2gpu.sh
-```
-
-Meshes → `FaceToEdge` graphs → GCN/SAGE ± Half-Hop → global pool → object class.
-Use `--p 0.5` (default) on T4; lower `--batch-size` if OOM.
-
-### Adaptive point-cloud ModelNet40 experiment
-```bash
-# Smoke-test the adaptive graph core locally
-python -m pytest tests/test_adaptive_modelnet.py -q
-
-# Kaggle 2x T4: prepare once, then run all controls/ablations on both GPUs
-bash experiments/modelnet/run_adaptive_kaggle_2gpu.sh
-```
-
-This separate experiment samples 1,024 points with normals, builds a PyTorch
-kNN graph, and compares `none`, `uniform`, `curvature`, `random`, `inverse`,
-and the cheaper `curvature_012` delay schedule. Results are written to
-`experiments/results/modelnet40_<label>.txt`. Override `EPOCHS`, `POINTS`,
-`BS`, `WORKERS`, `GPUS`, or `DATA_DIR` in the shell environment.
-
-### Generate Report
-```bash
-python experiments/generate_report.py
+pytest
 ```
 
 ---
 
-## Datasets
+## 6. Running Experiments
 
-| Dataset     | Nodes  | Edges   | Features | Classes | Homophily | Type         |
-|-------------|--------|---------|----------|---------|-----------|--------------|
-| Texas       | 183    | 295     | 1,703    | 5       | 0.11      | Heterophilic |
-| Wisconsin   | 251    | 499     | 1,703    | 5       | 0.21      | Heterophilic |
-| Actor       | 7,600  | 29,926  | 931      | 5       | 0.22      | Heterophilic |
-| Squirrel    | 5,201  | 217,073 | 2,089    | 5       | 0.22      | Heterophilic |
-| Chameleon   | 2,277  | 36,101  | 2,325    | 5       | 0.23      | Heterophilic |
-| Cornell     | 183    | 280     | 1,703    | 5       | 0.30      | Heterophilic |
-| Cora        | 2,708  | 10,556  | 1,433    | 7       | 0.81      | Homophilic   |
-| Citeseer    | 3,327  | 9,104   | 3,703    | 6       | 0.74      | Homophilic   |
-| Pubmed      | 19,717 | 88,648  | 500      | 3       | 0.80      | Homophilic   |
-| Amazon Comp.| 13,752 | 491,722 | 767      | 10      | 0.78      | SSL target   |
-| Amazon Photo| 7,650  | 238,162 | 745      | 8       | 0.83      | SSL target   |
-
----
-
-## Key Results (Table 2, ICML 2023)
-
-Test accuracy (%) — reproduced results may vary ±2% due to baseline hyperparameter differences.
-
-| Dataset   | GCN   | HH-GCN | SAGE  | HH-SAGE | GAT   | HH-GAT |
-|-----------|-------|--------|-------|---------|-------|--------|
-| Texas     | 59.5  | **82.7**   | 74.3  | **83.5**    | 58.4  | **82.7**   |
-| Wisconsin | 51.8  | **83.1**   | 76.7  | **84.1**    | 49.4  | **82.4**   |
-| Actor     | 29.7  | **35.8**   | 35.2  | **37.4**    | 28.5  | **35.6**   |
-| Squirrel  | 38.7  | **55.3**   | 40.5  | **54.2**    | 36.6  | **52.1**   |
-| Chameleon | 60.4  | **68.8**   | 57.3  | **66.1**    | 55.1  | **64.5**   |
-| Cornell   | 55.7  | **78.9**   | 74.3  | **80.0**    | 54.6  | **79.5**   |
-
-> **Half-Hop consistently improves all baselines by 10–25% on heterophilic graphs.**
-
----
-
-## GPU Acceleration
-
-The code automatically uses CUDA (GPU) if available:
-
-```python
-DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-```
-
-**Running on Kaggle (2x T4, 15GB each):**
-1. New Notebook → Settings → Accelerator → GPU T4 x2
-2. Official BGRL is single-GPU. Pin one experiment per T4.
-3. Run:
-
-```python
-# one-time setup
-!pip install -r requirements.txt && pip install -e .
-
-# smoke test (optional): 2 epochs, skip mid-training eval
-!python run_bgrl_experiments.py --dataset computers --augmentation feat_edge --seed 0 --device cuda --epochs 2 --eval-epochs 0
-
-# Amazon Computers official BGRL baseline (Table 3 FeatDrop+EdgeDrop)
-# GPU 0
-!CUDA_VISIBLE_DEVICES=0 python run_bgrl_experiments.py --dataset computers --augmentation feat_edge --seed 0 --device cuda
-
-# GPU 1 (second job, different setup or seed)
-!CUDA_VISIBLE_DEVICES=1 python run_bgrl_experiments.py --dataset computers --augmentation none --seed 0 --device cuda
-```
-
-Do not `pip install torch==1.9.1` from the official BGRL README. Use Kaggle's existing PyTorch/PyG so the supervised Half-Hop code keeps working.
-
----
-
-## Running Tests
+### Train on ShapeNet-Part
 
 ```bash
-pytest -v
+# Baseline EdgeConv (no Half-Hop)
+python -m experiments.shapenet_partseg.run_partseg --category Table --condition none --epochs 100
+
+# Geometry-Aware Boundary Half-Hop (proposed)
+python -m experiments.shapenet_partseg.run_partseg --category Table --condition boundary --epochs 100
+
+# Random Half-Hop Control (matched edge budget)
+python -m experiments.shapenet_partseg.run_partseg --category Table --condition random --epochs 100
 ```
 
-All 43 tests should pass.
+### Threshold Sensitivity Sweep
 
----
+```bash
+python -m experiments.shapenet_partseg.run_partseg --category Chair --sweep
+```
 
-## Half-Hop Parameters
+### Batch Rigid Category Benchmark
 
-| Parameter       | Default  | Description                                      |
-|-----------------|----------|--------------------------------------------------|
-| `alpha`         | `0.5`    | Interpolation weight for slow-node features      |
-| `p`             | `1.0`    | Fraction of edges to apply Half-Hop to           |
-| `slow_node_init`| `linear` | Init scheme: `linear`, `zero`, or `random`       |
-| `connectivity`  | `proposed` | Edge scheme: `proposed`, `hh1`, or `hh2`      |
-| `inplace`       | `False`  | Whether to modify the Data object in-place       |
-
----
-
-## Citation
-
-```bibtex
-@inproceedings{zhao2023halfhop,
-  title     = {Half-Hop: A graph upsampling approach for slowing down message passing},
-  author    = {Zhao, Cheng and others},
-  booktitle = {Proceedings of the 40th International Conference on Machine Learning},
-  year      = {2023},
-}
+```bash
+bash experiments/shapenet_partseg/run_rigid_benchmark.sh
 ```

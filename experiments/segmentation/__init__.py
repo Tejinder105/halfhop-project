@@ -1,1 +1,0 @@
-"""ShapeNet part-segmentation experiments."""

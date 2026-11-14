@@ -182,9 +182,10 @@ The segmentation network employs a hierarchical EdgeConv architecture:
 ---
 
 ## 9. Primary Artifact References
-- **Script Generator:** [report/generate_3d_segmentation_vis.py](file:///d:/ai_course/Project/halfhop-project/report/generate_3d_segmentation_vis.py)
-- **Conceptual Figure:** [report/figures/fig1_boundary_halfhop_concept.pdf](file:///d:/ai_course/Project/halfhop-project/report/figures/fig1_boundary_halfhop_concept.pdf)
-- **Threshold Sweep Figure:** [report/figures/fig4_crease_threshold_ablation.pdf](file:///d:/ai_course/Project/halfhop-project/report/figures/fig4_crease_threshold_ablation.pdf)
-- **Qualitative 4-Panel Figure:** [report/figures/fig5_shapenet_qualitative_segmentation.pdf](file:///d:/ai_course/Project/halfhop-project/report/figures/fig5_shapenet_qualitative_segmentation.pdf)
-- **Rigid Gains Figure:** [report/figures/fig6_rigid_categories_miou_gains.pdf](file:///d:/ai_course/Project/halfhop-project/report/figures/fig6_rigid_categories_miou_gains.pdf)
-- **Final IEEE Publication:** [report/ieee_reproduction_and_extension.pdf](file:///d:/ai_course/Project/halfhop-project/report/ieee_reproduction_and_extension.pdf)
+- **Execution Pipeline:** [experiments/shapenet_partseg/run_partseg.py](file:///d:/ai_course/Project/halfhop-project/experiments/shapenet_partseg/run_partseg.py)
+- **Model Architecture:** [experiments/shapenet_partseg/model.py](file:///d:/ai_course/Project/halfhop-project/experiments/shapenet_partseg/model.py)
+- **Benchmark Results:** [experiments/results/rigid_partseg_benchmark.jsonl](file:///d:/ai_course/Project/halfhop-project/experiments/results/rigid_partseg_benchmark.jsonl)
+- **Threshold Sweep Results:** [experiments/results/threshold_sweep_chair.jsonl](file:///d:/ai_course/Project/halfhop-project/experiments/results/threshold_sweep_chair.jsonl)
+- **Final Publication PDF:** [final/202451161.pdf](file:///d:/ai_course/Project/final/202451161.pdf)
+
+

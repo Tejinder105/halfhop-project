@@ -1,1 +1,0 @@
-FINAL RESULTS: random ModelNet10 best_val=0.8596 test_at_best_val=0.7996 seed=0 mode=random delays=(1, 2, 3) backward=last points=512 knn=12
